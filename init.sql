@@ -81,10 +81,10 @@ CREATE TABLE IF NOT EXISTS episodio(
 
 CREATE TABLE IF NOT EXISTS resenha_filme(
     id SERIAL PRIMARY KEY,
-    usuario_id INT,
-    filme_id INT,
-    resenha TEXT,
-    avaliacao INT,
+    usuario_id INT NOT NULL,
+    filme_id INT NOT NULL,
+    resenha TEXT NOT NULL,
+    avaliacao INT NOT NULL,
 
     CONSTRAINT usuario_FK FOREIGN KEY (usuario_id) REFERENCES usuario(id),
     CONSTRAINT filme_FK FOREIGN KEY (filme_id) REFERENCES filme(id),
@@ -95,10 +95,10 @@ CREATE TABLE IF NOT EXISTS resenha_filme(
 CREATE TABLE IF NOT EXISTS resenha_serie(
     /*Ninguém faz resenhas sobre episódios individuais de séries.*/
     id SERIAL PRIMARY KEY,
-    usuario_id INT,
-    serie_id INT,
-    resenha TEXT,
-    avaliacao INT,
+    usuario_id INT NOT NULL,
+    serie_id INT NOT NULL,
+    resenha TEXT NOT NULL,
+    avaliacao INT NOT NULL,
 
     CONSTRAINT usuario_FK FOREIGN KEY (usuario_id) REFERENCES usuario(id),
     CONSTRAINT serie_FK FOREIGN KEY (serie_id) REFERENCES serie(id),
@@ -108,8 +108,8 @@ CREATE TABLE IF NOT EXISTS resenha_serie(
 
 /* Relações M:N com atores */
 CREATE TABLE IF NOT EXISTS filme_ator(
-    id_filme INT,
-    id_ator INT,
+    id_filme INT NOT NULL,
+    id_ator INT NOT NULL,
 
     CONSTRAINT ator_FK FOREIGN KEY (id_ator) REFERENCES ator(id) ON DELETE CASCADE,
     CONSTRAINT filme_FK FOREIGN KEY (id_filme) REFERENCES filme(id) ON DELETE CASCADE,
@@ -118,8 +118,8 @@ CREATE TABLE IF NOT EXISTS filme_ator(
 );
 
 CREATE TABLE IF NOT EXISTS serie_ator(
-    id_serie INT,
-    id_ator INT,
+    id_serie INT NOT NULL,
+    id_ator INT NOT NULL,
 
     CONSTRAINT ator_FK FOREIGN KEY (id_ator) REFERENCES ator(id) ON DELETE CASCADE,
     CONSTRAINT serie_FK FOREIGN KEY (id_serie) REFERENCES serie(id) ON DELETE CASCADE,
