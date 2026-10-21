@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS diretor(
     data_nascimento DATE,
     biografia TEXT,
     qtde_premios INT DEFAULT 0,
+    fotografia TEXT,
 
     CONSTRAINT nascimento_CK CHECK (data_nascimento BETWEEN '1895-12-28T00:00:00Z' AND '2026-10-19T00:00:00Z'),
     CONSTRAINT premios_CK CHECK (qtde_premios>=0)/*Sem limite superior; não queremos limitar os excepcionais.*/
@@ -17,6 +18,7 @@ CREATE TABLE IF NOT EXISTS ator(
     data_nascimento DATE,
     biografia TEXT,
     qtde_premios INT DEFAULT 0,
+    fotografia TEXT,
 
     CONSTRAINT nascimento_CK CHECK (data_nascimento BETWEEN '1895-12-28T00:00:00Z' AND '2026-10-19T00:00:00Z'),
     CONSTRAINT premios_CK CHECK (qtde_premios>=0)/*Idem*/
@@ -28,7 +30,8 @@ CREATE TABLE IF NOT EXISTS usuario(
     email VARCHAR(85) UNIQUE NOT NULL,
     critico BOOLEAN,
     administrador BOOLEAN,
-    senha CHAR(60) NOT NULL
+    senha CHAR(60) NOT NULL,
+    fotografia TEXT,
     /*Parece não precisar de constraints*/
 );
 
@@ -40,6 +43,7 @@ CREATE TABLE IF NOT EXISTS filme(
     faixa_etaria INT,
     duracao INT,
     qtde_premios INT DEFAULT 0,
+    fotografia TEXT,
 
     CONSTRAINT diretor_FK FOREIGN KEY (diretor) REFERENCES diretor(id),
     CONSTRAINT faixa_etaria_CK CHECK (faixa_etaria>=0 AND faixa_etaria<=18),
@@ -54,6 +58,7 @@ CREATE TABLE IF NOT EXISTS serie(
     sinopse TEXT,
     faixa_etaria INT,
     qtde_premios INT DEFAULT 0,
+    fotografia TEXT,
 
     CONSTRAINT diretor_FK FOREIGN KEY (diretor) REFERENCES diretor(id),
     CONSTRAINT faixa_etaria_CK CHECK (faixa_etaria>=0 AND faixa_etaria<=18),
@@ -83,7 +88,8 @@ CREATE TABLE IF NOT EXISTS resenha_filme(
 
     CONSTRAINT usuario_FK FOREIGN KEY (usuario_id) REFERENCES usuario(id),
     CONSTRAINT filme_FK FOREIGN KEY (filme_id) REFERENCES filme(id),
-    CONSTRAINT avaliacao_CK CHECK (avaliacao>=0 AND avaliacao<=100)
+    CONSTRAINT avaliacao_CK CHECK (avaliacao>=0 AND avaliacao<=100),
+    CONSTRAINT usuario_filme_UK UNIQUE (usuario_id, filme_id)
 );
 
 CREATE TABLE IF NOT EXISTS resenha_serie(
@@ -96,7 +102,8 @@ CREATE TABLE IF NOT EXISTS resenha_serie(
 
     CONSTRAINT usuario_FK FOREIGN KEY (usuario_id) REFERENCES usuario(id),
     CONSTRAINT serie_FK FOREIGN KEY (serie_id) REFERENCES serie(id),
-    CONSTRAINT avaliacao_CK CHECK (avaliacao>=0 AND avaliacao<=100)
+    CONSTRAINT avaliacao_CK CHECK (avaliacao>=0 AND avaliacao<=100),
+    CONSTRAINT usuario_serie_UK UNIQUE (usuario_id, serie_id)
 );
 
 /* Relações M:N com atores */
@@ -167,6 +174,3 @@ INSERT INTO serie_ator (id_serie, id_ator) VALUES (1, 1);
 INSERT INTO serie_ator (id_serie, id_ator) VALUES (1, 2);
 INSERT INTO serie_ator (id_serie, id_ator) VALUES (2, 1);
 INSERT INTO serie_ator (id_serie, id_ator) VALUES (2, 2);
-
-/* Cada usuário poderá fazer somente uma resenha em cada filme? */
-/* Como fazer para inserir imagens? */

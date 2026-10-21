@@ -23,7 +23,7 @@ Somente administradores podem cadastrar ou alterar filmes, alterar seus diretore
 
 ###Atores e diretores 🎭🎬
 
-O sistema mantém informações sobre os atores e diretores, como nome, data de nascimento, biografia, nacionalidade (no caso dos atores) e quantidade de prêmios.
+O sistema mantém informações sobre os atores e diretores, como nome, data de nascimento, biografia, nacionalidade e quantidade de prêmios.
 O administrador é responsável pelo cadastro, alteração e exclusão dessas pessoas. Também é possível consultar suas participações e os filmes dirigidos ou nos quais os atores participam.
 
 ###Resenhas e avaliações 📝⭐
