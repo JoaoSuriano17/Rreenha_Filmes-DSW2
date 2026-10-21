@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS filme(
     faixa_etaria INT,
     duracao INT,
     qtde_premios INT DEFAULT 0,
-    fotografia TEXT,
+    cartaz TEXT,
 
     CONSTRAINT diretor_FK FOREIGN KEY (diretor) REFERENCES diretor(id),
     CONSTRAINT faixa_etaria_CK CHECK (faixa_etaria>=0 AND faixa_etaria<=18),
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS serie(
     sinopse TEXT,
     faixa_etaria INT,
     qtde_premios INT DEFAULT 0,
-    fotografia TEXT,
+    cartaz TEXT,
 
     CONSTRAINT diretor_FK FOREIGN KEY (diretor) REFERENCES diretor(id),
     CONSTRAINT faixa_etaria_CK CHECK (faixa_etaria>=0 AND faixa_etaria<=18),
