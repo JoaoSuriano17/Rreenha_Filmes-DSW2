@@ -1,38 +1,43 @@
-🍅 Rreenha Filmes 🍅
-O arquivo HTML, localizado em http://localhost:3000/, apresenta uma documentação visual do sistema, organizando seus principais endpoints. A documentação está dividida em cinco módulos: Usuários, Filmes, Resenhas, Atores, Diretores, Séries e Episódios.
+# 🍅 Rreenha Filmes 🍅
 
-Para cada endpoint, são apresentados o método HTTP (GET, POST, PUT ou DELETE), sua finalidade, os dados necessários para realizar a requisição e um exemplo do resultado retornado pela API.
+O projeto Rreenha Filmes, que possui um nome exótico e carismático, tem o objetivo de gerenciar as opiniões dos usuários para cada filme e/ou série, essas opiniões são expressas por meio de resenhas com avaliações.
 
-Funcionamento básico do sistema
+O sistema permite a criação de usuários; e, se o usuário for administrador, permite adicionar, excluir e alterar filmes, atores, diretores, séries, episódios e suas relações intrínsecas.
 
-O Rreenha Filmes é um sistema de gerenciamento de filmes e séries que permite o cadastro de usuários, filmes, atores, diretores, resenhas séries e episódios. Os usuários podem consultar as informações cadastradas e, dependendo de suas permissões, realizar diferentes operações no sistema.
+---
 
-Usuário 👤
+**Segue abaixo um aprofundamento:**
 
-O sistema possui três níveis de usuário:
+###Usuário 👤
 
-Usuário comum: pode realizar consultas e publicar, alterar ou excluir suas próprias resenhas.
-Crítico: possui as mesmas funcionalidades básicas de um usuário comum, mas suas resenhas são identificadas como resenhas críticas, permitindo diferenciá-las das resenhas públicas dos demais usuários.
-Administrador: possui permissões de gerenciamento do sistema, podendo cadastrar, alterar e excluir filmes, atores e diretores, além de gerenciar as associações entre atores e filmes e alterar informações de filmes.
+Há três tipos de usuários:
 
-Filmes 🎥
+- Usuário comum: acessa as informações de filmes, séries, atores, diretores, episódios; além disso, pode publicar, alterar e excluir suas próprias resenhas.
+- Crítico: possui as mesmas funcionalidades de um usuário comum, mas suas resenhas são identificadas como resenhas críticas, permitindo diferenciá-las das resenhas comuns, que como padrão tende a ser mais simples.
+- Administrador: possui permissões de gerenciamento de todo o sistema.
 
-Os filmes possuem informações como título, diretor, sinopse, faixa etária, orçamento e duração. O sistema permite consultar os filmes cadastrados, seus atores, avaliações e resenhas.
+###Filmes 🎥
+
+Os filmes apresentam as informações a seguir: título, diretor, sinopse, faixa etária, duração e quantidade de prêmios.
 Somente administradores podem cadastrar ou alterar filmes, alterar seus diretores, associar ou remover atores e excluir filmes.
 
-Atores e diretores 🎭🎬
+###Atores e diretores 🎭🎬
 
-O sistema mantém informações sobre os atores e diretores, como nome, data de nascimento, descrição, nacionalidade (no caso dos atores) e quantidade de prêmios.
+O sistema mantém informações sobre os atores e diretores, como nome, data de nascimento, biografia, nacionalidade (no caso dos atores) e quantidade de prêmios.
 O administrador é responsável pelo cadastro, alteração e exclusão dessas pessoas. Também é possível consultar suas participações e os filmes dirigidos ou nos quais os atores participam.
 
-Resenhas e avaliações 📝⭐
+###Resenhas e avaliações 📝⭐
 
-Os usuários podem publicar uma resenha associada a um filme, contendo um texto e uma avaliação de 0 a 100.
-Cada usuário pode alterar ou excluir apenas suas próprias resenhas. As resenhas são classificadas de acordo com o tipo de usuário, podendo ser consultadas como resenhas públicas ou resenhas de críticos.
+Os usuários podem publicar uma resenha associada a um filme e uma série (o mesmo não se aplica a episódios), contendo um texto e uma avaliação de 0 a 100.
+Cada usuário pode alterar ou excluir apenas suas próprias resenhas. As resenhas são classificadas de acordo com o tipo de usuário.
 
-Séries e episódios 🎞️📺
+###Séries e episódios 🎞️📺
 
-As séries funcionam como uma lista de episódios, do qual possuem informações como título, diretor, sinopse, qtde_premios e faixa_etaria. 
-Os episódios possuem informações como a série, título, sinopse, duração e temporada.
+As séries são listas de episódios. Cada episódio apresenta as informações a seguir: título, sinopse, duração e temporada. As séries, por sua vez, apresentam: título, diretor, sinopse, faixa etária e quantidade de prêmios.
 
-Somente administradores podem cadastrar ou alterar as séries e os filmes, adicionar novos e exclui-los.
+Cada episódio tem relação com uma série. Somente administradores podem cadastrar, alterar e excluir séries e episódios.
+ 
+---
+
+###Documentação
+Todos os endpoints serão apresentados em uma documentação visual após a elaboração definitiva do backend.
