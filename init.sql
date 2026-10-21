@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS usuario(
     critico BOOLEAN,
     administrador BOOLEAN,
     senha CHAR(60) NOT NULL,
-    fotografia TEXT,
+    fotografia TEXT
     /*Parece não precisar de constraints*/
 );
 
