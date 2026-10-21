@@ -31,8 +31,10 @@ CREATE TABLE IF NOT EXISTS usuario(
     critico BOOLEAN,
     administrador BOOLEAN,
     senha CHAR(60) NOT NULL,
-    fotografia TEXT
-    /*Parece não precisar de constraints*/
+    fotografia TEXT,
+
+    CONSTRAINT senha_CK CHECK (senha NOT LIKE '% %'),/*Ou seja, sem espaços*/
+    CONSTRAINT email_CK CHECK (email LIKE '%@%.%' AND email NOT LIKE '% %' AND email NOT LIKE '%,%' AND email NOT LIKE '%;%')
 );
 
 CREATE TABLE IF NOT EXISTS filme(
