@@ -1,3 +1,12 @@
+CREATE TABLE IF NOT EXISTS arquivo_imagem(
+    id SERIAL PRIMARY KEY,
+    nome_original VARCHAR(255) NOT NULL,
+    tipo_mime VARCHAR(100) NOT NULL,
+    tamanho_bytes BIGINT NOT NULL,
+    conteudo BYTEA NOT NULL
+    /*Sem "criado_em"*/
+);
+
 CREATE TABLE IF NOT EXISTS diretor(
     id SERIAL PRIMARY KEY,
     nome VARCHAR(150) NOT NULL,
@@ -5,10 +14,11 @@ CREATE TABLE IF NOT EXISTS diretor(
     data_nascimento DATE,
     biografia TEXT,
     qtde_premios INT DEFAULT 0,
-    fotografia TEXT,
+    fotografia INT,
 
     CONSTRAINT nascimento_CK CHECK (data_nascimento BETWEEN '1895-12-28T00:00:00Z' AND '2026-10-19T00:00:00Z'),
-    CONSTRAINT premios_CK CHECK (qtde_premios>=0)/*Sem limite superior; não queremos limitar os excepcionais.*/
+    CONSTRAINT premios_CK CHECK (qtde_premios>=0),/*Sem limite superior; não queremos limitar os excepcionais.*/
+    CONSTRAINT fotografia_FK FOREIGN KEY (fotografia) REFERENCES arquivo_imagem(id)
 );
 
 CREATE TABLE IF NOT EXISTS ator(
@@ -18,10 +28,11 @@ CREATE TABLE IF NOT EXISTS ator(
     data_nascimento DATE,
     biografia TEXT,
     qtde_premios INT DEFAULT 0,
-    fotografia TEXT,
+    fotografia INT,
 
     CONSTRAINT nascimento_CK CHECK (data_nascimento BETWEEN '1895-12-28T00:00:00Z' AND '2026-10-19T00:00:00Z'),
-    CONSTRAINT premios_CK CHECK (qtde_premios>=0)/*Idem*/
+    CONSTRAINT premios_CK CHECK (qtde_premios>=0),/*Idem*/
+    CONSTRAINT fotografia_FK FOREIGN KEY (fotografia) REFERENCES arquivo_imagem(id)
 );
 
 CREATE TABLE IF NOT EXISTS usuario(
@@ -31,10 +42,11 @@ CREATE TABLE IF NOT EXISTS usuario(
     critico BOOLEAN,
     administrador BOOLEAN,
     senha CHAR(60) NOT NULL,
-    fotografia TEXT,
+    fotografia INT,
 
     CONSTRAINT senha_CK CHECK (senha NOT LIKE '% %'),/*Ou seja, sem espaços*/
-    CONSTRAINT email_CK CHECK (email LIKE '%@%.%' AND email NOT LIKE '% %' AND email NOT LIKE '%,%' AND email NOT LIKE '%;%')
+    CONSTRAINT email_CK CHECK (email LIKE '%@%.%' AND email NOT LIKE '% %' AND email NOT LIKE '%,%' AND email NOT LIKE '%;%'),
+    CONSTRAINT fotografia_FK FOREIGN KEY (fotografia) REFERENCES arquivo_imagem(id)
 );
 
 CREATE TABLE IF NOT EXISTS filme(
@@ -45,12 +57,13 @@ CREATE TABLE IF NOT EXISTS filme(
     faixa_etaria INT,
     duracao INT,
     qtde_premios INT DEFAULT 0,
-    cartaz TEXT,
+    cartaz INT,
 
     CONSTRAINT diretor_FK FOREIGN KEY (diretor) REFERENCES diretor(id),
     CONSTRAINT faixa_etaria_CK CHECK (faixa_etaria>=0 AND faixa_etaria<=18),
     CONSTRAINT duracao_CK CHECK (duracao>0),/*Pode-se conceber um curtíssima-metragem de 29 segundos?*/
-    CONSTRAINT premios_CK CHECK (qtde_premios>=0)/*Idem*/
+    CONSTRAINT premios_CK CHECK (qtde_premios>=0),/*Idem*/
+    CONSTRAINT cartaz_FK FOREIGN KEY (cartaz) REFERENCES arquivo_imagem(id)
 );
 
 CREATE TABLE IF NOT EXISTS serie(
@@ -60,11 +73,12 @@ CREATE TABLE IF NOT EXISTS serie(
     sinopse TEXT,
     faixa_etaria INT,
     qtde_premios INT DEFAULT 0,
-    cartaz TEXT,
+    cartaz INT,
 
     CONSTRAINT diretor_FK FOREIGN KEY (diretor) REFERENCES diretor(id),
     CONSTRAINT faixa_etaria_CK CHECK (faixa_etaria>=0 AND faixa_etaria<=18),
-    CONSTRAINT premios_CK CHECK (qtde_premios>=0)/*Idem*/
+    CONSTRAINT premios_CK CHECK (qtde_premios>=0),/*Idem*/
+    CONSTRAINT cartaz_FK FOREIGN KEY (cartaz) REFERENCES arquivo_imagem(id)
 );
 
 CREATE TABLE IF NOT EXISTS episodio(
