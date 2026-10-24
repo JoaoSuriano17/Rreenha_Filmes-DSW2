@@ -36,24 +36,28 @@ router.post("/",  upload.single("arquivo"), async (req, res)=>{
     try{
         const {nome, nacionalidade, data_nascimento, biografia, qtde_premios}=req.body
 
-        if (!nome || !nacionalidade || !data_nascimento || !biografia || isNaN(qtde_premios) || !req.file){
-            return res.status(400).json({msg:"Nem todos os parâmetros foram preenchidos corretamente"})
+        if (!nome){
+            return res.status(400).json({msg:"O ator deve ter pelo menos um nome"})
         }
 
-        const { originalname, mimetype, size, buffer } = req.file;
-
-        const query = "INSERT INTO arquivo (nome_original, tipo_mime, tamanho_bytes, conteudo) VALUES ($1, $2, $3, $4) RETURNING id";
-        const r = await db.query(query, [originalname, mimetype, size, buffer]);
-        if (!r.rowCount) { 
-            return res.status(500).json({ msg: "Erro ao salvar o arquivo" }); 
+        var r2;
+        if(!req.file){
+            r2=await db.query("INSERT INTO ator(nome, nacionalidade, data_nascimento, biografia, qtde_premios, fotografia) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [nome, nacionalidade, data_nascimento, biografia, qtde_premios, 1])
+        }else{
+            const { originalname, mimetype, size, buffer } = req.file;
+            const query = "INSERT INTO arquivo (nome_original, tipo_mime, tamanho_bytes, conteudo) VALUES ($1, $2, $3, $4) RETURNING id";
+            const r = await db.query(query, [originalname, mimetype, size, buffer]);
+            if (!r.rowCount) { 
+                return res.status(500).json({ msg: "Erro ao salvar a imagem" }); 
+            }
+            r2=await db.query("INSERT INTO ator(nome, nacionalidade, data_nascimento, biografia, qtde_premios, fotografia) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [nome, nacionalidade, data_nascimento, biografia, qtde_premios, r.rows[0].id])
         }
 
-        const r2=await db.query("INSERT INTO ator(nome, nacionalidade, data_nascimento, biografia, qtde_premios, fotografia) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [nome, nacionalidade, data_nascimento, biografia, qtde_premios, r.rows[0].id])
         if (!r2.rowCount) { 
             return res.status(500).json({ msg: "Erro ao cadastrar o ator" }); 
         }
 
-        return res.json(r2)
+        return res.json({ator:r2.rows[0]})
     }catch(erro){
         return res.status(500).json({msg:erro.message})
     }
@@ -69,7 +73,10 @@ router.delete("/:id", tipo, async(req, res)=>{
         }
 
         await db.query("DELETE FROM ator WHERE id=$1", [req.params.id])
-        await db.query("DELETE FROM arquivo WHERE id=$1", [r.rows[0].fotografia])
+
+        if (req.rows[0].fotografia!=1 && req.rows[0].fotografia!=2){
+            await db.query("DELETE FROM arquivo WHERE id=$1", [r.rows[0].fotografia])
+        }
 
         return res.json({msg:"Ator deletado com sucesso"})
     }catch(erro){
