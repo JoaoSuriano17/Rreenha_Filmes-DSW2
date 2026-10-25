@@ -42,15 +42,19 @@ router.post("/",  upload.single("arquivo"), async (req, res)=>{
 
         var r2;
         if(!req.file){
-            r2=await db.query("INSERT INTO diretor(nome, nacionalidade, data_nascimento, biografia, qtde_premios, fotografia) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [nome, nacionalidade, data_nascimento, biografia, qtde_premios, 1])
+            r2=await db.query("INSERT INTO diretor(nome, nacionalidade, data_nascimento, biografia, qtde_premios, fotografia) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [nome, nacionalidade, data_nascimento, biografia, qtde_premios, 7])
         }else{
-            const { originalname, mimetype, size, buffer } = req.file;
-            const query = "INSERT INTO arquivo (nome_original, tipo_mime, tamanho_bytes, conteudo) VALUES ($1, $2, $3, $4) RETURNING id";
-            const r = await db.query(query, [originalname, mimetype, size, buffer]);
-            if (!r.rowCount) { 
-                return res.status(500).json({ msg: "Erro ao salvar a imagem" }); 
+            const formData = new FormData();
+            formData.append( "arquivo", new Blob([req.file.buffer], { type: req.file.mimetype }), req.file.originalname);
+
+            const r=await fetch("http://localhost:3000/arquivo", { method: "POST", body: formData })
+            if (!r.ok) {
+                return res.status(500).json({msg: "Erro ao salvar a imagem"});
             }
-            r2=await db.query("INSERT INTO diretor(nome, nacionalidade, data_nascimento, biografia, qtde_premios, fotografia) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [nome, nacionalidade, data_nascimento, biografia, qtde_premios, r.rows[0].id])
+
+            const arquivo = await r.json();
+
+            r2=await db.query("INSERT INTO diretor(nome, nacionalidade, data_nascimento, biografia, qtde_premios, fotografia) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [nome, nacionalidade, data_nascimento, biografia, qtde_premios, arquivo.id])
         }
 
         if (!r2.rowCount) { 
@@ -73,9 +77,8 @@ router.delete("/:id", tipo, async(req, res)=>{
         }
 
         await db.query("DELETE FROM diretor WHERE id=$1", [req.params.id])
-
-        if (req.rows[0].fotografia!=1 && req.rows[0].fotografia!=2){
-            await db.query("DELETE FROM arquivo WHERE id=$1", [r.rows[0].fotografia])
+        if (r.rows[0].fotografia!=7 && r.rows[0].fotografia!=8){
+            await fetch(`http://localhost:3000/arquivo/${r.rows[0].fotografia}`, {method:"DELETE"})
         }
 
         return res.json({msg:"Diretor deletado com sucesso"})

@@ -31,25 +31,29 @@ router.get("/:id", tipo, async (req, res)=>{
     }
 })
 
-router.post("/", upload.single("arquivo"), async (req,res)=>{
+router.post("/",  upload.single("arquivo"), async (req, res)=>{
     try{
         const {titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios}=req.body
-        
-        if (!titulo || ! diretor){
-            return res.status(400).json({msg:"O filme deve ter um titulo e um diretor pelo menos"})
+
+        if (!titulo){
+            return res.status(400).json({msg:"O filme deve ter pelo menos um titulo"})
         }
 
         var r2;
         if(!req.file){
-            r2=await db.query("INSERT INTO filme(titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios, cartaz) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *", [titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios, 2])
+            r2=await db.query("INSERT INTO filme(titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios, cartaz) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *", [titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios, 8])
         }else{
-            const { originalname, mimetype, size, buffer } = req.file;
-            const query = "INSERT INTO arquivo (nome_original, tipo_mime, tamanho_bytes, conteudo) VALUES ($1, $2, $3, $4) RETURNING id";
-            const r = await db.query(query, [originalname, mimetype, size, buffer]);
-            if (!r.rowCount) { 
-                return res.status(500).json({ msg: "Erro ao salvar a imagem" }); 
+            const formData = new FormData();
+            formData.append( "arquivo", new Blob([req.file.buffer], { type: req.file.mimetype }), req.file.originalname);
+
+            const r=await fetch("http://localhost:3000/arquivo", { method: "POST", body: formData })
+            if (!r.ok) {
+                return res.status(500).json({msg: "Erro ao salvar a imagem"});
             }
-            r2=await db.query("INSERT INTO filme(titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios, cartaz) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *", [titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios, req.rows[0].id])
+
+            const arquivo = await r.json();
+
+            r2=await db.query("INSERT INTO filme(titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios, cartaz) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *", [titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios, arquivo.id])
         }
 
         if (!r2.rowCount) { 
@@ -62,6 +66,8 @@ router.post("/", upload.single("arquivo"), async (req,res)=>{
     }
 })
 
+//PUT
+
 router.delete("/:id", tipo, async(req, res)=>{
     try{
         const r=await db.query("SELECT cartaz FROM filme WHERE id=$1", [req.params.id])
@@ -70,9 +76,8 @@ router.delete("/:id", tipo, async(req, res)=>{
         }
 
         await db.query("DELETE FROM filme WHERE id=$1", [req.params.id])
-
-        if (req.rows[0].cartaz!=1 && req.rows[0].cartaz!=2){
-            await db.query("DELETE FROM arquivo WHERE id=$1", [r.rows[0].cartaz])
+        if (r.rows[0].cartaz!=7 && r.rows[0].cartaz!=8){
+            await fetch(`http://localhost:3000/arquivo/${r.rows[0].cartaz}`, {method:"DELETE"})
         }
 
         return res.json({msg:"Filme deletado com sucesso"})

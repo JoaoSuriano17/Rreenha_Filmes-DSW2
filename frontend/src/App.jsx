@@ -12,8 +12,25 @@ function App() {
   const [data_nasc, setData_nasc] = useState(Date)
   const [biografia, setBiografia] = useState("")
   const [qtde_premios, setQtde_premios] = useState(0)
-  const [arquivo2, setArquivo2] = useState(null);
-  const [inp2, setInput2] = useState("");
+  const [arquivoa, setArquivoa] = useState(null);
+  const [inpa, setInputa] = useState("");
+
+  const [nomed, setNomed] = useState("")
+  const [nacionalidaded, setNacionalidaded] = useState("")
+  const [data_nascd, setData_nascd] = useState(Date)
+  const [biografiad, setBiografiad] = useState("")
+  const [qtde_premiosd, setQtde_premiosd] = useState(0)
+  const [arquivod, setArquivod] = useState(null);
+  const [inpd, setInputd] = useState("");
+
+  const [titulo, setTitulo] = useState("")
+  const [diretor, setDiretor] = useState(0)
+  const [sinopse, setSinopse] = useState("")
+  const [faixa_etaria, setFaixa_etaria] = useState(0)
+  const [duracao, setDuracao] = useState(0)
+  const [qtde_premiosf, setQtde_premiosf] = useState(0)
+  const [arquivof, setArquivof] = useState(null);
+  const [inpf, setInputf] = useState("");
 
   async function carregarDados() {
     const res = await fetch(`http://localhost:3000/arquivo`);
@@ -61,7 +78,7 @@ function App() {
     formData.append("data_nascimento", data_nasc);
     formData.append("biografia", biografia);
     formData.append("qtde_premios", qtde_premios);
-    formData.append("arquivo", arquivo2);
+    formData.append("arquivo", arquivoa);
 
     let res = await fetch(`http://localhost:3000/ator`, { method: "POST", body: formData });
     if (!res.ok) {
@@ -73,6 +90,50 @@ function App() {
     carregarDados();
   }
 
+  async function cadastrar_diretor(e){
+    e.preventDefault()
+
+    const formData = new FormData();
+
+    formData.append("nome", nomed);
+    formData.append("nacionalidade", nacionalidaded);
+    formData.append("data_nascimento", data_nascd);
+    formData.append("biografia", biografiad);
+    formData.append("qtde_premios", qtde_premiosd);
+    formData.append("arquivo", arquivod);
+
+    let res = await fetch(`http://localhost:3000/diretor`, { method: "POST", body: formData });
+    if (!res.ok) {
+      const json = await res.json();
+      alert(`Erro: ${json.msg}`);
+      return;
+    }
+    resetForm();
+    carregarDados();
+  }
+
+  async function cadastrar_filme(e){
+    e.preventDefault()
+
+    const formData = new FormData();
+
+    formData.append("titulo", titulo);
+    formData.append("diretor", diretor);
+    formData.append("sinopse", sinopse);
+    formData.append("faixa_etaria", faixa_etaria);
+    formData.append("duracao", duracao);
+    formData.append("qtde_premios", qtde_premiosf);
+    formData.append("arquivo", arquivof);
+
+    let res = await fetch(`http://localhost:3000/filme`, { method: "POST", body: formData });
+    if (!res.ok) {
+      const json = await res.json();
+      alert(`Erro: ${json.msg}`);
+      return;
+    }
+    resetForm();
+    carregarDados();
+  }
 
 
 
@@ -85,10 +146,24 @@ function App() {
     }
   }
 
-  function changeFile2(e) {
+  function changeFilea(e) {
     if (e.target.files.length > 0) {
-      setArquivo2(e.target.files[0]);
-      setInput2(e.target.files[0].name);
+      setArquivoa(e.target.files[0]);
+      setInputa(e.target.files[0].name);
+    }
+  }
+
+  function changeFiled(e) {
+    if (e.target.files.length > 0) {
+      setArquivod(e.target.files[0]);
+      setInputd(e.target.files[0].name);
+    }
+  }
+
+  function changeFilef(e) {
+    if (e.target.files.length > 0) {
+      setArquivof(e.target.files[0]);
+      setInputf(e.target.files[0].name);
     }
   }
 
@@ -115,19 +190,52 @@ function App() {
 
   return (
     <>
-      <header>
-        <section className="hero is-success">
-          <div className="hero-body">
-            <p className="title">EXEMPLO</p>
-            <p className="subtitle">Exemplo de upload de arquivo</p>
-          </div>
-        </section>
-      </header>
       <main>
         <section className="columns">
           <div className="column is-1"></div>
           <div className="column my-5">
 
+            <h1>Adicionar ator</h1>
+            <form onSubmit={cadastrar_ator}>
+              <input type="text" value={nome} onChange={(e)=>{setNome(e.target.value)}}/>
+              <input type="text" value={nacionalidade} onChange={(e)=>{setNacionalidade(e.target.value)}}/>
+              <input type="date" value={data_nasc} onChange={(e)=>{setData_nasc(e.target.value)}}/>
+              <input type="text" value={biografia} onChange={(e)=>{setBiografia(e.target.value)}}/>
+              <input type="number" value={qtde_premios} onChange={(e)=>{setQtde_premios(e.target.value)}}/>
+              <input className="file-input" type="file" name="foto" accept="image/*" onChange={changeFilea}/>
+              <span className="file-name">{inpa}</span>
+
+              <button type="submit">Enviar</button>
+            </form>
+
+            <h1>Adicionar diretor</h1>
+            <form onSubmit={cadastrar_diretor}>
+              <input type="text" value={nomed} onChange={(e)=>{setNomed(e.target.value)}}/>
+              <input type="text" value={nacionalidaded} onChange={(e)=>{setNacionalidaded(e.target.value)}}/>
+              <input type="date" value={data_nascd} onChange={(e)=>{setData_nascd(e.target.value)}}/>
+              <input type="text" value={biografiad} onChange={(e)=>{setBiografiad(e.target.value)}}/>
+              <input type="number" value={qtde_premiosd} onChange={(e)=>{setQtde_premiosd(e.target.value)}}/>
+              <input className="file-input" type="file" name="foto" accept="image/*" onChange={changeFiled}/>
+              <span className="file-name">{inpd}</span>
+
+              <button type="submit">Enviar</button>
+            </form>
+
+            <h1>Adicionar filme</h1>
+            <form onSubmit={cadastrar_filme}>
+              <input type="text" value={titulo} onChange={(e)=>{setTitulo(e.target.value)}}/>
+              <input type="number" value={diretor} onChange={(e)=>{setDiretor(e.target.value)}}/>
+              <input type="text" value={sinopse} onChange={(e)=>{setSinopse(e.target.value)}}/>
+              <input type="number" value={faixa_etaria} onChange={(e)=>{setFaixa_etaria(e.target.value)}}/>
+              <input type="number" value={duracao} onChange={(e)=>{setDuracao(e.target.value)}}/>
+              <input type="number" value={qtde_premiosf} onChange={(e)=>{setQtde_premiosf(e.target.value)}}/>
+              <input className="file-input" type="file" name="foto" accept="image/*" onChange={changeFilef}/>
+              <span className="file-name">{inpf}</span>
+
+              <button type="submit">Enviar</button>
+            </form>
+
+            <h1>Adiconar imagem no servidor</h1>
             <form onSubmit={cadastrar}>
               <div className="field">
                 <label className="label">Envie sua imagem</label>
@@ -155,19 +263,6 @@ function App() {
           </div>
           <div className="column is-1"></div>
         </section>
-
-        <h1>Adicionar ator</h1>
-        <form onSubmit={cadastrar_ator}>
-          <input type="text" value={nome} onChange={(e)=>{setNome(e.target.value)}}/>
-          <input type="text" value={nacionalidade} onChange={(e)=>{setNacionalidade(e.target.value)}}/>
-          <input type="date" value={data_nasc} onChange={(e)=>{setData_nasc(e.target.value)}}/>
-          <input type="text" value={biografia} onChange={(e)=>{setBiografia(e.target.value)}}/>
-          <input type="number" value={qtde_premios} onChange={(e)=>{setQtde_premios(e.target.value)}}/>
-          <input className="file-input" type="file" name="foto" accept="image/*" onChange={changeFile2}/>
-          <span className="file-name">{inp2}</span>
-
-          <button type="submit">Enviar</button>
-        </form>
       </main>
     </>
   );
