@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS arquivo_imagem(
     id SERIAL PRIMARY KEY,
     nome_original VARCHAR(255) NOT NULL,
-    tipo_mime VARCHAR(100) NOT NULL,
+    tipo_mime VARCHAR(100),
     tamanho_bytes BIGINT NOT NULL,
     conteudo BYTEA NOT NULL
     /*Sem "criado_em"*/

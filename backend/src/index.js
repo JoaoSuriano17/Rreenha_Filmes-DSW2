@@ -14,6 +14,7 @@ app.use("/filme", require("./routes/filme"));
 app.use("/resenha", require("./routes/resenha"));
 app.use("/serie", require("./routes/serie"));
 app.use("/usuario", require("./routes/usuario"));
+app.use("/arquivo", require("./routes/arquivo"));
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "static", "index.html"));
