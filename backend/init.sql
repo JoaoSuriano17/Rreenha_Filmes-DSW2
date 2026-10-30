@@ -144,22 +144,22 @@ CREATE TABLE IF NOT EXISTS serie_ator(
 );
 
 /* Inserções */
-INSERT INTO diretor (nome, nacionalidade, data_nascimento, biografia, qtde_premios) VALUES ('Werner Herzog', 'Alemão', '1942-09-05T00:00:00Z', 'Alemão, ousado, impertinente', 11);
-INSERT INTO diretor (nome, nacionalidade, data_nascimento, biografia, qtde_premios) VALUES ('Ingmar Bergman', 'Sueco', '1918-07-14T00:00:00Z', 'Maior diretor sueco, dirigiu 48 filmes, ganhou três óscares na categoria de Melhor Filme Internacional.', 64);
-INSERT INTO diretor (nome, nacionalidade, data_nascimento, biografia, qtde_premios) VALUES ('Klebe (falso)', 'Prefere não dizer', '1999-12-30T00:00:00Z', 'Raramente vi tamanha capacidade inventiva misturada a tão pouco talento, diriam se não fosse o melhor.', 123);
+INSERT INTO diretor (nome, nacionalidade, data_nascimento, biografia, qtde_premios, fotografia) VALUES ('Werner Herzog', 'Alemão', '1942-09-05T00:00:00Z', 'Alemão, ousado, impertinente', 11, 1);
+INSERT INTO diretor (nome, nacionalidade, data_nascimento, biografia, qtde_premios, fotografia) VALUES ('Ingmar Bergman', 'Sueco', '1918-07-14T00:00:00Z', 'Maior diretor sueco, dirigiu 48 filmes, ganhou três óscares na categoria de Melhor Filme Internacional.', 64, 1);
+INSERT INTO diretor (nome, nacionalidade, data_nascimento, biografia, qtde_premios, fotografia) VALUES ('Klebe (falso)', 'Prefere não dizer', '1999-12-30T00:00:00Z', 'Raramente vi tamanha capacidade inventiva misturada a tão pouco talento, diriam se não fosse o melhor.', 123, 1);
 
-INSERT INTO ator (nome, nacionalidade, data_nascimento, biografia, qtde_premios) VALUES ('Wagner Moura', 'Brasileiro', '1976-07-14T00:00:00Z', 'Grande sujeito, baiano.', 2);
-INSERT INTO ator (nome, nacionalidade, data_nascimento, biografia, qtde_premios) VALUES ('Klaus Kinski', 'Alemão', '1926-07-14T00:00:00Z', 'Grande desregulado.', 0);
+INSERT INTO ator (nome, nacionalidade, data_nascimento, biografia, qtde_premios, fotografia) VALUES ('Wagner Moura', 'Brasileiro', '1976-07-14T00:00:00Z', 'Grande sujeito, baiano.', 2, 1);
+INSERT INTO ator (nome, nacionalidade, data_nascimento, biografia, qtde_premios, fotografia) VALUES ('Klaus Kinski', 'Alemão', '1926-07-14T00:00:00Z', 'Grande desregulado.', 0, 1);
 
 INSERT INTO usuario (nome, email, critico, administrador, senha) VALUES ('João Silva', 'joao@gmail.com', TRUE, TRUE, '$2b$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy');
 INSERT INTO usuario (nome, email, critico, administrador, senha) VALUES ('Maria Oliveira', 'maria@gmail.com', TRUE, FALSE, '$2b$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy');
 INSERT INTO usuario (nome, email, critico, administrador, senha) VALUES ('Pedro Santos', 'pedro@gmail.com', FALSE, FALSE, '$2b$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy');
 
-INSERT INTO filme (titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios) VALUES ('Aguirre, a Cólera dos Deuses', 1, 'Um explorador espanhol conduz uma expedição pela Amazônia em busca de riquezas, enquanto sua ambição o leva à obsessão.', 14, 95, 5);
-INSERT INTO filme (titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios) VALUES ('O Enigma de Kaspar Hauser', 1, 'Um jovem criado em isolamento surge na sociedade e precisa compreender as convenções e relações humanas.', 12, 110, 3);
-INSERT INTO filme (titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios) VALUES ('O Sétimo Selo', 2, 'Um cavaleiro medieval retorna das Cruzadas e joga uma partida de xadrez com a Morte.', 14, 96, 4);
-INSERT INTO filme (titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios) VALUES ('Morangos Silvestres', 2, 'Um professor idoso revisita lembranças de sua vida durante uma viagem para receber uma homenagem acadêmica.', 10, 91, 2);
-INSERT INTO filme (titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios) VALUES ('A Obra-Prima de Klebe', 3, 'Um cineasta fictício tenta realizar sua obra definitiva, enfrentando contratempos tão absurdos quanto sua própria ambição.', 12, 87, 123);
+INSERT INTO filme (titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios, cartaz) VALUES ('Aguirre, a Cólera dos Deuses', 1, 'Um explorador espanhol conduz uma expedição pela Amazônia em busca de riquezas, enquanto sua ambição o leva à obsessão.', 14, 95, 5, 2);
+INSERT INTO filme (titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios, cartaz) VALUES ('O Enigma de Kaspar Hauser', 1, 'Um jovem criado em isolamento surge na sociedade e precisa compreender as convenções e relações humanas.', 12, 110, 3, 2);
+INSERT INTO filme (titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios, cartaz) VALUES ('O Sétimo Selo', 2, 'Um cavaleiro medieval retorna das Cruzadas e joga uma partida de xadrez com a Morte.', 14, 96, 4, 2);
+INSERT INTO filme (titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios, cartaz) VALUES ('Morangos Silvestres', 2, 'Um professor idoso revisita lembranças de sua vida durante uma viagem para receber uma homenagem acadêmica.', 10, 91, 2, 2);
+INSERT INTO filme (titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios, cartaz) VALUES ('A Obra-Prima de Klebe', 3, 'Um cineasta fictício tenta realizar sua obra definitiva, enfrentando contratempos tão absurdos quanto sua própria ambição.', 12, 87, 123, 2);
 
 INSERT INTO serie (titulo, diretor, sinopse, faixa_etaria, qtde_premios) VALUES ('A Jornada Humana', 3, 'Uma série fictícia sobre personagens que buscam compreender a si mesmos em meio a dilemas morais.', 12, 2);
 INSERT INTO serie (titulo, diretor, sinopse, faixa_etaria, qtde_premios) VALUES ('Contos da Existência', 2, 'Histórias independentes sobre escolhas, conflitos e o sentido da vida.', 14, 3);

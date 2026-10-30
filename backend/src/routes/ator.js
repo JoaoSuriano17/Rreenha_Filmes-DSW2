@@ -42,7 +42,7 @@ router.post("/",  upload.single("arquivo"), async (req, res)=>{
 
         var r2;
         if(!req.file){
-            r2=await db.query("INSERT INTO ator(nome, nacionalidade, data_nascimento, biografia, qtde_premios, fotografia) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [nome, nacionalidade, data_nascimento, biografia, qtde_premios, 7])
+            r2=await db.query("INSERT INTO ator(nome, nacionalidade, data_nascimento, biografia, qtde_premios, fotografia) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [nome, nacionalidade, data_nascimento, biografia, qtde_premios, 1])
         }else{
             const formData = new FormData();
             formData.append( "arquivo", new Blob([req.file.buffer], { type: req.file.mimetype }), req.file.originalname);
@@ -77,7 +77,7 @@ router.delete("/:id", tipo, async(req, res)=>{
         }
 
         await db.query("DELETE FROM ator WHERE id=$1", [req.params.id])
-        if (r.rows[0].fotografia!=7 && r.rows[0].fotografia!=8){
+        if (r.rows[0].fotografia!=1 && r.rows[0].fotografia!=2){
             await fetch(`http://localhost:3000/arquivo/${r.rows[0].fotografia}`, {method:"DELETE"})
         }
 

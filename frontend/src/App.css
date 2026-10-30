@@ -1,0 +1,84 @@
+.hero-content {
+  position: absolute;
+  top: 52%;
+  left: 6%;
+  transform: translateY(-50%);
+  z-index: 10;
+  color: white;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.hero {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#carouselExampleInterval {
+  width: 100%;
+  max-width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+#carouselExampleInterval .carousel-inner,
+#carouselExampleInterval .carousel-item {
+  width: 100% !important;
+  height: 730px;
+}
+
+#carouselExampleInterval .carousel-item img {
+  width: 100% !important;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* Escurece levemente a imagem */
+.carousel-item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.8),
+    transparent 75%
+  );
+  pointer-events: none;
+}
+
+.texto1{
+  font-size: 90px;
+}
+
+.texto2{
+  color: rgb(250, 167, 43);
+}
+
+.hero-content span{
+  font-size: 20px;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.search{
+  border-radius: 10px;
+  border: 0px;
+}
+
+.card{
+  width: 18rem;
+}
+
+.procurados{
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.filmes_classicos{
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}

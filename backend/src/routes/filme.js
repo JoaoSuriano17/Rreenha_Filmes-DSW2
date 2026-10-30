@@ -41,7 +41,7 @@ router.post("/",  upload.single("arquivo"), async (req, res)=>{
 
         var r2;
         if(!req.file){
-            r2=await db.query("INSERT INTO filme(titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios, cartaz) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *", [titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios, 8])
+            r2=await db.query("INSERT INTO filme(titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios, cartaz) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *", [titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios, 2])
         }else{
             const formData = new FormData();
             formData.append( "arquivo", new Blob([req.file.buffer], { type: req.file.mimetype }), req.file.originalname);
@@ -76,7 +76,7 @@ router.delete("/:id", tipo, async(req, res)=>{
         }
 
         await db.query("DELETE FROM filme WHERE id=$1", [req.params.id])
-        if (r.rows[0].cartaz!=7 && r.rows[0].cartaz!=8){
+        if (r.rows[0].cartaz!=1 && r.rows[0].cartaz!=2){
             await fetch(`http://localhost:3000/arquivo/${r.rows[0].cartaz}`, {method:"DELETE"})
         }
 
