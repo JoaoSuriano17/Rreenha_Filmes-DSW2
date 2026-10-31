@@ -1,7 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { useEffect, useState } from 'react';
-import {BsAlarm, BsCart, BsHeart, BsStar} from "react-icons/bs"
+import {BsInstagram, BsTiktok, BsTwitterX, BsYoutube} from "react-icons/bs"
+import { Link } from 'react-router-dom';
 
 function Home(props){
 
@@ -64,9 +65,11 @@ function Home(props){
 
             <h1 className='procurados'>Veja os filmes mais procurados no nosso site</h1>
             <div className="filmes_classicos">
-                {classico.filmes?.filter(filme => filme.id <= 4).map((filme, index) => (
+                {classico.filmes?.filter(filme => filme.id>5).map((filme, index) => (
                     <div className="card" key={filme.id ?? index}>
-                        <img src={`http://localhost:3000/arquivo/${filme.cartaz}`} alt="Image" />
+                        <Link to={"/filme/"+filme.id}>
+                            <img src={`http://localhost:3000/arquivo/${filme.cartaz}`} alt="Image" className='imagem_classicos'/>
+                        </Link>
                         <div className="card-body">
                             <h5 className="card-title">{filme.titulo}</h5>
                             <p className="card-text">{filme.duracao} minutos</p>
@@ -74,6 +77,20 @@ function Home(props){
                     </div>
                 ))}
             </div>
+
+            <footer>
+                <div className='redes-footer'>
+                    <span>Nos siga nas nossas redes sociais</span>
+                    <div className='redes-icones'>
+                        <a href='https://www.youtube.com/@LOUDBrawlStars'><BsYoutube></BsYoutube></a>
+                        <a href='https://www.tiktok.com/@loud.brawlstars'><BsTiktok></BsTiktok></a>
+                        <a href='https://www.instagram.com/teamhmble/'><BsInstagram></BsInstagram></a>
+                        <a href='https://x.com/TeamHmble'><BsTwitterX></BsTwitterX></a>
+                    </div>
+                </div>
+
+                <span className='cop'>©2026. Rreenha_Filmes. Todos os direitos reservados.</span>
+            </footer>
         </>
     )
 }
