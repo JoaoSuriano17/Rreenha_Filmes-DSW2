@@ -83,7 +83,7 @@ function Home(props){
         <>
             <nav className="navbar bg-black fg-2">
                 <div className="container-fluid">
-                <a className="navbar-brand text-light">Rreenha Filmes</a>
+                <Link to={"/"} className="link Rreenha">Rreenha Filmes</Link>
                 <form className="d-flex" role="search" onSubmit={pesquisar}>
                     <input className="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search" value={search} onChange={(e)=>{setSearch(e.target.value)}}/>
                     <button className="search" type="submit"><BsSearch></BsSearch></button>
@@ -123,7 +123,7 @@ function Home(props){
             <h1 className='procurados'>Veja os filmes mais procurados no nosso site</h1>
             <div className="filmes_classicos">
                 {classico.filmes?.filter(filme => filme.id>5 && filme.id<10).map((filme, index) => (
-                    <div className="card" key={filme.id ?? index}>
+                    <div className="card cardhome" key={filme.id ?? index}>
                         <Link to={"/filme/"+filme.id}>
                             <img src={`http://localhost:3000/arquivo/${filme.cartaz}`} alt="Image" className='imagem_classicos'/>
                         </Link>
@@ -133,6 +133,9 @@ function Home(props){
                         </div>
                     </div>
                 ))}
+            </div>
+            <div className='d-flex justify-content-center'>
+                <button className="btncatalogo" onClick={()=>{navigate("/filmes")}}>Explorar catálogo completo</button>
             </div>
 
             <h1 className='procurados'>Veja os filmes mais premiados</h1>

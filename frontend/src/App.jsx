@@ -6,6 +6,9 @@ import Home from "./Home";
 import Filme from "./Filme";
 import Ator from "./Ator";
 import Diretor from "./Diretor";
+import CatalogoFilmes from "./CatalogoFilmes";
+import CatalogoAtores from "./CatalogoAtores";
+import CatalogoDiretores from "./CatalogoDiretores";
 
 function App() {
   async function filmes_classicos() {
@@ -43,6 +46,22 @@ function App() {
   async function atores() {
     try{
       const r=await fetch("http://localhost:3000/ator")
+      
+      if(!r.ok){
+        return null;
+      }
+      
+      const r2=await r.json()
+
+      return r2
+    }catch(erro){
+      console.log("Erro: "+erro)
+    }
+  }
+
+  async function diretores() {
+    try{
+      const r=await fetch("http://localhost:3000/diretor")
       
       if(!r.ok){
         return null;
@@ -173,9 +192,12 @@ function App() {
       <Routes>
         <Route path="/" element={<Home classico={filmes_classicos} arquivos={arquivos} premios={filmes_premiados} atores={atores} titulo={filme_titulo} nomea={ator_nome} nomed={diretor_nome}></Home>}></Route>
         <Route path="/arquivo" element={<Arquivo></Arquivo>}></Route>
-        <Route path="/filme/:id" element={<Filme filme={filme} diretor={diretor}></Filme>}></Route>
-        <Route path="/ator/:id" element={<Ator ator={ator}></Ator>}></Route>
-        <Route path="/diretor/:id" element={<Diretor diretor={diretor}></Diretor>}></Route>
+        <Route path="/filme/:id" element={<Filme filme={filme} diretor={diretor} titulo={filme_titulo} nomea={ator_nome} nomed={diretor_nome}></Filme>}></Route>
+        <Route path="/ator/:id" element={<Ator ator={ator} titulo={filme_titulo} nomea={ator_nome} nomed={diretor_nome}></Ator>}></Route>
+        <Route path="/diretor/:id" element={<Diretor diretor={diretor} titulo={filme_titulo} nomea={ator_nome} nomed={diretor_nome}></Diretor>}></Route>
+        <Route path="/filmes" element={<CatalogoFilmes catalogo={filmes_classicos}></CatalogoFilmes>}></Route>
+        <Route path="/atores" element={<CatalogoAtores catalogo={atores}></CatalogoAtores>}></Route>
+        <Route path="/diretores" element={<CatalogoDiretores catalogo={diretores}></CatalogoDiretores>}></Route>
       </Routes>
     </>
   )

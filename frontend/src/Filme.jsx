@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
-import {BsInstagram, BsTiktok, BsTwitterX, BsYoutube} from "react-icons/bs"
+import {BsInstagram, BsSearch, BsTiktok, BsTwitterX, BsYoutube} from "react-icons/bs"
 
 function Filme(props){
 
@@ -9,6 +9,39 @@ function Filme(props){
 
     const [filme, setFilme]=useState([])
     const [diretor, setDiretor]=useState([])
+
+     const [search, setSearch]=useState("")
+
+    const navigate = useNavigate();
+
+    async function pesquisar(e) {
+    e.preventDefault();
+
+    try {
+        const titulo = await props.titulo(search);
+        if (titulo != null) {
+            navigate("/filme/" + titulo);
+            return;
+        }
+
+        const ator = await props.nomea(search);
+        if (ator != null) {
+            navigate("/ator/" + ator);
+            return;
+        }
+
+        const diretor = await props.nomed(search);
+        if (diretor != null) {
+            navigate("/diretor/" + diretor);
+            return;
+        }
+
+        alert("Não há nada cadastrado com esse nome");
+    } catch (erro) {
+        console.log("Erro na pesquisa:", erro);
+        alert("Ocorreu um erro ao realizar a pesquisa");
+    }
+}
 
     useEffect(()=>{
         async function pegar_filme(){
@@ -44,10 +77,10 @@ function Filme(props){
         <>
             <nav className="navbar bg-black fg-2">
                 <div className="container-fluid">
-                <a className="navbar-brand text-light">Navbar</a>
-                <form className="d-flex" role="search">
-                    <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-                    <button className="search" type="submit">Search</button>
+                <Link to={"/"} className="link Rreenha">Rreenha Filmes</Link>
+                <form className="d-flex" role="search" onSubmit={pesquisar}>
+                    <input className="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search" value={search} onChange={(e)=>{setSearch(e.target.value)}}/>
+                    <button className="search" type="submit"><BsSearch></BsSearch></button>
                 </form>
                 </div>
             </nav>
@@ -66,7 +99,7 @@ function Filme(props){
                     <hr></hr>
                     <p><b>Quantidade de prêmios:</b> {filme.qtde_premios}</p>
                     <hr></hr>
-                    <p><b>Diretor:</b> <Link to={"/diretor/"+diretor.id}>{diretor.nome}</Link></p>
+                    <p><b>Diretor:</b> <Link className="link" to={"/diretor/"+diretor.id}>{diretor.nome}</Link></p>
                 </div>
             </div>
 

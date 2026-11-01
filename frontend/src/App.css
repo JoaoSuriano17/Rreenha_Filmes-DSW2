@@ -67,7 +67,7 @@
   border: 0px;
 }
 
-.card{
+.cardhome{
   width: 18rem;
 }
 
@@ -155,4 +155,63 @@ footer{
   width: 100%;
   border: 1px black solid;
   border-radius: 5px;
+}
+
+.btncatalogo{
+  background-color: rgb(91, 91, 239);
+  margin-top: 15px;
+  color: rgb(233, 229, 229);
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.catalogo{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5%;
+}
+
+.cardcatalogo{
+  width: 9rem;
+  margin-top: 20px;
+  background-color: rgb(35, 79, 79);
+}
+
+.imagem_catalogo{
+  width: 100%;
+  height: 200px;
+  border: 1px solid black;
+  border-radius: 3px;
+}
+
+.link{
+  text-decoration: none;
+}
+
+.Rreenha{
+  color: white;
+  font-size: 20px;
+}
+
+.pegar_filme{
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  width: 300px;
+  margin-top: 20px;
+  border: 2px solid black;
+  border-radius: 10px;
+}
+
+.pegar_filme input{
+  border: 1px solid black;
+  text-align: center;
+}
+
+.imagem_catalogo_pessoa{
+  width: 100%;
+  height: 150px;
+  border: 1px solid black;
+  border-radius: 3px;
 }
