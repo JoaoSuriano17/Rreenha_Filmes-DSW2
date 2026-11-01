@@ -1,12 +1,47 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { useEffect, useState } from 'react';
-import {BsInstagram, BsTiktok, BsTwitterX, BsYoutube} from "react-icons/bs"
-import { Link } from 'react-router-dom';
+import {BsInstagram, BsSearch, BsTiktok, BsTwitterX, BsYoutube} from "react-icons/bs"
+import { Link, useNavigate } from 'react-router-dom';
 
 function Home(props){
 
     const [classico, setClassico]=useState([])
+    const [premiados, setPremiados]=useState([])
+    const [atores, setAtores]=useState([])
+
+    const [search, setSearch]=useState("")
+
+    const navigate = useNavigate();
+
+    async function pesquisar(e) {
+    e.preventDefault();
+
+    try {
+        const titulo = await props.titulo(search);
+        if (titulo != null) {
+            navigate("/filme/" + titulo);
+            return;
+        }
+
+        const ator = await props.nomea(search);
+        if (ator != null) {
+            navigate("/ator/" + ator);
+            return;
+        }
+
+        const diretor = await props.nomed(search);
+        if (diretor != null) {
+            navigate("/diretor/" + diretor);
+            return;
+        }
+
+        alert("Não há nada cadastrado com esse nome");
+    } catch (erro) {
+        console.log("Erro na pesquisa:", erro);
+        alert("Ocorreu um erro ao realizar a pesquisa");
+    }
+}
 
     useEffect(()=>{
         async function filmes_classicos(){
@@ -19,17 +54,39 @@ function Home(props){
             }
         }
 
+        async function filmes_premiados(){
+            try{
+                const r=await props.premios()
+                console.log(r)
+                setPremiados(r)
+            }catch(erro){
+                console.log(erro)
+            }
+        }
+
+        async function atores(){
+            try{
+                const r=await props.atores()
+                console.log(r)
+                setAtores(r)
+            }catch(erro){
+                console.log(erro)
+            }
+        }
+
         filmes_classicos()
+        filmes_premiados()
+        atores()
     }, [])
 
     return(
         <>
             <nav className="navbar bg-black fg-2">
                 <div className="container-fluid">
-                <a className="navbar-brand text-light">Navbar</a>
-                <form className="d-flex" role="search">
-                    <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-                    <button className="search" type="submit">Search</button>
+                <a className="navbar-brand text-light">Rreenha Filmes</a>
+                <form className="d-flex" role="search" onSubmit={pesquisar}>
+                    <input className="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search" value={search} onChange={(e)=>{setSearch(e.target.value)}}/>
+                    <button className="search" type="submit"><BsSearch></BsSearch></button>
                 </form>
                 </div>
             </nav>
@@ -65,7 +122,7 @@ function Home(props){
 
             <h1 className='procurados'>Veja os filmes mais procurados no nosso site</h1>
             <div className="filmes_classicos">
-                {classico.filmes?.filter(filme => filme.id>5).map((filme, index) => (
+                {classico.filmes?.filter(filme => filme.id>5 && filme.id<10).map((filme, index) => (
                     <div className="card" key={filme.id ?? index}>
                         <Link to={"/filme/"+filme.id}>
                             <img src={`http://localhost:3000/arquivo/${filme.cartaz}`} alt="Image" className='imagem_classicos'/>
@@ -73,6 +130,37 @@ function Home(props){
                         <div className="card-body">
                             <h5 className="card-title">{filme.titulo}</h5>
                             <p className="card-text">{filme.duracao} minutos</p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            <h1 className='procurados'>Veja os filmes mais premiados</h1>
+            <div className="filmes_classicos">
+                {premiados.filmes?.slice(0, 4).map((filme, index) => (
+                    <div className="card" key={filme.id ?? index}>
+                        <Link to={"/filme/"+filme.id}>
+                            <img src={`http://localhost:3000/arquivo/${filme.cartaz}`} alt="Image" className='imagem_classicos'/>
+                        </Link>
+                        <div className="card-body">
+                            <h5 className="card-title">{filme.titulo}</h5>
+                            <p className="card-text">{filme.duracao} minutos</p>
+                            <p className="card-text">{filme.qtde_premios} prêmios recebidos</p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            <h1 className='procurados'>Veja os atores mais procurados</h1>
+            <div className="filmes_classicos">
+                {atores.atores?.filter(ator => ator.id<5).map((ator, index) => (
+                    <div className="card" key={ator.id ?? index}>
+                        <Link to={"/ator/"+ator.id}>
+                            <img src={`http://localhost:3000/arquivo/${ator.fotografia}`} alt="Image" className='ator'/>
+                        </Link>
+                        <div className="card-body">
+                            <h5 className="card-title">{ator.nome}</h5>
+                            <p className="card-text">{ator.nacionalidade}</p>
                         </div>
                     </div>
                 ))}

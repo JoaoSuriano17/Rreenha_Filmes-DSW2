@@ -19,6 +19,19 @@ router.get("/", async (req, res)=>{
     }
 })
 
+//Pegar o id do diretor pelo nome. Usado na pesquisa da navbar
+router.get("/nome/:nome", async (req, res)=>{
+    try{
+        const r=await db.query("SELECT id FROM diretor WHERE nome=$1", [req.params.nome])
+        if (r.rowCount==0){
+            return res.status(404).json({msg:"Não existe diretor com esse nome"})
+        }
+        return res.json({diretor:r.rows[0]})
+    }catch(erro){
+        return res.status(500).json({msg:erro.message})
+    }
+})
+
 router.get("/:id", tipo, async (req, res)=>{
     try{
         const r=await db.query("SELECT * FROM diretor WHERE id=$1", [req.params.id])

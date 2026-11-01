@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import {BsInstagram, BsTiktok, BsTwitterX, BsYoutube} from "react-icons/bs"
 
@@ -66,7 +66,7 @@ function Filme(props){
                     <hr></hr>
                     <p><b>Quantidade de prêmios:</b> {filme.qtde_premios}</p>
                     <hr></hr>
-                    <p><b>Diretor:</b> {diretor.nome}</p>
+                    <p><b>Diretor:</b> <Link to={"/diretor/"+diretor.id}>{diretor.nome}</Link></p>
                 </div>
             </div>
 

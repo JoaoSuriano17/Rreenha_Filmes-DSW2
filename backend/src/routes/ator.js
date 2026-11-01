@@ -19,6 +19,19 @@ router.get("/", async (req, res)=>{
     }
 })
 
+//Pegar o id do ator pelo nome. Usado na pesquisa da navbar
+router.get("/nome/:nome", async (req, res)=>{
+    try{
+        const r=await db.query("SELECT id FROM ator WHERE nome=$1", [req.params.nome])
+        if (r.rowCount==0){
+            return res.status(404).json({msg:"Não existe ator com esse nome"})
+        }
+        return res.json({ator:r.rows[0]})
+    }catch(erro){
+        return res.status(500).json({msg:erro.message})
+    }
+})
+
 router.get("/:id", tipo, async (req, res)=>{
     try{
         const r=await db.query("SELECT * FROM ator WHERE id=$1", [req.params.id])

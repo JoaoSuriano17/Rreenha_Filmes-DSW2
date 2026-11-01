@@ -129,6 +129,7 @@ function Arquivo() {
     if (!res.ok) {
       const json = await res.json();
       alert(`Erro: ${json.msg}`);
+      await fetch(`http://localhost:3000/filme`, { method: "DELETE"})
       return;
     }
     resetForm();

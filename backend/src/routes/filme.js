@@ -19,6 +19,32 @@ router.get("/", async (req, res)=>{
     }
 })
 
+//Mostrar os filmes do mais premiados ao menos premiado
+router.get("/premiado", async (req, res)=>{
+    try{
+        const r=await db.query("SELECT * FROM filme ORDER BY qtde_premios DESC");
+        if(!r.rowCount){
+            return res.status(400).json({msg:"Não há filme cadastrado com esse nome."});
+        }
+        return res.status(200).json({filmes:r.rows});
+    }catch(erro){
+        return res.status(500).json({msg:erro.message});
+    }
+})
+
+//Pegar o id do filme pelo titulo. Usado na pesquisa da navbar
+router.get("/titulo/:titulo", async (req, res)=>{
+    try{
+        const r=await db.query("SELECT id FROM filme WHERE titulo=$1", [req.params.titulo])
+        if (r.rowCount==0){
+            return res.status(404).json({msg:"Não existe filme com esse título"})
+        }
+        return res.json({filme:r.rows[0]})
+    }catch(erro){
+        return res.status(500).json({msg:erro.message})
+    }
+})
+
 router.get("/:id", tipo, async (req, res)=>{
     try{
         const r=await db.query("SELECT * FROM filme WHERE id=$1", [req.params.id])
@@ -37,6 +63,11 @@ router.post("/",  upload.single("arquivo"), async (req, res)=>{
 
         if (!titulo){
             return res.status(400).json({msg:"O filme deve ter pelo menos um titulo"})
+        }
+
+        const dir=await db.query("SELECT nome FROM diretor WHERE id=$1", [diretor])
+        if (!dir.rowCount){
+            return res.json({msg:"Diretor inexistente"})
         }
 
         var r2;
