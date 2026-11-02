@@ -9,6 +9,7 @@ import Diretor from "./Diretor";
 import CatalogoFilmes from "./CatalogoFilmes";
 import CatalogoAtores from "./CatalogoAtores";
 import CatalogoDiretores from "./CatalogoDiretores";
+import Erro from "./Erro";
 
 function App() {
   async function filmes_classicos() {
@@ -195,9 +196,11 @@ function App() {
         <Route path="/filme/:id" element={<Filme filme={filme} diretor={diretor} titulo={filme_titulo} nomea={ator_nome} nomed={diretor_nome}></Filme>}></Route>
         <Route path="/ator/:id" element={<Ator ator={ator} titulo={filme_titulo} nomea={ator_nome} nomed={diretor_nome}></Ator>}></Route>
         <Route path="/diretor/:id" element={<Diretor diretor={diretor} titulo={filme_titulo} nomea={ator_nome} nomed={diretor_nome}></Diretor>}></Route>
-        <Route path="/filmes" element={<CatalogoFilmes catalogo={filmes_classicos}></CatalogoFilmes>}></Route>
-        <Route path="/atores" element={<CatalogoAtores catalogo={atores}></CatalogoAtores>}></Route>
-        <Route path="/diretores" element={<CatalogoDiretores catalogo={diretores}></CatalogoDiretores>}></Route>
+        <Route path="/filmes" element={<CatalogoFilmes catalogo={filmes_classicos} titulo={filme_titulo} nomea={ator_nome} nomed={diretor_nome}></CatalogoFilmes>}></Route>
+        <Route path="/atores" element={<CatalogoAtores catalogo={atores} titulo={filme_titulo} nomea={ator_nome} nomed={diretor_nome}></CatalogoAtores>}></Route>
+        <Route path="/diretores" element={<CatalogoDiretores catalogo={diretores} titulo={filme_titulo} nomea={ator_nome} nomed={diretor_nome}></CatalogoDiretores>}></Route>
+
+        <Route path="/:sla" element={<Erro titulo={filme_titulo} nomea={ator_nome} nomed={diretor_nome}></Erro>}></Route>
       </Routes>
     </>
   )

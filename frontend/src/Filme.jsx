@@ -10,43 +10,47 @@ function Filme(props){
     const [filme, setFilme]=useState([])
     const [diretor, setDiretor]=useState([])
 
-     const [search, setSearch]=useState("")
+    const [search, setSearch]=useState("")
 
     const navigate = useNavigate();
 
     async function pesquisar(e) {
-    e.preventDefault();
+        e.preventDefault();
 
-    try {
-        const titulo = await props.titulo(search);
-        if (titulo != null) {
-            navigate("/filme/" + titulo);
-            return;
+        try {
+            const titulo = await props.titulo(search);
+            if (titulo != null) {
+                navigate("/filme/" + titulo);
+                return;
+            }
+
+            const ator = await props.nomea(search);
+            if (ator != null) {
+                navigate("/ator/" + ator);
+                return;
+            }
+
+            const diretor = await props.nomed(search);
+            if (diretor != null) {
+                navigate("/diretor/" + diretor);
+                return;
+            }
+
+            alert("Não há nada cadastrado com esse nome");
+        } catch (erro) {
+            console.log("Erro na pesquisa:", erro);
+            alert("Ocorreu um erro ao realizar a pesquisa");
         }
-
-        const ator = await props.nomea(search);
-        if (ator != null) {
-            navigate("/ator/" + ator);
-            return;
-        }
-
-        const diretor = await props.nomed(search);
-        if (diretor != null) {
-            navigate("/diretor/" + diretor);
-            return;
-        }
-
-        alert("Não há nada cadastrado com esse nome");
-    } catch (erro) {
-        console.log("Erro na pesquisa:", erro);
-        alert("Ocorreu um erro ao realizar a pesquisa");
     }
-}
 
     useEffect(()=>{
         async function pegar_filme(){
             try{
                 const r=await props.filme(id)
+                if (r==null){
+                    alert("Não existe filme com esse id")
+                    return false;
+                }
                 console.log(r)
                 setFilme(r.filme)
             }catch(erro){
@@ -107,10 +111,10 @@ function Filme(props){
                 <div className='redes-footer'>
                     <span>Nos siga nas nossas redes sociais</span>
                     <div className='redes-icones'>
-                        <BsYoutube></BsYoutube>
-                        <BsTiktok></BsTiktok>
-                        <BsInstagram></BsInstagram>
-                        <BsTwitterX></BsTwitterX>
+                        <a href='https://www.youtube.com/@LOUDBrawlStars'><BsYoutube></BsYoutube></a>
+                        <a href='https://www.tiktok.com/@loud.brawlstars'><BsTiktok></BsTiktok></a>
+                        <a href='https://www.instagram.com/teamhmble/'><BsInstagram></BsInstagram></a>
+                        <a href='https://x.com/TeamHmble'><BsTwitterX></BsTwitterX></a>
                     </div>
                 </div>
 

@@ -1,12 +1,44 @@
 import { useEffect, useState } from "react"
-import { BsYoutube, BsTiktok, BsInstagram, BsTwitterX } from "react-icons/bs"
-import { Link } from "react-router-dom"
+import { BsYoutube, BsTiktok, BsInstagram, BsTwitterX, BsSearch } from "react-icons/bs"
+import { Link, useNavigate } from "react-router-dom"
 
 function CatalogoDiretores(props){
 
     const [search, setSearch]=useState("")
 
     const [diretores, setDiretores]=useState({diretores:[]})
+
+    const [search2, setSearch2]=useState("")
+
+    const navigate = useNavigate();
+
+    async function pesquisar(e) {
+        e.preventDefault();
+        try {
+            const titulo = await props.titulo(search2);
+            if (titulo != null) {
+                navigate("/filme/" + titulo);
+                return;
+            }
+
+            const ator = await props.nomea(search2);
+            if (ator != null) {
+                navigate("/ator/" + ator);
+                return;
+            }
+
+            const diretor = await props.nomed(search2);
+            if (diretor != null) {
+                navigate("/diretor/" + diretor);
+                return;
+            }
+
+            alert("Não há nada cadastrado com esse nome");
+        } catch (erro) {
+            console.log("Erro na pesquisa:", erro);
+            alert("Ocorreu um erro ao realizar a pesquisa");
+        }
+    }
 
     useEffect(()=>{
         async function catalogo(){
@@ -27,6 +59,10 @@ function CatalogoDiretores(props){
             <nav className="navbar bg-black fg-2">
                 <div className="container-fluid">
                 <Link to={"/"} className="link Rreenha">Rreenha Diretores</Link>
+                <form className="d-flex" role="search" onSubmit={pesquisar}>
+                    <input className="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search" value={search2} onChange={(e)=>{setSearch2(e.target.value)}}/>
+                    <button className="search" type="submit"><BsSearch></BsSearch></button>
+                </form>
                 </div>
             </nav>
 
@@ -55,10 +91,10 @@ function CatalogoDiretores(props){
                 <div className='redes-footer'>
                     <span>Nos siga nas nossas redes sociais</span>
                     <div className='redes-icones'>
-                        <BsYoutube></BsYoutube>
-                        <BsTiktok></BsTiktok>
-                        <BsInstagram></BsInstagram>
-                        <BsTwitterX></BsTwitterX>
+                        <a href='https://www.youtube.com/@LOUDBrawlStars'><BsYoutube></BsYoutube></a>
+                        <a href='https://www.tiktok.com/@loud.brawlstars'><BsTiktok></BsTiktok></a>
+                        <a href='https://www.instagram.com/teamhmble/'><BsInstagram></BsInstagram></a>
+                        <a href='https://x.com/TeamHmble'><BsTwitterX></BsTwitterX></a>
                     </div>
                 </div>
 

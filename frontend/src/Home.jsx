@@ -15,33 +15,33 @@ function Home(props){
     const navigate = useNavigate();
 
     async function pesquisar(e) {
-    e.preventDefault();
+        e.preventDefault();
 
-    try {
-        const titulo = await props.titulo(search);
-        if (titulo != null) {
-            navigate("/filme/" + titulo);
-            return;
+        try {
+            const titulo = await props.titulo(search);
+            if (titulo != null) {
+                navigate("/filme/" + titulo);
+                return;
+            }
+
+            const ator = await props.nomea(search);
+            if (ator != null) {
+                navigate("/ator/" + ator);
+                return;
+            }
+
+            const diretor = await props.nomed(search);
+            if (diretor != null) {
+                navigate("/diretor/" + diretor);
+                return;
+            }
+
+            alert("Não há nada cadastrado com esse nome");
+        } catch (erro) {
+            console.log("Erro na pesquisa:", erro);
+            alert("Ocorreu um erro ao realizar a pesquisa");
         }
-
-        const ator = await props.nomea(search);
-        if (ator != null) {
-            navigate("/ator/" + ator);
-            return;
-        }
-
-        const diretor = await props.nomed(search);
-        if (diretor != null) {
-            navigate("/diretor/" + diretor);
-            return;
-        }
-
-        alert("Não há nada cadastrado com esse nome");
-    } catch (erro) {
-        console.log("Erro na pesquisa:", erro);
-        alert("Ocorreu um erro ao realizar a pesquisa");
     }
-}
 
     useEffect(()=>{
         async function filmes_classicos(){
@@ -95,13 +95,13 @@ function Home(props){
                 <div id="carouselExampleInterval" className="carousel slide" data-bs-ride="carousel" data-bs-interval="3000" data-bs-pause="false">
                 <div className="carousel-inner">
                     <div className="carousel-item active">
-                    <img src="https://wallpapers.com/images/hd/naruto-shippuden-naruto-s-comrades-poster-rxxyiybobk8m0q7u.jpg" className="w-50" alt="..."/>
+                    <img src="Imagens/naruto-hero.jpg" className="w-50" alt="Banner do Naruto"/>
                     </div>
                     <div className="carousel-item">
-                    <img src="https://geekpopnews.com.br/wp-content/uploads/2024/09/Um-Filme-Minecraft-Banner-de-divulgacao.jpg" className="w-50" alt="..."/>
+                    <img src="Imagens/Minecraft-hero.webp" className="w-50" alt="Banner do filme do Minecraft"/>
                     </div>
                     <div className="carousel-item">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7C8EpW1x5AaBAx2YAl_Ekot7XBww8MRBne8ydLFD2o6n2jSvfcm9Qrd7l&s=10" className="w-50" alt="..."/>
+                    <img src="Imagens/homem_aranha-hero.jpeg" className="w-50" alt="Banner do Homem Aranha Um Novo Dia"/>
                     </div>
                 </div>
 
@@ -120,9 +120,19 @@ function Home(props){
                 </div>
             </div>
 
+            <div className='grid-filme grid-filme-menor'>
+                <h4 className='text-center'>Explore nossos catálogos</h4>
+                <div className='d-flex justify-content-center catalogos'>
+                    <button className="btncatalogos" onClick={()=>{navigate("/filmes")}}>Filmes</button>
+                    <button className="btncatalogos" onClick={()=>{navigate("/atores")}}>Atores</button>
+                    <button className="btncatalogos" onClick={()=>{navigate("/diretores")}}>Diretores</button>
+                    <button className="btncatalogos" onClick={()=>{navigate("/series")}}>Séries</button>
+                </div>
+            </div>
+
             <h1 className='procurados'>Veja os filmes mais procurados no nosso site</h1>
             <div className="filmes_classicos">
-                {classico.filmes?.filter(filme => filme.id>5 && filme.id<10).map((filme, index) => (
+                {classico.filmes?.filter(filme => filme.id<5).map((filme, index) => (
                     <div className="card cardhome" key={filme.id ?? index}>
                         <Link to={"/filme/"+filme.id}>
                             <img src={`http://localhost:3000/arquivo/${filme.cartaz}`} alt="Image" className='imagem_classicos'/>
@@ -167,6 +177,9 @@ function Home(props){
                         </div>
                     </div>
                 ))}
+            </div>
+            <div className='d-flex justify-content-center'>
+                <button className="btncatalogo" onClick={()=>{navigate("/atores")}}>Ver todos os nossos atores</button>
             </div>
 
             <footer>
