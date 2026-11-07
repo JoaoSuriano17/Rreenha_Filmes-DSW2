@@ -660,6 +660,20 @@
 
                     {
                         method: "GET",
+                        path: "/titulo/:titulo",
+                        description: "Buscar série pelo título",
+                        protected: true,
+                        params: ":titulo — Título da série.",
+                        detail: "Busca o id de uma série específica pelo seu título.",
+                        response: `{
+  "serie": {
+    "id": 1
+  }
+}`
+                    },
+
+                    {
+                        method: "GET",
                         path: "/:id",
                         description: "Buscar série pelo ID",
                         protected: true,

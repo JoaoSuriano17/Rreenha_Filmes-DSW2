@@ -20,6 +20,19 @@ router.get("/", async (req, res) => {
     }
 });
 
+//Pegar o id da serie pelo titulo. Usado na pesquisa da navbar
+router.get("/titulo/:titulo", async (req, res)=>{
+    try{
+        const r=await db.query("SELECT id FROM serie WHERE titulo=$1", [req.params.titulo])
+        if (r.rowCount==0){
+            return res.status(404).json({msg:"Não existe série com esse título"})
+        }
+        return res.json({serie:r.rows[0]})
+    }catch(erro){
+        return res.status(500).json({msg:erro.message})
+    }
+})
+
 router.get("/:id", tipo, async (req, res) => {
     try {
         const r = await db.query("SELECT * FROM serie WHERE id=$1", [req.params.id]);

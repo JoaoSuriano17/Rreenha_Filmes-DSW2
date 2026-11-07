@@ -11,7 +11,7 @@ function Arquivo() {
   const [nacionalidade, setNacionalidade] = useState("")
   const [data_nasc, setData_nasc] = useState(Date)
   const [biografia, setBiografia] = useState("")
-  const [qtde_premios, setQtde_premios] = useState(0)
+  const [qtde_premios, setQtde_premios] = useState(null)
   const [arquivoa, setArquivoa] = useState(null);
   const [inpa, setInputa] = useState("");
 
@@ -19,18 +19,33 @@ function Arquivo() {
   const [nacionalidaded, setNacionalidaded] = useState("")
   const [data_nascd, setData_nascd] = useState(Date)
   const [biografiad, setBiografiad] = useState("")
-  const [qtde_premiosd, setQtde_premiosd] = useState(0)
+  const [qtde_premiosd, setQtde_premiosd] = useState(null)
   const [arquivod, setArquivod] = useState(null);
   const [inpd, setInputd] = useState("");
 
   const [titulo, setTitulo] = useState("")
-  const [diretor, setDiretor] = useState(0)
+  const [diretor, setDiretor] = useState(null)
   const [sinopse, setSinopse] = useState("")
-  const [faixa_etaria, setFaixa_etaria] = useState(0)
-  const [duracao, setDuracao] = useState(0)
-  const [qtde_premiosf, setQtde_premiosf] = useState(0)
+  const [faixa_etaria, setFaixa_etaria] = useState(null)
+  const [duracao, setDuracao] = useState(null)
+  const [qtde_premiosf, setQtde_premiosf] = useState(null)
   const [arquivof, setArquivof] = useState(null);
   const [inpf, setInputf] = useState("");
+
+  const [titulos, setTitulos]=useState("")
+  const [diretors, setDiretors] = useState(null)
+  const [sinopses, setSinopses] = useState("")
+  const [faixa_etarias, setFaixa_etarias] = useState(null)
+  const [qtde_premioss, setQtde_premioss] = useState(null)
+  const [arquivos, setArquivos] = useState(null);
+  const [inps, setInputs] = useState("");
+
+  const [tituloe, setTituloe]=useState("")
+  const [sinopsee, setSinopsee] = useState("")
+  const [duracaoe, setDuracaoe] = useState(null)
+  const [temporada, setTemporada] = useState(null)
+  const [serie_id, setSerie_id] = useState(null)
+
 
   async function carregarDados() {
     const res = await fetch(`http://localhost:3000/arquivo`);
@@ -136,6 +151,46 @@ function Arquivo() {
     carregarDados();
   }
 
+  async function cadastrar_serie(e){
+    e.preventDefault()
+
+    const formData = new FormData();
+
+    formData.append("titulo", titulos);
+    formData.append("diretor", diretors);
+    formData.append("sinopse", sinopses);
+    formData.append("faixa_etaria", faixa_etarias);
+    formData.append("qtde_premios", qtde_premioss);
+    formData.append("arquivo", arquivos);
+
+    let res = await fetch(`http://localhost:3000/serie`, { method: "POST", body: formData });
+    if (!res.ok) {
+      const json = await res.json();
+      alert(`Erro: ${json.msg}`);
+      await fetch(`http://localhost:3000/serie`, { method: "DELETE"})
+      return;
+    }
+    resetForm();
+    carregarDados();
+  }
+
+  async function cadastrar_episodio(e){
+    e.preventDefault();
+
+    let res = await fetch(`http://localhost:3000/episodio`, { 
+      method: "POST", headers: {"Content-Type": "application/json"},
+      body:JSON.stringify({titulo:tituloe, sinopse:sinopsee, duracao:duracaoe, temporada:temporada, serie_id:serie_id})  
+    });
+    if (!res.ok) {
+      const json = await res.json();
+      alert(`Erro: ${json.msg}`);
+      await fetch(`http://localhost:3000/episodio`, { method: "DELETE"})
+      return;
+    }
+    resetForm();
+    carregarDados();
+  }
+
 
 
   function changeFile(e) {
@@ -165,6 +220,13 @@ function Arquivo() {
     if (e.target.files.length > 0) {
       setArquivof(e.target.files[0]);
       setInputf(e.target.files[0].name);
+    }
+  }
+
+  function changeFiles(e) {
+    if (e.target.files.length > 0) {
+      setArquivos(e.target.files[0]);
+      setInputs(e.target.files[0].name);
     }
   }
 
@@ -198,11 +260,11 @@ function Arquivo() {
 
             <h1>Adicionar ator</h1>
             <form onSubmit={cadastrar_ator}>
-              <input type="text" value={nome} onChange={(e)=>{setNome(e.target.value)}}/>
-              <input type="text" value={nacionalidade} onChange={(e)=>{setNacionalidade(e.target.value)}}/>
-              <input type="date" value={data_nasc} onChange={(e)=>{setData_nasc(e.target.value)}}/>
-              <input type="text" value={biografia} onChange={(e)=>{setBiografia(e.target.value)}}/>
-              <input type="number" value={qtde_premios} onChange={(e)=>{setQtde_premios(e.target.value)}}/>
+              <input type="text" placeholder="Nome" value={nome} onChange={(e)=>{setNome(e.target.value)}}/>
+              <input type="text" placeholder="Nacionalidade" value={nacionalidade} onChange={(e)=>{setNacionalidade(e.target.value)}}/>
+              <input type="date" placeholder="Data de Nascimento" value={data_nasc} onChange={(e)=>{setData_nasc(e.target.value)}}/>
+              <input type="text" placeholder="Biografia" value={biografia} onChange={(e)=>{setBiografia(e.target.value)}}/>
+              <input type="number" placeholder="Quantidade de Prêmios" value={qtde_premios} onChange={(e)=>{setQtde_premios(e.target.value)}}/>
               <input className="file-input" type="file" name="foto" accept="image/*" onChange={changeFilea}/>
               <span className="file-name">{inpa}</span>
 
@@ -211,11 +273,11 @@ function Arquivo() {
 
             <h1>Adicionar diretor</h1>
             <form onSubmit={cadastrar_diretor}>
-              <input type="text" value={nomed} onChange={(e)=>{setNomed(e.target.value)}}/>
-              <input type="text" value={nacionalidaded} onChange={(e)=>{setNacionalidaded(e.target.value)}}/>
-              <input type="date" value={data_nascd} onChange={(e)=>{setData_nascd(e.target.value)}}/>
-              <input type="text" value={biografiad} onChange={(e)=>{setBiografiad(e.target.value)}}/>
-              <input type="number" value={qtde_premiosd} onChange={(e)=>{setQtde_premiosd(e.target.value)}}/>
+              <input type="text" placeholder="Nome" value={nomed} onChange={(e)=>{setNomed(e.target.value)}}/>
+              <input type="text" placeholder="Nacionalidade" value={nacionalidaded} onChange={(e)=>{setNacionalidaded(e.target.value)}}/>
+              <input type="date" placeholder="Data de Nascimento" value={data_nascd} onChange={(e)=>{setData_nascd(e.target.value)}}/>
+              <input type="text" placeholder="Biografia" value={biografiad} onChange={(e)=>{setBiografiad(e.target.value)}}/>
+              <input type="number" placeholder="Quantidade de Prêmios" value={qtde_premiosd} onChange={(e)=>{setQtde_premiosd(e.target.value)}}/>
               <input className="file-input" type="file" name="foto" accept="image/*" onChange={changeFiled}/>
               <span className="file-name">{inpd}</span>
 
@@ -224,14 +286,38 @@ function Arquivo() {
 
             <h1>Adicionar filme</h1>
             <form onSubmit={cadastrar_filme}>
-              <input type="text" value={titulo} onChange={(e)=>{setTitulo(e.target.value)}}/>
-              <input type="number" value={diretor} onChange={(e)=>{setDiretor(e.target.value)}}/>
-              <input type="text" value={sinopse} onChange={(e)=>{setSinopse(e.target.value)}}/>
-              <input type="number" value={faixa_etaria} onChange={(e)=>{setFaixa_etaria(e.target.value)}}/>
-              <input type="number" value={duracao} onChange={(e)=>{setDuracao(e.target.value)}}/>
-              <input type="number" value={qtde_premiosf} onChange={(e)=>{setQtde_premiosf(e.target.value)}}/>
+              <input type="text" placeholder="Título" value={titulo} onChange={(e)=>{setTitulo(e.target.value)}}/>
+              <input type="number" placeholder="Id do Diretor" value={diretor} onChange={(e)=>{setDiretor(e.target.value)}}/>
+              <input type="text"  placeholder="Sinopse" value={sinopse} onChange={(e)=>{setSinopse(e.target.value)}}/>
+              <input type="number" placeholder="Faixa Etária" value={faixa_etaria} onChange={(e)=>{setFaixa_etaria(e.target.value)}}/>
+              <input type="number" placeholder="Duração" value={duracao} onChange={(e)=>{setDuracao(e.target.value)}}/>
+              <input type="number" placeholder="Quantidade de Prêmios" value={qtde_premiosf} onChange={(e)=>{setQtde_premiosf(e.target.value)}}/>
               <input className="file-input" type="file" name="foto" accept="image/*" onChange={changeFilef}/>
               <span className="file-name">{inpf}</span>
+
+              <button type="submit">Enviar</button>
+            </form>
+
+            <h1>Adicionar série</h1>
+            <form onSubmit={cadastrar_serie}>
+              <input type="text" placeholder="Título" value={titulos} onChange={(e)=>{setTitulos(e.target.value)}}/>
+              <input type="number" placeholder="Id do Diretor" value={diretors} onChange={(e)=>{setDiretors(e.target.value)}}/>
+              <input type="text"  placeholder="Sinopse" value={sinopses} onChange={(e)=>{setSinopses(e.target.value)}}/>
+              <input type="number" placeholder="Faixa Etária" value={faixa_etarias} onChange={(e)=>{setFaixa_etarias(e.target.value)}}/>
+              <input type="number" placeholder="Quantidade de Prêmios" value={qtde_premioss} onChange={(e)=>{setQtde_premioss(e.target.value)}}/>
+              <input className="file-input" type="file" name="foto" accept="image/*" onChange={changeFiles}/>
+              <span className="file-name">{inps}</span>
+
+              <button type="submit">Enviar</button>
+            </form>
+
+            <h1>Adicionar episódios</h1>
+            <form onSubmit={cadastrar_episodio}>
+              <input type="text" placeholder="Título" value={tituloe} onChange={(e)=>{setTituloe(e.target.value)}}/>
+              <input type="text"  placeholder="Sinopse" value={sinopsee} onChange={(e)=>{setSinopsee(e.target.value)}}/>
+              <input type="number" placeholder="Duração" value={duracaoe} onChange={(e)=>{setDuracaoe(e.target.value)}}/>
+              <input type="number" placeholder="Temporada" value={temporada} onChange={(e)=>{setTemporada(e.target.value)}}/>
+              <input type="number" placeholder="id da série" value={serie_id} onChange={(e)=>{setSerie_id(e.target.value)}}/>
 
               <button type="submit">Enviar</button>
             </form>

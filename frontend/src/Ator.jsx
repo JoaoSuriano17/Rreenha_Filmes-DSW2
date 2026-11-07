@@ -11,27 +11,31 @@ function Ator(props){
 
     const [search, setSearch]=useState("")
 
-    const navigate = useNavigate();
-
     async function pesquisar(e) {
-    e.preventDefault();
+        e.preventDefault();
 
         try {
             const titulo = await props.titulo(search);
             if (titulo != null) {
-                navigate("/filme/" + titulo);
+                window.location.href = "/filme/"+titulo;
+                return;
+            }
+
+            const serie = await props.titulos(search);
+            if (serie != null) {
+                window.location.href = "/serie/"+serie;
                 return;
             }
 
             const ator = await props.nomea(search);
             if (ator != null) {
-                navigate("/ator/" + ator);
+                window.location.href = "/ator/"+ator;
                 return;
             }
 
             const diretor = await props.nomed(search);
             if (diretor != null) {
-                navigate("/diretor/" + diretor);
+                window.location.href = "/diretor/"+diretor;
                 return;
             }
 
