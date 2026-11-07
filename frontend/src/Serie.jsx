@@ -9,6 +9,8 @@ function Serie(props){
     const [serie, setSerie]=useState([])
     const [diretor, setDiretor]=useState([])
 
+    const navigate=useNavigate()
+
     const [search, setSearch]=useState("")
 
     async function pesquisar(e) {
@@ -99,7 +101,7 @@ function Serie(props){
                     <h5>Sinopse: <br/> <span className="sinopse">{serie.sinopse}</span></h5>
                 </div>
                 <div className="">
-                    <button className="listaeps">Ver a lista de episódios</button>
+                    <button className="listaeps" onClick={()=>{navigate(`/serie/${serie.id}/episodios`)}}>Ver a lista de episódios</button>
                     <hr></hr>
                     <p><b>Faixa etária:</b> {serie.faixa_etaria} anos</p>
                     <hr></hr>

@@ -9,6 +9,7 @@ function Home(props){
     const [classico, setClassico]=useState([])
     const [premiados, setPremiados]=useState([])
     const [atores, setAtores]=useState([])
+    const [series, setSeries]=useState([])
 
     const [search, setSearch]=useState("")
 
@@ -80,9 +81,20 @@ function Home(props){
             }
         }
 
+        async function series(){
+            try{
+                const r=await props.series()
+                console.log(r)
+                setSeries(r)
+            }catch(erro){
+                console.log(erro)
+            }
+        }
+
         filmes_classicos()
         filmes_premiados()
         atores()
+        series()
     }, [])
 
     return(
@@ -169,6 +181,9 @@ function Home(props){
                     </div>
                 ))}
             </div>
+            <div className='d-flex justify-content-center'>
+                <button className="btncatalogo" onClick={()=>{navigate("/filmes")}}>Explorar catálogo completo</button>
+            </div>
 
             <h1 className='procurados'>Veja os atores mais procurados</h1>
             <div className="filmes_classicos">
@@ -186,6 +201,24 @@ function Home(props){
             </div>
             <div className='d-flex justify-content-center'>
                 <button className="btncatalogo" onClick={()=>{navigate("/atores")}}>Ver todos os nossos atores</button>
+            </div>
+
+            <h1 className='procurados'>Veja as séries mais procuradas no nosso site</h1>
+            <div className="filmes_classicos">
+                {series.series?.filter(serie => serie.id<5).map((serie, index) => (
+                    <div className="card cardhome" key={serie.id ?? index}>
+                        <Link to={"/serie/"+serie.id}>
+                            <img src={`http://localhost:3000/arquivo/${serie.cartaz}`} alt="Image" className='imagem_classicos'/>
+                        </Link>
+                        <div className="card-body">
+                            <h5 className="card-title">{serie.titulo}</h5>
+                            <p className="card-text">{serie.qtde_premios} prêmios recebidos</p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+            <div className='d-flex justify-content-center'>
+                <button className="btncatalogo" onClick={()=>{navigate("/series")}}>Explorar catálogo completo</button>
             </div>
 
             <footer>

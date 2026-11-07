@@ -95,6 +95,22 @@ function App() {
     }
   }
 
+  async function episodios(id) {
+    try{
+      const r=await fetch("http://localhost:3000/episodio/serie/"+id)
+      
+      if(!r.ok){
+        return null;
+      }
+      
+      const r2=await r.json()
+
+      return r2
+    }catch(erro){
+      console.log("Erro: "+erro)
+    }
+  }
+
   async function arquivos() {
     try{
       const r=await fetch("http://localhost:3000/arquivo")
@@ -238,11 +254,27 @@ function App() {
       console.log("Erro: "+erro)
     }
   }
+
+  async function series() {
+    try{
+      const r=await fetch("http://localhost:3000/serie")
+      
+      if(!r.ok){
+        return null;
+      }
+      
+      const r2=await r.json()
+
+      return r2
+    }catch(erro){
+      console.log("Erro: "+erro)
+    }
+  }
   
   return(
     <>
       <Routes>
-        <Route path="/" element={<Home classico={filmes_classicos} arquivos={arquivos} premios={filmes_premiados} atores={atores} titulo={filme_titulo} nomea={ator_nome} nomed={diretor_nome} titulos={serie_titulo}></Home>}></Route>
+        <Route path="/" element={<Home classico={filmes_classicos} arquivos={arquivos} premios={filmes_premiados} atores={atores} titulo={filme_titulo} nomea={ator_nome} nomed={diretor_nome} titulos={serie_titulo} series={series}></Home>}></Route>
         <Route path="/arquivo" element={<Arquivo></Arquivo>}></Route>
         <Route path="/filme/:id" element={<Filme filme={filme} diretor={diretor} titulo={filme_titulo} nomea={ator_nome} nomed={diretor_nome} titulos={serie_titulo}></Filme>}></Route>
         <Route path="/ator/:id" element={<Ator ator={ator} titulo={filme_titulo} nomea={ator_nome} nomed={diretor_nome} titulos={serie_titulo}></Ator>}></Route>
@@ -251,7 +283,7 @@ function App() {
         <Route path="/atores" element={<CatalogoAtores catalogo={atores} titulo={filme_titulo} nomea={ator_nome} nomed={diretor_nome} titulos={serie_titulo}></CatalogoAtores>}></Route>
         <Route path="/diretores" element={<CatalogoDiretores catalogo={diretores} titulo={filme_titulo} nomea={ator_nome} nomed={diretor_nome} titulos={serie_titulo}></CatalogoDiretores>}></Route>
         <Route path="/serie/:id" element={<Serie serie={serie} diretor={diretor} titulo={filme_titulo} nomea={ator_nome} nomed={diretor_nome} titulos={serie_titulo}></Serie>}></Route>
-        <Route path="/serie/:id/episodios" element={<Episodios></Episodios>}></Route>
+        <Route path="/serie/:id/episodios" element={<Episodios episodios={episodios} serie={serie} titulo={filme_titulo} nomea={ator_nome} nomed={diretor_nome} titulos={serie_titulo}></Episodios>}></Route>
         <Route path="/series" element={<CatalogoSeries catalogo={series} titulo={filme_titulo} nomea={ator_nome} nomed={diretor_nome} titulos={serie_titulo}></CatalogoSeries>}></Route>
 
         <Route path="/:sla" element={<Erro titulo={filme_titulo} nomea={ator_nome} nomed={diretor_nome}></Erro>}></Route>

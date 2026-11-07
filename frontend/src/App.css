@@ -68,7 +68,7 @@
 }
 
 .cardhome{
-  width: 18rem;
+  width: 15rem;
 }
 
 .procurados{
@@ -84,7 +84,7 @@
 }
 
 .imagem_classicos{
-  height: 400px;
+  height: 300px;
   border: 1px black solid;
   border-radius: 5px;
   width: 100%;
@@ -151,7 +151,7 @@ footer{
 }
 
 .ator{
-  height: 300px;
+  height: 250px;
   width: 100%;
   border: 1px black solid;
   border-radius: 5px;
@@ -252,10 +252,68 @@ footer{
 
 .listaeps{
   margin-top: -10px;
-  background-color: blue;
+  background-color: gray;
   color: white;
   border-radius: 5px;
   width: 100%;
   padding-bottom: 5px;
   padding-top: 5px;
+}
+
+.cabecalhoeps{
+  background-color: gray;
+  padding-bottom: 10px;
+  padding-top: 5px;
+}
+
+.cabecalhoeps img{
+  width: 180px;
+  border: 1px solid black;
+  border-radius: 10px;
+  margin-left: 2%;
+  margin-top: 10px;
+}
+
+.cabecalhoeps div{
+  margin-top: auto;
+  margin-left: 5px;
+}
+
+.tserie{
+  color: rgb(68, 68, 68);
+}
+
+.grid-episodios{
+  margin-left: 15%;
+  margin-right: 15%;
+  background-color: whitesmoke;
+}
+
+.temporadas {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.temporadas button {
+    width: 60px;
+    height: 60px;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    font-weight: bold;
+}
+
+.temporadas button:hover {
+    background-color: #eeeeee;
+}
+
+.temporadas button.ativo {
+    background-color: gray;
+}
+
+.voltar{
+  color: white;
+  margin-left: 3%;
+  margin-top: 5px;
 }
