@@ -64,7 +64,7 @@ router.get("/:id", async (req, res)=>{
 
 router.post("/", async (req, res)=>{
     try{
-        const {nome, email, critico, administrador, senha, fotografia}=req.body||{};
+        let {nome, email, critico, administrador, senha, fotografia}=req.body||{};
         if(!nome){return res.status(400).json({msg:"Nome não informado!"});}
         if(!email){return res.status(400).json({msg:"E-mail não informado!"});}
         if(!senha){return res.status(400).json({msg:"Senha não informada!"});}
@@ -72,6 +72,7 @@ router.post("/", async (req, res)=>{
         if(!critico){critico=false;}
         if(!administrador){administrador=false;}
         if(!fotografia){fotografia=null;}
+
         const senhaHash=await bcrypt.hash(senha, 12);
         const r=await db.query("INSERT INTO usuario (nome, email, critico, administrador, senha, fotografia) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [nome, email, critico, administrador, senhaHash, fotografia]);
         return res.status(201).json({msg:"Usuário criado com sucesso!", usuario:r.rows[0]});

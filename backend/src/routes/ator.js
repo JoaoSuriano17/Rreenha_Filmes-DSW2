@@ -3,6 +3,7 @@ const router=express.Router();
 const db=require("../db");
 
 const tipo=require("../middleware/tipo")
+const verificarAdministrador = require("../middleware/verificarAdministrador");
 
 const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
@@ -45,7 +46,7 @@ router.get("/:id", tipo, async (req, res)=>{
     }
 })
 
-router.post("/",  upload.single("arquivo"), async (req, res)=>{
+router.post("/", verificarAdministrador, upload.single("arquivo"), async (req, res)=>{
     try{
         const {nome, nacionalidade, data_nascimento, biografia, qtde_premios}=req.body
 
@@ -82,7 +83,7 @@ router.post("/",  upload.single("arquivo"), async (req, res)=>{
 
 //PUT
 
-router.delete("/:id", tipo, async(req, res)=>{
+router.delete("/:id", verificarAdministrador, tipo, async(req, res)=>{
     try{
         const r=await db.query("SELECT fotografia FROM ator WHERE id=$1", [req.params.id])
         if(r.rowCount==0){
