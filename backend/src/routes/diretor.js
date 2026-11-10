@@ -59,26 +59,34 @@ router.post("/", verificarAdministrador, upload.single("arquivo"), async (req, r
 
         var r2;
         if (!req.file) {
-            r2 = await db.query("INSERT INTO diretor(nome, nacionalidade, data_nascimento, biografia, qtde_premios, fotografia) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [nome, nacionalidade, data_nascimento, biografia, qtde_premios, 1])
+            r2 = await db.query("INSERT INTO diretor(nome, nacionalidade, data_nascimento, biografia, qtde_premios, fotografia) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [nome, nacionalidade, data_nascimento, biografia, premios, null]);
         } else {
             const formData = new FormData();
-            formData.append("arquivo", new Blob([req.file.buffer], { type: req.file.mimetype }), req.file.originalname);
 
-            const r = await fetch("http://localhost:3000/arquivo", { method: "POST", body: formData })
+            formData.append(
+                "arquivo",
+                new Blob([req.file.buffer], { type: req.file.mimetype }),
+                req.file.originalname
+            );
+
+            const r = await fetch("http://localhost:3000/arquivo", {
+                method: "POST",
+                body: formData
+            });
+
             if (!r.ok) {
-                return res.status(500).json({ msg: "Erro ao salvar a imagem" });
+                return res.status(500).json({msg: "Erro ao salvar a imagem."});
             }
 
             const arquivo = await r.json();
-
-            r2 = await db.query("INSERT INTO diretor(nome, nacionalidade, data_nascimento, biografia, qtde_premios, fotografia) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [nome, nacionalidade, data_nascimento, biografia, qtde_premios, arquivo.id])
+            r2 = await db.query("INSERT INTO diretor(nome, nacionalidade, data_nascimento, biografia, qtde_premios, fotografia)VALUES ($1, $2, $3, $4, $5, $6)RETURNING *", [nome, nacionalidade, data_nascimento, biografia, premios, arquivo.arquivo.id]);
         }
 
         if (!r2.rowCount) {
-            return res.status(500).json({ msg: "Erro ao cadastrar o diretor" });
+            return res.status(500).json({msg: "Erro ao cadastrar o diretor."});
         }
 
-        return res.json({ diretor: r2.rows[0] })
+        return res.json({diretor: r2.rows[0]});
     } catch (erro) {
         return res.status(500).json({ msg: erro.message })
     }
@@ -94,27 +102,40 @@ router.put("/:id", tipo, verificarAdministrador, upload.single("arquivo"), async
             return res.status(400).json({ msg: "O diretor deve ter pelo menos um atributo para ser alterado!" })
         }
 
+        if (!isNaN(qtde_premios) && qtde_premios >= 0) {
+            return res.status(400).json({ msg: "O quantidade de prêmios deve ser um número inteiro." })
+        }
+
 
         const atual = await db.query("SELECT * FROM diretor WHERE id=$1", [req.params.id]);
         if (!atual.rowCount) {
-            return res.status(404).json({ msg: "Diretor não inexistente." });
+            return res.status(404).json({ msg: "Diretor não inexistente."});
         }
 
-        let r2 = await db.query("UPDATE diretor SET biografia = $1, qtde_premios = $2 WHERE id = $3", [biografia != undefined ? biografia : atual.rows[0].biografia, !isNaN(qtde_premios) && qtde_premios >= 0 && qtde_premios != undefined ? qtde_premios : atual.rows[0].qtde_premios, id])
+        let r2 = await db.query("UPDATE diretor SET biografia = $1, qtde_premios = $2 WHERE id = $3", [biografia != undefined ? biografia : atual.rows[0].biografia, qtde_premios!=undefined? qtde_premios : atual.rows[0].qtde_premios, id])
 
         if (req.file) {
             const formData = new FormData();
-            formData.append("arquivo", new Blob([req.file.buffer], { type: req.file.mimetype }), req.file.originalname);
+            formData.append(
+                "arquivo",
+                new Blob([req.file.buffer], { type: req.file.mimetype }),
+                req.file.originalname
+            );
 
-            const r = await fetch("http://localhost:3000/arquivo", { method: "POST", body: formData })
+            const r = await fetch("http://localhost:3000/arquivo", {
+                method: "POST",
+                body: formData
+            });
+
             if (!r.ok) {
-                return res.status(500).json({ msg: "Erro ao salvar a imagem" });
+                return res.status(500).json({msg: "Erro ao salvar a imagem."});
             }
             const arquivo = await r.json();
-            r2 = await db.query("UPDATE diretor SET fotografia = $1 WHERE id = $2", [r.id, id])
+            await db.query("UPDATE diretor SET fotografia=$1 WHERE id=$2",[arquivo.arquivo.id, id]);
         }
 
-        return res.json({ diretor: r2.rows[0] })
+        r2 = await db.query("SELECT * FROM diretor WHERE id=$1", [req.params.id]);
+        return res.json({diretor: r2.rows[0]})
     } catch (erro) {
         return res.status(500).json({ msg: erro.message })
     }

@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS arquivo_imagem(
+CREATE TABLE arquivo_imagem(
     id SERIAL PRIMARY KEY,
     nome_original VARCHAR(255) NOT NULL,
     tipo_mime VARCHAR(100),

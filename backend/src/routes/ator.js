@@ -82,40 +82,60 @@ router.post("/", verificarAdministrador, upload.single("arquivo"), async (req, r
 })
 
 //PUT
+
 router.put("/:id", tipo, verificarAdministrador, upload.single("arquivo"), async (req, res) => {
     try {
-        const { biografia, qtde_premios } = req.body
-        const id = req.params.id
+        const { biografia, qtde_premios } = req.body;
+        const id = req.params.id;
 
-        if (!biografia || !qtde_premios || !req.file) {
-            return res.status(400).json({ msg: "O ator deve ter pelo menos um atributo para ser alterado!" })
+        if (!biografia && !qtde_premios && !req.file) {
+            return res.status(400).json({msg: "O ator deve ter pelo menos um atributo para ser alterado!"});
         }
 
+        let r2;
         if (biografia) {
-            r2 = await db.query("UPDATE ator SET biografia=$1 WHERE id=$2", [biografia, id])
+            r2 = await db.query("UPDATE ator SET biografia = $1 WHERE id = $2 RETURNING *", [biografia, id]);
         }
+
         if (qtde_premios) {
-            r2 = await db.query("UPDATE ator SET qtde_premios=$1 WHERE id=$2", [qtde_premios, id])
+            r2 = await db.query("UPDATE ator SET qtde_premios = $1 WHERE id = $2 RETURNING *", [qtde_premios, id]);
         }
 
         if (req.file) {
             const formData = new FormData();
-            formData.append("arquivo", new Blob([req.file.buffer], { type: req.file.mimetype }), req.file.originalname);
+            formData.append(
+                "arquivo",
+                new Blob([req.file.buffer], { type: req.file.mimetype }),
+                req.file.originalname
+            );
 
-            const r = await fetch("http://localhost:3000/arquivo", { method: "POST", body: formData })
+            const r = await fetch("http://localhost:3000/arquivo", {
+                method: "POST",
+                body: formData
+            });
+
             if (!r.ok) {
-                return res.status(500).json({ msg: "Erro ao salvar a imagem" });
+                return res.status(500).json({msg: "Erro ao salvar a imagem."});
             }
-            const arquivo = await r.json();
 
-            r2 = await db.query("UPDATE ator SET fotografia = $1 WHERE id = $2", [r.id, id])
+            const arquivo = await r.json();
+            r2 = await db.query("UPDATE ator SET fotografia = $1 WHERE id = $2 RETURNING *", [arquivo.arquivo.id, id]);
         }
 
-        return res.json({ ator: r2.rows[0] })
+        if (!r2) {
+            r2 = await db.query("SELECT * FROM ator WHERE id = $1", [id]);
+        }
+
+        if (r2.rowCount == 0) {
+            return res.status(404).json({msg: "Ator não encontrado."});
+        }
+
+        return res.status(200).json({msg: "Ator atualizado com sucesso!",ator: r2.rows[0]});
     } catch (erro) {
-        return res.status(500).json({ msg: erro.message })
+        return res.status(500).json({msg: erro.message});
     }
-})
+});
+
 
 router.delete("/:id", tipo, verificarAdministrador, tipo, async (req, res) => {
     try {

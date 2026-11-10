@@ -1,133 +1,187 @@
+
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
-const path = require("path");
 const multer = require("multer");
-const fs = require("fs");
 
-const confMulter = multer({
+// Configuração do Multer
+const upload = multer({
   storage: multer.memoryStorage(),
 
-  // Limite de 5MB (5 * 1024 * 1024 bytes)
   limits: {
-    fileSize: 5 * 1024 * 1024,
+    fileSize: 5 * 1024 * 1024 // 5 MB
   },
-  // Filtro para aceitar apenas imagens
+
   fileFilter: (req, file, cb) => {
-    // Verifica se o tipo do arquivo começa com "image/" (ex: image/png, image/jpeg)
     if (file.mimetype.startsWith("image/")) {
-      cb(null, true); // Aceita o arquivo
+      cb(null, true);
     } else {
-      cb(new Error("Apenas arquivos de imagem são permitidos!")); // Rejeita
+      cb(new Error("Apenas arquivos de imagem são permitidos."));
     }
-  },
+  }
 });
 
+// GET /arquivo
+// Lista as imagens sem retornar seus conteúdos binários.
 router.get("/", async (req, res) => {
   try {
-    const r = await db.query("SELECT * FROM arquivo_imagem");
-    if (r.rowCount == 0) {
-      return res.status(400).json("Não há arquivos cadastrados")
-    }
-    res.json(r.rows);
+    const sql = `
+            SELECT id, nome_original, tipo_mime, tamanho_bytes
+            FROM arquivo_imagem
+            ORDER BY id
+        `;
+
+    const resultado = await db.query(sql);
+
+    return res.status(200).json(resultado.rows);
+
   } catch (err) {
-    return res.status(500).json({ msg: err.message });
+    console.error("Erro ao listar imagens:", err);
+
+    return res.status(500).json({
+      msg: "Erro ao consultar as imagens."
+    });
   }
 });
 
+// GET /arquivo/:id
+// Retorna o conteúdo binário da imagem.
 router.get("/:id", async (req, res) => {
   try {
-    const r = await db.query("SELECT * FROM arquivo_imagem WHERE id = $1", [req.params.id]);
-    if (!r.rowCount) {
-      return res.status(404).json({ erro: "Imagem não encontrada no servidor." });
+    const { id } = req.params;
+
+    const sql = `
+            SELECT conteudo, tipo_mime
+            FROM arquivo_imagem
+            WHERE id = $1
+        `;
+
+    const resultado = await db.query(sql, [id]);
+
+    if (resultado.rowCount === 0) {
+      return res.status(404).json({
+        msg: "Imagem não encontrada."
+      });
     }
-    const caminhoCompleto = path.join(
-      __dirname,
-      "../uploads",
-      `${r.rows[0].id}${r.rows[0].extensao}`,
-    );
-    if (fs.existsSync(caminhoCompleto)) {
-      return res.sendFile(caminhoCompleto);
-    } else {
-      return res.status(404).json({ erro: "Imagem não encontrada no servidor." });
-    }
+
+    const imagem = resultado.rows[0];
+
+    res.setHeader("Content-Type", imagem.tipo_mime);
+    return res.send(imagem.conteudo);
+
   } catch (err) {
-    res.status(500).json({ msg: err.message });
+    console.error("Erro ao buscar imagem:", err);
+
+    return res.status(500).json({
+      msg: "Erro ao buscar a imagem."
+    });
   }
 });
 
-router.post("/", confMulter.single("arquivo"), async (req, res) => {
+// POST /arquivo
+// Recebe e armazena uma imagem no PostgreSQL.
+router.post("/", upload.single("arquivo"), async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ msg: "'arquivo' não enviado" });
+      return res.status(400).json({
+        msg: "Nenhum arquivo foi enviado."
+      });
     }
 
-    const q = "INSERT INTO arquivo_imagem (nome_original, conteudo, tamanho_bytes, tipo_mime) VALUES ($1, $2, $3, $4) RETURNING *";
-    const r = await db.query(q, [req.file.originalname, path.extname(req.file.originalname), req.file.size, req.file.type]);
-    if (!r.rowCount) {
-      return res.status(500).json({ msg: "Erro na inserção no banco de dados!" });
-    }
+    const sql = `
+            INSERT INTO arquivo_imagem
+                (nome_original, tipo_mime, tamanho_bytes, conteudo)
+            VALUES ($1, $2, $3, $4)
+            RETURNING id, nome_original, tipo_mime, tamanho_bytes
+        `;
 
-    const idGerado = r.rows[0].id;
-    const extensao = r.rows[0].extensao;
+    const valores = [
+      req.file.originalname,
+      req.file.mimetype,
+      req.file.size,
+      req.file.buffer
+    ];
 
-    const pastaDestino = path.join(__dirname, "../uploads");
-    // Cria a pasta 'uploads' caso ela não exista
-    if (!fs.existsSync(pastaDestino)) {
-      fs.mkdirSync(pastaDestino);
-    }
-    const nomeFinalDoArquivo = `${idGerado}${extensao}`;
-    const caminhoCompleto = path.join(pastaDestino, nomeFinalDoArquivo);
+    const resultado = await db.query(sql, valores);
 
-    // Salva o arquivo no disco
-    fs.writeFileSync(caminhoCompleto, req.file.buffer);
+    return res.status(201).json({
+      msg: "Imagem cadastrada com sucesso.",
+      arquivo: resultado.rows[0]
+    });
 
-    res.json(r.rows[0]);
   } catch (err) {
-    res.status(500).json({ msg: err.message });
+    console.error("Erro ao cadastrar imagem:", err);
+
+    return res.status(500).json({
+      msg: "Erro ao salvar a imagem no banco de dados.",
+      erro: err.message
+    });
   }
 });
 
+// DELETE /arquivo/:id
 router.delete("/:id", async (req, res) => {
   try {
-    const r = await db.query("SELECT * FROM arquivo_imagem WHERE id = $1", [req.params.id]);
-    if (!r.rowCount) {
-      return res.status(404).json({ erro: "Imagem não encontrada no servidor." });
+    const { id } = req.params;
+
+    const sql = `
+            DELETE FROM arquivo_imagem
+            WHERE id = $1
+            RETURNING id
+        `;
+
+    const resultado = await db.query(sql, [id]);
+
+    if (resultado.rowCount === 0) {
+      return res.status(404).json({
+        msg: "Imagem não encontrada."
+      });
     }
 
-    const caminhoCompleto = path.join(
-      __dirname,
-      "../uploads",
-      `${r.rows[0].id}${r.rows[0].extensao}`,
-    );
-    if (fs.existsSync(caminhoCompleto)) {
-      // Comando que remove arquivo do sistema operacional.
-      fs.unlinkSync(caminhoCompleto);
-    } else {
-      return res.status(404).json({ erro: "Imagem não encontrada no servidor." });
-    }
+    return res.status(200).json({
+      msg: "Imagem excluída com sucesso.",
+      id: resultado.rows[0].id
+    });
 
-    const r2 = await db.query("DELETE FROM arquivo_imagem WHERE id = $1", [req.params.id]);
-    return res.json({ msg: "'arquivo' deletado com sucesso" });
   } catch (err) {
-    res.status(500).json({ msg: err.message });
+    console.error("Erro ao excluir imagem:", err);
+
+    // Violação de chave estrangeira:
+    // a imagem ainda está sendo utilizada por outra tabela.
+    if (err.code === "23503") {
+      return res.status(409).json({
+        msg: "Não é possível excluir esta imagem, pois ela está vinculada a outro registro."
+      });
+    }
+
+    return res.status(500).json({
+      msg: "Erro ao excluir a imagem."
+    });
   }
 });
 
-// Tratamento de erros específicos do multer na hora do upload de arquivo....
-
+// Middleware para tratar erros do Multer.
+// Deve ficar depois das rotas.
 router.use((err, req, res, next) => {
-  if (err.code === "LIMIT_FILE_SIZE") {
-    return res.status(413).json({
-      msg: "Arquivo muito grande. O tamanho máximo é 5 MB.",
+  console.error("Erro no upload:", err);
+
+  if (err instanceof multer.MulterError) {
+    if (err.code === "LIMIT_FILE_SIZE") {
+      return res.status(413).json({
+        msg: "Arquivo muito grande. O limite é de 5 MB."
+      });
+    }
+
+    return res.status(400).json({
+      msg: err.message,
+      codigo: err.code,
+      campo: err.field
     });
   }
 
-  res.status(400).json({
-    msg: err.message,
+  return res.status(400).json({
+    msg: err.message || "Erro ao processar o envio do arquivo."
   });
 });
-
-module.exports = router;
 
 module.exports = router;
