@@ -26,7 +26,7 @@ const confMulter = multer({
 router.get("/", async (req, res) => {
   try {
     const r = await db.query("SELECT * FROM arquivo_imagem");
-    if(r.rowCount==0){
+    if (r.rowCount == 0) {
       return res.status(400).json("Não há arquivos cadastrados")
     }
     res.json(r.rows);

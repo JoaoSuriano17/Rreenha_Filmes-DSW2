@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require("../db");
 
 const tipo = require("../middleware/tipo");
+const verificarAdministrador = require("../middleware/verificarAdministrador")
 
 const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
@@ -21,15 +22,15 @@ router.get("/", async (req, res) => {
 });
 
 //Pegar o id da serie pelo titulo. Usado na pesquisa da navbar
-router.get("/titulo/:titulo", async (req, res)=>{
-    try{
-        const r=await db.query("SELECT id FROM serie WHERE titulo=$1", [req.params.titulo])
-        if (r.rowCount==0){
-            return res.status(404).json({msg:"Não existe série com esse título"})
+router.get("/titulo/:titulo", async (req, res) => {
+    try {
+        const r = await db.query("SELECT id FROM serie WHERE titulo=$1", [req.params.titulo])
+        if (r.rowCount == 0) {
+            return res.status(404).json({ msg: "Não existe série com esse título" })
         }
-        return res.json({serie:r.rows[0]})
-    }catch(erro){
-        return res.status(500).json({msg:erro.message})
+        return res.json({ serie: r.rows[0] })
+    } catch (erro) {
+        return res.status(500).json({ msg: erro.message })
     }
 })
 
@@ -46,11 +47,11 @@ router.get("/:id", tipo, async (req, res) => {
     }
 });
 
-router.post("/", upload.single("arquivo"), async (req, res) => {
+router.post("/", verificarAdministrador, upload.single("arquivo"), async (req, res) => {
     try {
-        const {titulo, diretor, sinopse, faixa_etaria, qtde_premios } = req.body;
+        const { titulo, diretor, sinopse, faixa_etaria, qtde_premios } = req.body;
         if (!titulo || !diretor) {
-            return res.status(400).json({ msg: "A série deve possuir pelo menos um título e um diretor."});
+            return res.status(400).json({ msg: "A série deve possuir pelo menos um título e um diretor." });
         }
 
         var r2;
@@ -89,9 +90,9 @@ router.post("/", upload.single("arquivo"), async (req, res) => {
     }
 });
 
-router.put("/:id", tipo, upload.single("arquivo"), async (req, res) => {
+router.put("/:id", tipo, verificarAdministrador, upload.single("arquivo"), async (req, res) => {
     try {
-        const {titulo, diretor, sinopse, faixa_etaria, qtde_premios } = req.body;
+        const { titulo, diretor, sinopse, faixa_etaria, qtde_premios } = req.body;
 
         const atual = await db.query("SELECT * FROM serie WHERE id=$1", [req.params.id]);
         if (!atual.rowCount) {
@@ -120,8 +121,8 @@ router.put("/:id", tipo, upload.single("arquivo"), async (req, res) => {
             cartaz = arquivo.id;
         }
 
-        const r2 = await db.query(`UPDATE serie SET titulo=$1, diretor=$2, sinopse=$3, faixa_etaria=$4, qtde_premios=$5, cartaz=$6 WHERE id=$7 RETURNING *`,[
-                titulo, diretor, sinopse, faixa_etaria, qtde_premios, cartaz, req.params.id]
+        const r2 = await db.query(`UPDATE serie SET titulo=$1, diretor=$2, sinopse=$3, faixa_etaria=$4, qtde_premios=$5, cartaz=$6 WHERE id=$7 RETURNING *`, [
+            titulo, diretor, sinopse, faixa_etaria, qtde_premios, cartaz, req.params.id]
         );
 
         if (
@@ -142,14 +143,14 @@ router.put("/:id", tipo, upload.single("arquivo"), async (req, res) => {
     }
 });
 
-router.delete("/:id", tipo, async (req, res) => {
+router.delete("/:id", tipo, verificarAdministrador, async (req, res) => {
     try {
-        const r = await db.query( "SELECT cartaz FROM serie WHERE id=$1", [req.params.id] );
+        const r = await db.query("SELECT cartaz FROM serie WHERE id=$1", [req.params.id]);
         if (!r.rowCount) {
             return res.status(404).json({ msg: "Série inexistente." });
         }
 
-        await db.query( "DELETE FROM serie WHERE id=$1", [req.params.id]);
+        await db.query("DELETE FROM serie WHERE id=$1", [req.params.id]);
 
         if (r.rows[0].cartaz != 1 && r.rows[0].cartaz != 2) {
             await fetch(
