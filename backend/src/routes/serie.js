@@ -55,6 +55,13 @@ router.post("/", verificarAdministrador, upload.single("arquivo"), async (req, r
             return res.status(400).json({ msg: "A série deve possuir pelo menos um título e um diretor." });
         }
 
+        if (!isNaN(faixa_etaria) || faixa_etaria < 1) {
+            return res.status(400).json({ msg: "A faixa etária deve ser um número inteiro igual ou maior que 1." })
+        }
+        if (!isNaN(qtde_premios) || qtde_premios < 1) {
+            return res.status(400).json({ msg: "A faixa etária deve ser um número inteiro igual ou maior que 1." })
+        }
+
         var r2;
         if (!req.file) {
             r2 = await db.query(`INSERT INTO serie (titulo, diretor, sinopse, faixa_etaria, qtde_premios, cartaz) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`, [titulo, diretor, sinopse, faixa_etaria, qtde_premios, 1]);
@@ -101,7 +108,13 @@ router.put("/:id", tipo, verificarAdministrador, upload.single("arquivo"), async
             return res.status(404).json({ msg: "Série inexistente." });
         }
 
-        let cartaz = atual.rows[0].cartaz;
+        if (!isNaN(faixa_etaria) || faixa_etaria < 1) {
+            return res.status(400).json({ msg: "A faixa etária deve ser um número inteiro igual ou maior que 1." })
+        }
+        if (!isNaN(qtde_premios) || qtde_premios < 1) {
+            return res.status(400).json({ msg: "A faixa etária deve ser um número inteiro igual ou maior que 1." })
+        }
+
         if (req.file) {
             const formData = new FormData();
             formData.append(
@@ -122,7 +135,7 @@ router.put("/:id", tipo, verificarAdministrador, upload.single("arquivo"), async
             await db.query("UPDATE filme SET cartaz = $1 WHERE id = $2", [arquivo.arquivo.id, id]);
         }
 
-        const resultado = await db.query("SELECT * FROM filme WHERE id = $1", [id]);
+        const resultado = await db.query("UPDATE serie SET titulo=$1, diretor=$2, sinopse=$3, faixa_etaria=$4, qtde_premios=$5 WHERE id =$6", [titulo!=undefined?titulo:atual.rows[0].titulo, diretor!=undefined?diretor:atual.rows[0].diretor, sinopse!=undefined?sinopse:atual.rows[0].sinopse, faixa_etaria!=undefined?titulo:atual.rows[0].faixa_etaria, qtde_premios!=undefined?qtde_premios:atual.rows[0].qtde_premios, req.params.id]);
         return res.json({ serie: resultado.rows[0] });
     } catch (erro) {
         return res.status(500).json({ msg: erro.message });
@@ -136,15 +149,12 @@ router.delete("/:id", tipo, verificarAdministrador, async (req, res) => {
             return res.status(404).json({ msg: "Série inexistente." });
         }
 
-        await db.query("DELETE FROM serie WHERE id=$1", [req.params.id]);
-
-        if (r.rows[0].cartaz != 1 && r.rows[0].cartaz != 2) {
-            await fetch(
-                `http://localhost:3000/arquivo/${r.rows[0].cartaz}`,
-                { method: "DELETE" }
-            );
+        let r1 = await db.query("DELETE FROM serie WHERE id=$1", [req.params.id]);
+        if(!r1.rowCount){
+            return res.status(400).json({msg: "Erro ao deletar série."})
         }
 
+        await fetch(`http://localhost:3000/arquivo/${r.rows[0].cartaz}`, { method: "DELETE" });
         return res.json({ msg: "Série deletada com sucesso." });
     } catch (erro) {
         return res.status(500).json({ msg: erro.message });

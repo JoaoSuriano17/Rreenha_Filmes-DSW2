@@ -46,6 +46,7 @@ router.get("/:id", tipo, async (req, res) => {
     }
 })
 
+
 router.post("/", verificarAdministrador, upload.single("arquivo"), async (req, res) => {
     try {
         const { nome, nacionalidade, data_nascimento, biografia, qtde_premios } = req.body
@@ -53,13 +54,17 @@ router.post("/", verificarAdministrador, upload.single("arquivo"), async (req, r
             return res.status(400).json({ msg: "O diretor deve ter no mínimo nome, nacionalidade e data de nascimento." })
         }
 
-        if (!isNaN(qtde_premios) && qtde_premios >= 0) {
-            return res.status(400).json({ msg: "O quantidade de prêmios deve ser um número inteiro." })
+        if (!nome) { return res.status(400).json({ msg: "Nome não informado!" }); }
+        if (!nacionalidade) { return res.status(400).json({ msg: "Nacionalidade não informado!" }); }
+        if (!data_nascimento) { return res.status(400).json({ msg: "Data de nascimento não informada!" }); }
+
+        if (qtde_premios < 0) {
+            return res.status(400).json({ msg: "A quantidade de prêmios deve ser um número inteiro." })
         }
 
         var r2;
         if (!req.file) {
-            r2 = await db.query("INSERT INTO diretor(nome, nacionalidade, data_nascimento, biografia, qtde_premios, fotografia) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [nome, nacionalidade, data_nascimento, biografia, premios, null]);
+            r2 = await db.query("INSERT INTO diretor(nome, nacionalidade, data_nascimento, biografia, qtde_premios, fotografia) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [nome, nacionalidade, data_nascimento, biografia, qtde_premios, null]);
         } else {
             const formData = new FormData();
 
@@ -79,7 +84,7 @@ router.post("/", verificarAdministrador, upload.single("arquivo"), async (req, r
             }
 
             const arquivo = await r.json();
-            r2 = await db.query("INSERT INTO diretor(nome, nacionalidade, data_nascimento, biografia, qtde_premios, fotografia)VALUES ($1, $2, $3, $4, $5, $6)RETURNING *", [nome, nacionalidade, data_nascimento, biografia, premios, arquivo.arquivo.id]);
+            r2 = await db.query("INSERT INTO diretor(nome, nacionalidade, data_nascimento, biografia, qtde_premios, fotografia)VALUES ($1, $2, $3, $4, $5, $6)RETURNING *", [nome, nacionalidade, data_nascimento, biografia, qtde_premios, arquivo.arquivo.id]);
         }
 
         if (!r2.rowCount) {
@@ -158,5 +163,38 @@ router.delete("/:id", tipo, verificarAdministrador, async (req, res) => {
         res.status(500).json({ msg: erro.message })
     }
 })
+
+router.get("/:id/dirige", tipo, async (req, res) => {
+    try {
+        const r1 = await db.query("SELECT * FROM diretor WHERE id=$1",[req.params.id]);
+
+        if (!r1.rowCount) {
+            return res.status(404).json({msg: "Não há diretor com esse id cadastrado."});
+        }
+
+        const r = await db.query("SELECT titulo, 'filme' AS tipo FROM filme WHERE diretor = $1 UNION ALL SELECT titulo, 'serie' AS tipo FROM serie WHERE diretor = $1", [req.params.id]);
+
+        if (!r.rowCount) {
+            return res.status(200).json({msg: "Diretor iniciante, nunca dirigiu nenhuma produção.", filmes: [], series: [] });
+        }
+
+        const prod = [[], []];
+
+        for (let p of r.rows) {
+            if (p.tipo === "filme") {
+                prod[0].push(p.titulo);
+            }
+
+            if (p.tipo === "serie") {
+                prod[1].push(p.titulo);
+            }
+        }
+
+        return res.status(200).json({ filmes: prod[0], series: prod[1] });
+
+    } catch (erro) {
+        return res.status(500).json({ msg: erro.message });
+    }
+});
 
 module.exports = router;

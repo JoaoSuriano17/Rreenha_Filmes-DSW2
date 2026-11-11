@@ -155,4 +155,114 @@ router.delete("/:id", tipo, verificarAdministrador, tipo, async (req, res) => {
     }
 })
 
+
+router.post("/:id/filme/:filme", tipo, verificarAdministrador,  async (req, res) => {
+    try {
+        const r = await db.query("SELECT * FROM ator WHERE id=$1", [req.params.id])
+        if (r.rowCount == 0) {
+            return res.status(400).json({ msg: "Ator inexistente." })
+        }
+
+        if (isNaN(req.params.serie)){
+            return res.json({msg:"O id deve ser um número inteiro!"})
+        }
+
+        const r2 = await db.query("SELECT * FROM filme WHERE id=$1", [req.params.filme])
+        if (r2.rowCount == 0) {
+            return res.status(400).json({ msg: "Filme inexistente" })
+        }
+
+        const requisicao = await db.query("INSERT INTO filme_ator(id_filme, id_ator) VALUES ($1, $2)", [req.params.filme, req.params.id])
+        if (!requisicao.rowCount){
+            return res.status(400).json({msg: "Erro ao associar ator a um filme."})
+        }
+
+        return res.json({ msg: "Associação realizada com sucesso!" })
+    } catch (erro) {
+        return res.status(500).json({ msg: erro.message })
+    }
+})
+
+router.delete("/:id/filme/:filme", tipo, verificarAdministrador,  async (req, res) => {
+    try {
+        const r = await db.query("SELECT * FROM ator WHERE id=$1", [req.params.id])
+        if (r.rowCount == 0) {
+            return res.status(400).json({ msg: "Ator inexistente." })
+        }
+
+        if (isNaN(req.params.serie)){
+            return res.json({msg:"O id deve ser um número inteiro!"})
+        }
+
+        const r2 = await db.query("SELECT * FROM filme WHERE id=$1", [req.params.filme])
+        if (r2.rowCount == 0) {
+            return res.status(400).json({ msg: "Filme inexistente" })
+        }
+
+        const requisicao = await db.query("DELETE FROM filme_ator WHERE id_filme=$1 AND id_ator=$2", [req.params.filme, req.params.id])
+        if (!requisicao.rowCount){
+            return res.status(400).json({msg: "Erro ao desassociar ator a um filme."})
+        }
+
+        return res.json({ msg: "Desassociação realizada com sucesso!" })
+    } catch (erro) {
+        return res.status(500).json({ msg: erro.message })
+    }
+})
+
+
+router.post("/:id/serie/:serie", tipo, verificarAdministrador,  async (req, res) => {
+    try {
+        const r = await db.query("SELECT * FROM ator WHERE id=$1", [req.params.id])
+        if (r.rowCount == 0) {
+            return res.status(400).json({ msg: "Ator inexistente." })
+        }
+
+        if (isNaN(req.params.serie)){
+            return res.json({msg:"O id deve ser um número inteiro!"})
+        }
+
+        const r2 = await db.query("SELECT * FROM serie WHERE id=$1", [req.params.serie])
+        if (r2.rowCount == 0) {
+            return res.status(400).json({ msg: "Série inexistente" })
+        }
+
+        const requisicao = await db.query("INSERT INTO filme_serie(id_serie, id_ator) VALUES ($1, $2)", [req.params.serie, req.params.id])
+        if (!requisicao.rowCount){
+            return res.status(400).json({msg: "Erro ao associar ator a uma série."})
+        }
+
+        return res.json({ msg: "Associação realizada com sucesso!" })
+    } catch (erro) {
+        return res.status(500).json({ msg: erro.message })
+    }
+})
+
+router.delete("/:id/serie/:filme", tipo, verificarAdministrador,  async (req, res) => {
+    try {
+        const r = await db.query("SELECT * FROM ator WHERE id=$1", [req.params.id])
+        if (r.rowCount == 0) {
+            return res.status(400).json({ msg: "Ator inexistente." })
+        }
+
+        if (isNaN(req.params.serie)){
+            return res.json({msg:"O id deve ser um número inteiro!"})
+        }
+
+        const r2 = await db.query("SELECT * FROM serie WHERE id=$1", [req.params.serie])
+        if (r2.rowCount == 0) {
+            return res.status(400).json({ msg: "Série inexistente" })
+        }
+
+        const requisicao = await db.query("DELETE FROM filme_serie WHERE id_serie=$1 AND id_ator=$2", [req.params.serie, req.params.id])
+        if (!requisicao.rowCount){
+            return res.status(400).json({msg: "Erro ao desassociar ator a um filme."})
+        }
+
+        return res.json({ msg: "Desassociação realizada com sucesso!" })
+    } catch (erro) {
+        return res.status(500).json({ msg: erro.message })
+    }
+})
+
 module.exports = router;

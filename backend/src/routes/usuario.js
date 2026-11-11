@@ -5,6 +5,9 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const senhaTokenJWT = "senhaSecretissimaIFSP";
 
+const multer = require("multer");
+const upload = multer({ storage: multer.memoryStorage() });
+
 const verificarAdministrador = require("../middleware/verificarAdministrador");
 
 // Função middleware que recebe o token do usuário, verifica se é válido e de um usuário permitido. Se der erro, bloqueia a requisição.
@@ -65,26 +68,47 @@ router.get("/:id", async (req, res) => {
     }
 });
 //POST - Criação (Requer: nome, email, senha)
-router.post("/", async (req, res) => {
+router.post("/", upload.single("arquivo"), async (req, res) => {
     try {
-        //Imagina-se que os parâmetros crítico e administrador não estariam na requisição, pois poderiam apenas ser conferidos por um administrador. No entanto não é assim que está.
-        let { nome, email, critico, administrador, senha, fotografia } = req.body || {};
+        const { nome, email, senha } = req.body || {};
         if (!nome) { return res.status(400).json({ msg: "Nome não informado!" }); }
         if (!email) { return res.status(400).json({ msg: "E-mail não informado!" }); }
         if (!senha) { return res.status(400).json({ msg: "Senha não informada!" }); }
-        if (!critico) { critico = false; }
-        if (!administrador) { administrador = false; }
-        if (!fotografia) { fotografia = null; }
 
+        let fotografia = null
+        if (req.file) {
+            const formData = new FormData();
+            formData.append(
+                "arquivo",
+                new Blob([req.file.buffer], {
+                    type: req.file.mimetype
+                }),
+                req.file.originalname
+            );
+
+            const resposta = await fetch("http://localhost:3000/arquivo", {
+                method: "POST",
+                body: formData
+            });
+
+            if (!resposta.ok) {
+                return res.status(500).json({msg: "Erro ao salvar a fotografia!"});
+            }
+
+            const arquivo = await resposta.json();
+            fotografia = arquivo.arquivo.id;
+        }
         const senhaHash = await bcrypt.hash(senha, 12);
-        const r = await db.query("INSERT INTO usuario (nome, email, critico, administrador, senha, fotografia) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [nome, email, critico, administrador, senhaHash, fotografia]);
+        const r = await db.query("INSERT INTO usuario(nome, email, critico, administrador, senha, fotografia) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, nome, email, critico, administrador, fotografia", [nome, email, false, false, senhaHash, fotografia]);
+
         return res.status(201).json({ msg: "Usuário criado com sucesso!", usuario: r.rows[0] });
     } catch (erro) {
         return res.status(500).json({ msg: erro.message });
     }
 });
+
 //POST - Login (Requer: email, senha)
-router.post("/login", async (req, res) => {
+router.post("/login",  async (req, res) => {
     try {
         const { email, senha } = req.body || {};
         if (!email) { return res.status(400).json({ msg: "E-mail não informado!" }); }
@@ -104,28 +128,50 @@ router.post("/login", async (req, res) => {
 });
 
 //PUT - Específico, por id
-router.put("/:id", verificarToken, async (req, res) => {
+router.put("/", verificarToken, upload.single("arquivo"), async (req, res) => {
     try {
-        const id = req.params.id || {};
-        if (!id) { return res.status(400).json({ msg: "Id não informado!" }); }
-        if (Number(req.params.id) !== Number(req.user)) {
-            return res.status(403).json({ msg: "Você não pode alterar outro usuário!" });
+        const { nome, senha } = req.body || {};
+        if (nome) { 
+            var ra = await db.query("UPDATE usuario SET nome=$1 WHERE id=$2 RETURNING *", [nome, req.user]); 
+            if (!ra.rowCount){
+                return res.status(400).json({msg: "Erro ao alterar nome."})
+            }
         }
-        const { nome, email, senha, fotografia } = req.body || {};
-        //if(!token){return res.status(401).json({msg:"É preciso estar autenticado para alterar um usuário!"});}
-        let r = await db.query("SELECT * FROM usuario WHERE id=$1", [id]);
-        if (nome) { r = await db.query("UPDATE usuario SET nome=$1 RETRUNING *", [nome]); }
-        if (email) { r = await db.query("UPDATE usuario SET email=$1 RETURNING *", [email]); }
         if (senha) {
             const senhaHash = await bcrypt.hash(senha, 12);
-            r = await db.query("UPDATE usuario SET senha=$1 RETURNING *", [senhaHash]);
+            var re = await db.query("UPDATE usuario SET senha=$1 WHERE id=$2 RETURNING *", [senhaHash, req.user]);
+            if (!re.rowCount){
+                return res.status(400).json({msg: "Erro ao alterar nome."})
+            }
         }
-        if (fotografia) { r = await db.query("UPDATE usuario SET fotografia=$1 RETURNING *", [fotografia]); }
+
+        if (req.file) {
+            const formData = new FormData();
+            formData.append(
+                "arquivo",
+                new Blob([req.file.buffer], { type: req.file.mimetype }),
+                req.file.originalname
+            );
+
+            const r = await fetch("http://localhost:3000/arquivo", {
+                method: "POST",
+                body: formData
+            });
+
+            if (!r.ok) {
+                return res.status(500).json({ msg: "Erro ao salvar o novo cartaz!" });
+            }
+            const arquivo = await r.json();
+            await db.query("UPDATE usuario SET fotografia = $1 WHERE id = $2", [arquivo.arquivo.id, req.user]);
+        }
+
+        let r = await db.query("SELECT  FROM usuario WHERE id=$1", [req.user]);
         return res.status(200).json({ msg: "Usuário alterado com sucesso!", usuario: r.rows[0] });
     } catch (erro) {
         return res.status(500).json({ msg: erro.message });
     }
 });
+
 //PUT - Específico, por id, altera atributo crítico
 router.put("/:id/critico", verificarAdministrador, async (req, res) => {
     try {
@@ -141,7 +187,7 @@ router.put("/:id/critico", verificarAdministrador, async (req, res) => {
 });
 
 //PUT - Específico, por id, altera atributo administrador
-router.put("/:id/critico", verificarAdministrador, async (req, res) => {
+router.put("/:id/administrador", verificarAdministrador, async (req, res) => {
     try {
         const id = req.params.id || {};
         if (!id) { return res.status(400).json({ msg: "Id não informado!" }); }
@@ -157,8 +203,6 @@ router.put("/:id/critico", verificarAdministrador, async (req, res) => {
 //DELETE - Específico, por token
 router.delete("/", verificarToken, async (req, res) => {
     try {
-        //const id=req.params.id||{};
-        //if(!id){return res.status(400).json({msg:"Id não informado!"});}
         const r = await db.query("DELETE FROM usuario WHERE id=$1 RETURNING *", [req.user]);
         //Assim, apenas um usuário pode deletar a si próprio.
         if (!r.rowCount) {
