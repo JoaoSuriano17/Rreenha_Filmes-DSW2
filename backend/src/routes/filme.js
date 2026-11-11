@@ -76,21 +76,26 @@ router.post("/", verificarAdministrador, upload.single("arquivo"), async (req, r
 
         var r2;
         if (!req.file) {
-            r2 = await db.query("INSERT INTO filme(titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios, cartaz) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *", [titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios, 2])
+            r2 = await db.query("INSERT INTO filme(titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios, cartaz) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *", [titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios, null])
         } else {
             const formData = new FormData();
-            formData.append("arquivo", new Blob([req.file.buffer], { type: req.file.mimetype }), req.file.originalname);
+            formData.append(
+                "arquivo",
+                new Blob([req.file.buffer], { type: req.file.mimetype }),
+                req.file.originalname
+            );
 
-            const r = await fetch("http://localhost:3000/arquivo", { method: "POST", body: formData })
+            const r = await fetch("http://localhost:3000/arquivo", {
+                method: "POST",
+                body: formData
+            });
+
             if (!r.ok) {
-                return res.status(500).json({ msg: "Erro ao salvar a imagem" });
+                return res.status(500).json({ msg: "Erro ao salvar a imagem." });
             }
-
             const arquivo = await r.json();
-
-            r2 = await db.query("INSERT INTO filme(titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios, cartaz) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *", [titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios, arquivo.id])
+            r2 = await db.query("INSERT INTO filme(titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios, cartaz) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *", [titulo, diretor, sinopse, faixa_etaria, duracao, premios, arquivo.arquivo.id]);
         }
-
         if (!r2.rowCount) {
             return res.status(500).json({ msg: "Erro ao cadastrar o filme" });
         }
@@ -99,7 +104,8 @@ router.post("/", verificarAdministrador, upload.single("arquivo"), async (req, r
     } catch (erro) {
         return res.status(500).json({ msg: erro.message })
     }
-})
+});
+
 
 //PUT
 router.put("/:id", tipo, verificarAdministrador, async (req, res) => {
@@ -132,7 +138,28 @@ router.put("/:id", tipo, verificarAdministrador, async (req, res) => {
             return res.status(500).json({ msg: "Erro ao alterar filme." });
         }
 
-        return res.json({ filme: r.rows[0] });
+        if (req.file) {
+            const formData = new FormData();
+            formData.append(
+                "arquivo",
+                new Blob([req.file.buffer], { type: req.file.mimetype }),
+                req.file.originalname
+            );
+
+            const r = await fetch("http://localhost:3000/arquivo", {
+                method: "POST",
+                body: formData
+            });
+
+            if (!r.ok) {
+                return res.status(500).json({ msg: "Erro ao salvar o novo cartaz!" });
+            }
+            const arquivo = await r.json();
+            await db.query("UPDATE filme SET cartaz = $1 WHERE id = $2", [arquivo.arquivo.id, id]);
+        }
+
+        const resultado = await db.query("SELECT * FROM filme WHERE id = $1", [id]);
+        return res.json({ filme: resultado.rows[0] });
     } catch (erro) {
         return res.status(500).json({ msg: erro.message });
     }

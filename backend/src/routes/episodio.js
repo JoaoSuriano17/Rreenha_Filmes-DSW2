@@ -70,8 +70,8 @@ router.post("/", verificarAdministrador, async (req, res) => {
     try {
         const { titulo, sinopse, duracao, temporada, serie_id } = req.body;
 
-        if (!titulo || !serie_id) {
-            return res.status(400).json({ msg: "O episódio deve possuir pelo menos um título e uma série." });
+        if (!titulo && !serie_id && !duracao && !sinopse && !temporada) {
+            return res.status(400).json({ msg: "O episódio deve possuir todos os parâmetros." });
         }
 
         // Verificando os atributos: 
@@ -93,7 +93,7 @@ router.post("/", verificarAdministrador, async (req, res) => {
             return res.status(500).json({ msg: "Erro ao cadastrar episódio." });
         }
 
-        return res.json({ episodio: r.rows[0] });
+        return res.json({episodio: r.rows[0]});
     } catch (erro) {
         return res.status(500).json({ msg: erro.message });
     }
@@ -121,7 +121,7 @@ router.put("/:id", tipo, verificarAdministrador, async (req, res) => {
         }
 
 
-        const r = await db.query("UPDATE episodio SET titulo=$1, sinopse=$2, duracao=$3, temporada=$4 WHERE id=$5 RETURNING *", [titulo != undefined ? titulo : atual.rows[0].titulo, sinopse != undefined ? sinopse : atual.rows[0].sinopse, duracao != undefined ? duracao : atual.rows[0].sinopse, temporada != undefined || temporada < 1 ? temporada : atual.rows[0].temporada, req.params.id]);
+        const r = await db.query("UPDATE episodio SET titulo=$1, sinopse=$2, duracao=$3, temporada=$4 WHERE id=$5 RETURNING *", [ titulo || atual.rows[0].titulo, sinopse || atual.rows[0].sinopse, duracao || atual.rows[0].duracao, temporada || atual.rows[0].temporada, req.params.id]);
         if (!r.rowCount) {
             return res.status(500).json({ msg: "Erro ao alterar episódio." });
         }

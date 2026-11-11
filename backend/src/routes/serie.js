@@ -47,6 +47,7 @@ router.get("/:id", tipo, async (req, res) => {
     }
 });
 
+//Terminar o serie.js
 router.post("/", verificarAdministrador, upload.single("arquivo"), async (req, res) => {
     try {
         const { titulo, diretor, sinopse, faixa_etaria, qtde_premios } = req.body;
@@ -78,7 +79,7 @@ router.post("/", verificarAdministrador, upload.single("arquivo"), async (req, r
 
             const arquivo = await r.json();
 
-            r2 = await db.query(`INSERT INTO serie(titulo, diretor, sinopse, faixa_etaria, qtde_premios, cartaz) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`, [titulo, diretor, sinopse, faixa_etaria, qtde_premios, arquivo.id]);
+            r2 = await db.query("INSERT INTO serie(titulo, diretor, sinopse, faixa_etaria, qtde_premios, cartaz) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [titulo, diretor, sinopse, faixa_etaria, qtde_premios, arquivo.id]);
         }
         if (!r2.rowCount) {
             return res.status(500).json({ msg: "Erro ao cadastrar a série." });
@@ -90,6 +91,7 @@ router.post("/", verificarAdministrador, upload.single("arquivo"), async (req, r
     }
 });
 
+//Terminar o serie.js
 router.put("/:id", tipo, verificarAdministrador, upload.single("arquivo"), async (req, res) => {
     try {
         const { titulo, diretor, sinopse, faixa_etaria, qtde_premios } = req.body;
@@ -102,7 +104,6 @@ router.put("/:id", tipo, verificarAdministrador, upload.single("arquivo"), async
         let cartaz = atual.rows[0].cartaz;
         if (req.file) {
             const formData = new FormData();
-
             formData.append(
                 "arquivo",
                 new Blob([req.file.buffer], { type: req.file.mimetype }),
@@ -115,29 +116,14 @@ router.put("/:id", tipo, verificarAdministrador, upload.single("arquivo"), async
             });
 
             if (!r.ok) {
-                return res.status(500).json({ msg: "Erro ao salvar o cartaz." });
+                return res.status(500).json({ msg: "Erro ao salvar o novo cartaz!" });
             }
             const arquivo = await r.json();
-            cartaz = arquivo.id;
+            await db.query("UPDATE filme SET cartaz = $1 WHERE id = $2", [arquivo.arquivo.id, id]);
         }
 
-        const r2 = await db.query(`UPDATE serie SET titulo=$1, diretor=$2, sinopse=$3, faixa_etaria=$4, qtde_premios=$5, cartaz=$6 WHERE id=$7 RETURNING *`, [
-            titulo, diretor, sinopse, faixa_etaria, qtde_premios, cartaz, req.params.id]
-        );
-
-        if (
-            req.file &&
-            atual.rows[0].cartaz != 1 &&
-            atual.rows[0].cartaz != 2
-        ) {
-            await fetch(
-                `http://localhost:3000/arquivo/${atual.rows[0].cartaz}`,
-                { method: "DELETE" }
-            );
-        }
-
-        return res.json({ serie: r2.rows[0] });
-
+        const resultado = await db.query("SELECT * FROM filme WHERE id = $1", [id]);
+        return res.json({ serie: resultado.rows[0] });
     } catch (erro) {
         return res.status(500).json({ msg: erro.message });
     }
