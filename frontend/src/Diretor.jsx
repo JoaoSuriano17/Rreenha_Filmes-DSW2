@@ -77,6 +77,7 @@ function Diretor(props){
                 </div>
             </nav>
 
+            <p className="categoria">Diretor(a)</p>
             <div className="grid-filme">
                 <h1 className="titulo">{diretor.nome}</h1>
                 <div className="combo">

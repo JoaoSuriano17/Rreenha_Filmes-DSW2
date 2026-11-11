@@ -65,8 +65,8 @@ router.post("/", verificarAdministrador, upload.single("arquivo"), async (req, r
             return res.status(400).json({ msg: "O filme deve, no mínimo, ter título, diretor, sinopse, faixa etária e duração." })
         }
 
-        if ((!isNaN(faixa_etaria) || faixa_etaria > 0) && (!isNaN(duracao) || duracao > 0)) {
-            return res.status(400).json({ msg: "O faixa etária e duração devem ser números inteiros maiores que 0" })
+        if ((isNaN(faixa_etaria) || faixa_etaria <= 0 || faixa_etaria>18) && (isNaN(duracao) || duracao <= 0)) {
+            return res.status(400).json({ msg: "A faixa etária e a duração devem ser números inteiros maiores que 0" })
         }
 
         const diretorExiste = await db.query("SELECT * FROM diretor WHERE id=$1", [diretor])

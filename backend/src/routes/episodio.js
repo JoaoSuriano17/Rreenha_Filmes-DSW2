@@ -75,10 +75,10 @@ router.post("/", verificarAdministrador, async (req, res) => {
         }
 
         // Verificando os atributos: 
-        if (!isNaN(duracao) || duracao < 1) {
+        if (isNaN(duracao) || duracao < 1) {
             return res.status(400).json({ msg: "A duração deve ser um número inteiro maior que 0." })
         }
-        if (!isNaN(temporada) || temporada < 1) {
+        if (isNaN(temporada) || temporada < 1) {
             return res.status(400).json({ msg: "A temporada deve ser um número inteiro igual ou maior que 1." })
         }
 

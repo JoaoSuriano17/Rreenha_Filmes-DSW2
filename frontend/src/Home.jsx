@@ -185,7 +185,7 @@ function Home(props){
                 <button className="btncatalogo" onClick={()=>{navigate("/filmes")}}>Explorar catálogo completo</button>
             </div>
 
-            <h1 className='procurados'>Veja os atores mais procurados</h1>
+            <h1 className='procurados'>Veja os atores mais procurados no nosso site</h1>
             <div className="filmes_classicos">
                 {atores.atores?.filter(ator => ator.id<5).map((ator, index) => (
                     <div className="card" key={ator.id ?? index}>

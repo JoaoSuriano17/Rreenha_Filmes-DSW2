@@ -55,16 +55,16 @@ router.post("/", verificarAdministrador, upload.single("arquivo"), async (req, r
             return res.status(400).json({ msg: "A série deve possuir pelo menos um título e um diretor." });
         }
 
-        if (!isNaN(faixa_etaria) || faixa_etaria < 1) {
-            return res.status(400).json({ msg: "A faixa etária deve ser um número inteiro igual ou maior que 1." })
+        if (faixa_etaria <= 0 || faixa_etaria>18) {
+            return res.status(400).json({ msg: "A faixa etária deve ser um número inteiro igual ou maior que 0." })
         }
-        if (!isNaN(qtde_premios) || qtde_premios < 1) {
-            return res.status(400).json({ msg: "A faixa etária deve ser um número inteiro igual ou maior que 1." })
+        if (qtde_premios < 0) {
+            return res.status(400).json({ msg: "A quantidade de prêmios deve ser um número inteiro igual ou maior que 0." })
         }
 
         var r2;
         if (!req.file) {
-            r2 = await db.query(`INSERT INTO serie (titulo, diretor, sinopse, faixa_etaria, qtde_premios, cartaz) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`, [titulo, diretor, sinopse, faixa_etaria, qtde_premios, 1]);
+            r2 = await db.query(`INSERT INTO serie (titulo, diretor, sinopse, faixa_etaria, qtde_premios, cartaz) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`, [titulo, diretor, sinopse, faixa_etaria, qtde_premios, 2]);
         } else {
             const formData = new FormData();
             formData.append(

@@ -93,6 +93,7 @@ function Filme(props){
                 </div>
             </nav>
 
+            <p className="categoria">Filme</p>
             <div className="grid-filme">
                 <h1 className="titulo">{filme.titulo}</h1>
                 <div className="combo">
@@ -109,6 +110,11 @@ function Filme(props){
                     <hr></hr>
                     <p><b>Diretor:</b> <Link className="link" to={"/diretor/"+diretor.id}>{diretor.nome}</Link></p>
                 </div>
+            </div>
+
+            <div className="grid-atores">
+                <h2><span className="blue">|</span> Elenco Principal</h2>
+
             </div>
 
             <footer>

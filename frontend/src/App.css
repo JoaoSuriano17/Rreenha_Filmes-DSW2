@@ -93,7 +93,6 @@
 .grid-filme{
   margin-left: 15%;
   margin-right: 15%;
-  margin-top: 2%;
   border: black 1px solid;
   border-radius: 10px;
   padding-left: 1%;
@@ -104,6 +103,7 @@
   display: flex;
   margin-top: 2%;
   margin-bottom: 2%;
+  flex-wrap: wrap;
 }
 
 .cartaz{
@@ -230,6 +230,7 @@ footer{
 .grid-filme-menor{
   margin-left: 30%;
   margin-right: 30%;
+  margin-top: 15px;
   padding-bottom: 10px;
   padding-top: 10px;
 }
@@ -316,4 +317,19 @@ footer{
   color: white;
   margin-left: 3%;
   margin-top: 5px;
+}
+
+.categoria{
+  margin-left: 15%;
+  margin-top: 15px;
+  margin-bottom: 0px;
+}
+
+.grid-atores{
+  margin-left: 15%;
+  margin-right: 15%;
+}
+
+.blue{
+  color: rgb(17, 17, 186);
 }

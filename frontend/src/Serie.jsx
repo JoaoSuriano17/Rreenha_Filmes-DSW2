@@ -94,6 +94,7 @@ function Serie(props){
                 </div>
             </nav>
 
+            <p className="categoria">Série</p>
             <div className="grid-filme">
                 <h1 className="titulo">{serie.titulo}</h1>
                 <div className="combo">

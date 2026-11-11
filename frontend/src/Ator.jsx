@@ -77,6 +77,7 @@ function Ator(props){
                 </div>
             </nav>
 
+            <p className="categoria">Ator(a)</p>
             <div className="grid-filme">
                 <h1 className="titulo">{ator.nome}</h1>
                 <div className="combo">

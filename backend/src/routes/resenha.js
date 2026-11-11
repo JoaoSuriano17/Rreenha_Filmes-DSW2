@@ -96,7 +96,7 @@ router.post("/filme", tokenArmazenar, async (req, res) => {
             return res.status(400).json({ msg: "Avaliação deve ser um número entre 0 e 100."})
         }
 
-        const r2 = await db.query("SELECT * FROM resenha_serie WHERE usuario_id = $1 and filme_id=$2", [req.usuario_id, filme_id])
+        const r2 = await db.query("SELECT * FROM resenha_filme WHERE usuario_id = $1 and filme_id=$2", [req.usuario_id, filme_id])
         if (r2.rowCount){
             return res.status(400).json({msg: "Resenha já está em filme."})
         }
@@ -116,7 +116,7 @@ router.post("/serie", tokenArmazenar, async (req, res) => {
         if (!resenha) { return res.status(400).json({ msg: "Resenha não informada!" }); }
         if (!avaliacao) { return res.status(400).json({ msg: "Avaliação não informada!" }); }
 
-        const r1 = await db.query("SELECT * FROM serie WHERE id = $1", [filme_id])
+        const r1 = await db.query("SELECT * FROM serie WHERE id = $1", [serie_id])
         if (!r1.rowCount){
             res.status(404).json("Serie inexistente.")
         }
