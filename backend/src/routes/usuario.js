@@ -70,7 +70,7 @@ router.get("/:id", async (req, res) => {
 //POST - Criação (Requer: nome, email, senha)
 router.post("/", upload.single("arquivo"), async (req, res) => {
     try {
-        const { nome, email, senha } = req.body || {};
+        let { nome, email, senha, critico, administrador } = req.body || {};
         if (!nome) { return res.status(400).json({ msg: "Nome não informado!" }); }
         if (!email) { return res.status(400).json({ msg: "E-mail não informado!" }); }
         if (!senha) { return res.status(400).json({ msg: "Senha não informada!" }); }
@@ -92,14 +92,28 @@ router.post("/", upload.single("arquivo"), async (req, res) => {
             });
 
             if (!resposta.ok) {
-                return res.status(500).json({msg: "Erro ao salvar a fotografia!"});
+                return res.status(500).json({ msg: "Erro ao salvar a fotografia!" });
             }
 
             const arquivo = await resposta.json();
             fotografia = arquivo.arquivo.id;
         }
         const senhaHash = await bcrypt.hash(senha, 12);
-        const r = await db.query("INSERT INTO usuario(nome, email, critico, administrador, senha, fotografia) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, nome, email, critico, administrador, fotografia", [nome, email, false, false, senhaHash, fotografia]);
+        if (critico) {
+            if (critico == "True" || critico == "true") {
+                critico = true
+            }
+        }
+        critico = false
+
+        if (administrador) {
+            if (administrador == "True" || administrador == "true") {
+                administrador = true
+            }
+        }
+        administrador = true
+
+        const r = await db.query("INSERT INTO usuario(nome, email, critico, administrador, senha, fotografia) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, nome, email, critico, administrador, fotografia", [nome, email, critico, administrador, senhaHash, fotografia]);
 
         return res.status(201).json({ msg: "Usuário criado com sucesso!", usuario: r.rows[0] });
     } catch (erro) {
@@ -108,7 +122,7 @@ router.post("/", upload.single("arquivo"), async (req, res) => {
 });
 
 //POST - Login (Requer: email, senha)
-router.post("/login",  async (req, res) => {
+router.post("/login", async (req, res) => {
     try {
         const { email, senha } = req.body || {};
         if (!email) { return res.status(400).json({ msg: "E-mail não informado!" }); }
@@ -131,17 +145,17 @@ router.post("/login",  async (req, res) => {
 router.put("/", verificarToken, upload.single("arquivo"), async (req, res) => {
     try {
         const { nome, senha } = req.body || {};
-        if (nome) { 
-            var ra = await db.query("UPDATE usuario SET nome=$1 WHERE id=$2 RETURNING *", [nome, req.user]); 
-            if (!ra.rowCount){
-                return res.status(400).json({msg: "Erro ao alterar nome."})
+        if (nome) {
+            var ra = await db.query("UPDATE usuario SET nome=$1 WHERE id=$2 RETURNING *", [nome, req.user]);
+            if (!ra.rowCount) {
+                return res.status(400).json({ msg: "Erro ao alterar nome." })
             }
         }
         if (senha) {
             const senhaHash = await bcrypt.hash(senha, 12);
             var re = await db.query("UPDATE usuario SET senha=$1 WHERE id=$2 RETURNING *", [senhaHash, req.user]);
-            if (!re.rowCount){
-                return res.status(400).json({msg: "Erro ao alterar nome."})
+            if (!re.rowCount) {
+                return res.status(400).json({ msg: "Erro ao alterar nome." })
             }
         }
 
@@ -165,7 +179,7 @@ router.put("/", verificarToken, upload.single("arquivo"), async (req, res) => {
             await db.query("UPDATE usuario SET fotografia = $1 WHERE id = $2", [arquivo.arquivo.id, req.user]);
         }
 
-        let r = await db.query("SELECT  FROM usuario WHERE id=$1", [req.user]);
+        let r = await db.query("SELECT nome, email FROM usuario WHERE id=$1", [req.user]);
         return res.status(200).json({ msg: "Usuário alterado com sucesso!", usuario: r.rows[0] });
     } catch (erro) {
         return res.status(500).json({ msg: erro.message });
