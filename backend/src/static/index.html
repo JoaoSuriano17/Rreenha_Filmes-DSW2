@@ -1,1268 +1,276 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API Documentation</title>
-
+    <title>Documentação do Backend</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap');
-
         :root {
-            --bg: #090b0a;
-            --surface: #101411;
-            --surface2: #171e19;
-            --border: #242e27;
-            --text: #e9f0eb;
-            --muted: #89958c;
-            --green: #a3f7bd;
+            --primary: #2563eb;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --muted: #64748b;
+            --border: #e2e8f0;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: Inter, sans-serif;
-            min-height: 100vh;
-        }
-
-        body::before {
-            content: "";
-            position: fixed;
-            width: 550px;
-            height: 550px;
-            background: radial-gradient(circle, #174b2b20, transparent 70%);
-            top: -200px;
-            right: -100px;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .container {
-            max-width: 1150px;
-            margin: auto;
-            padding: 40px 25px 80px;
-        }
-
-        /* HEADER */
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 25px;
-            border-bottom: 1px solid var(--border);
-            animation: fadeDown .7s ease;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 800;
-            letter-spacing: -1px;
-        }
-
-        .logo-icon {
-            width: 36px;
-            height: 36px;
-            background: var(--green);
-            color: #09150d;
-            display: grid;
-            place-items: center;
-            border-radius: 10px;
-        }
-
-        .status {
-            color: var(--green);
-            border: 1px solid #34523c;
-            padding: 8px 12px;
-            border-radius: 30px;
-            font-size: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .status::before {
-            content: "";
-            width: 7px;
-            height: 7px;
-            background: var(--green);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        /* HERO */
-
-        .hero {
-            padding: 75px 0 55px;
-            animation: fadeUp .8s ease;
-        }
-
-        .tag {
-            color: var(--green);
-            font-family: 'DM Mono', monospace;
-            font-size: 11px;
-            letter-spacing: 2px;
-        }
-
-        h1 {
-            font-size: clamp(38px, 6vw, 68px);
-            letter-spacing: -3px;
-            line-height: 1.08;
-            margin: 20px 0;
-        }
-
-        h1 span {
-            color: var(--green);
-        }
-
-        .hero p {
-            color: var(--muted);
-            max-width: 570px;
-            font-size: 13px;
-            line-height: 1.9;
-        }
-
-        /* STATS */
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-bottom: 55px;
-        }
-
-        .stat {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 22px;
-            transition: .3s;
-        }
-
-        .stat:hover {
-            border-color: #587b61;
-            transform: translateY(-4px);
-        }
-
-        .stat strong {
-            display: block;
-            font-size: 27px;
-            margin-bottom: 6px;
-        }
-
-        .stat small {
-            color: var(--muted);
-            font-size: 11px;
-        }
-
-        /* FILTROS */
-
-        .toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-
-        .toolbar h2 {
-            font-size: 18px;
-        }
-
-        .search {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            color: white;
-            padding: 12px 16px;
-            border-radius: 8px;
-            outline: none;
-            width: 260px;
-            font-family: inherit;
-            font-size: 12px;
-        }
-
-        .search:focus {
-            border-color: var(--green);
-        }
-
-        .filters {
-            display: flex;
-            gap: 7px;
-            flex-wrap: wrap;
-            margin-bottom: 35px;
-        }
-
-        .filter {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            color: var(--muted);
-            padding: 8px 13px;
-            border-radius: 6px;
-            font-size: 10px;
-            cursor: pointer;
-            transition: .2s;
-        }
-
-        .filter:hover,
-        .filter.active {
-            background: var(--green);
-            color: #09150d;
-            border-color: var(--green);
-        }
-
-        /* CATEGORIAS */
-
-        .category {
-            margin-bottom: 40px;
-        }
-
-        .category-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .category-header h3 {
-            font-size: 13px;
-        }
-
-        .category-header span {
-            color: var(--muted);
-            font-family: 'DM Mono', monospace;
-            font-size: 10px;
-        }
-
-        /* ENDPOINTS */
-
-        .endpoint {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            margin-bottom: 10px;
-            overflow: hidden;
-            transition: border-color .3s, transform .3s;
-            animation: fadeUp .5s ease both;
-        }
-
-        .endpoint:hover {
-            border-color: #46634d;
-            transform: translateX(3px);
-        }
-
-        .endpoint-top {
-            display: flex;
-            align-items: center;
-            padding: 17px;
-            gap: 13px;
-            cursor: pointer;
-            flex-wrap: wrap;
-        }
-
-        .method {
-            width: 68px;
-            text-align: center;
-            padding: 7px 0;
-            border-radius: 5px;
-            font-family: 'DM Mono', monospace;
-            font-size: 10px;
-            font-weight: 500;
-        }
-
-        .GET {
-            background: #142e23;
-            color: #80e9a8;
-        }
-
-        .POST {
-            background: #302819;
-            color: #f4c76e;
-        }
-
-        .PUT {
-            background: #172a3d;
-            color: #81c5ff;
-        }
-
-        .DELETE {
-            background: #361d20;
-            color: #ff8d91;
-        }
-
-        .path {
-            font-family: 'DM Mono', monospace;
-            font-size: 12px;
-            flex: 1;
-            overflow-wrap: anywhere;
-        }
-
-        .description {
-            color: var(--muted);
-            font-size: 11px;
-        }
-
-        .protected {
-            color: #e9bd75;
-            background: #302819;
-            padding: 5px 8px;
-            font-size: 9px;
-            border-radius: 4px;
-            white-space: nowrap;
-        }
-
-        .arrow {
-            color: var(--muted);
-            transition: .3s;
-        }
-
-        .endpoint.active .arrow {
-            transform: rotate(180deg);
-        }
-
-        /* DETALHES */
-
-        .endpoint-content {
-            max-height: 0;
-            opacity: 0;
-            overflow: hidden;
-            transition: max-height .45s ease, opacity .3s ease;
-        }
-
-        .endpoint.active .endpoint-content {
-            max-height: 1000px;
-            opacity: 1;
-            border-top: 1px solid var(--border);
-        }
-
-        .content-inner {
-            padding: 22px;
-        }
-
-        .content-inner h4 {
-            font-size: 10px;
-            color: var(--green);
-            margin: 17px 0 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .content-inner h4:first-child {
-            margin-top: 0;
-        }
-
-        .content-inner p {
-            color: var(--muted);
-            font-size: 12px;
-            line-height: 1.8;
-        }
-
-        pre {
-            background: #080c09;
-            border: 1px solid var(--border);
-            padding: 15px;
-            border-radius: 8px;
-            color: #a3f7bd;
-            overflow-x: auto;
-            font-family: 'DM Mono', monospace;
-            font-size: 11px;
-            line-height: 1.8;
-            white-space: pre;
-        }
-
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 15px;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .copy {
-            background: var(--surface2);
-            color: var(--muted);
-            border: 1px solid var(--border);
-            border-radius: 5px;
-            padding: 7px 10px;
-            cursor: pointer;
-            font-size: 10px;
-            transition: .2s;
-        }
-
-        .copy:hover {
-            color: var(--green);
-            border-color: var(--green);
-        }
-
-        .empty {
-            display: none;
-            color: var(--muted);
-            text-align: center;
-            padding: 50px 15px;
-            font-size: 13px;
-        }
-
-        /* FOOTER */
-
-        footer {
-            border-top: 1px solid var(--border);
-            margin-top: 65px;
-            padding-top: 25px;
-            display: flex;
-            justify-content: space-between;
-            color: var(--muted);
-            font-size: 10px;
-        }
-
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(18px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeDown {
-            from {
-                opacity: 0;
-                transform: translateY(-15px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes pulse {
-            50% {
-                opacity: .3;
-            }
-        }
-
-        @media(max-width: 650px) {
-            .container {
-                padding: 25px 16px 50px;
-            }
-
-            .stats {
-                grid-template-columns: 1fr;
-            }
-
-            h1 {
-                letter-spacing: -2px;
-            }
-
-            .search {
-                width: 100%;
-            }
-
-            .toolbar {
-                align-items: stretch;
-            }
-
-            .endpoint-top {
-                gap: 10px;
-            }
-
-            .description {
-                width: 100%;
-                padding-left: 80px;
-            }
-
-            footer {
-                flex-direction: column;
-                gap: 12px;
-            }
-        }
-
-        @media(prefers-reduced-motion: reduce) {
-
-            *,
-            *::before,
-            *::after {
-                animation-duration: .01ms !important;
-                transition-duration: .01ms !important;
-            }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; padding: 24px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        
+        header { margin-bottom: 32px; border-bottom: 1px solid var(--border); padding-bottom: 16px; }
+        h1 { font-size: 24px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
+        p { color: var(--muted); font-size: 14px; }
+
+        .toolbar { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+        input[type="text"] { flex: 1; min-width: 200px; padding: 10px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; outline: none; background: #fff; }
+        input:focus { border-color: var(--primary); }
+
+        .filters { display: flex; gap: 6px; }
+        .filter { padding: 8px 12px; border: 1px solid var(--border); background: #fff; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; color: var(--muted); }
+        .filter.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+        .modnav { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+        .modnav a { font-size: 13px; color: var(--primary); text-decoration: none; background: #eff6ff; padding: 4px 10px; border-radius: 4px; }
+        .modnav a:hover { background: #dbeafe; }
+
+        .category { margin-bottom: 32px; }
+        .category h2 { font-size: 16px; font-weight: 600; color: #475569; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .endpoint { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+        .endpoint-top { padding: 14px 18px; display: flex; align-items: center; gap: 12px; cursor: pointer; user-select: none; }
+        .endpoint-top:hover { background: #f1f5f9; }
+
+        .method { font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 4px; min-width: 60px; text-align: center; text-transform: uppercase; }
+        .GET { background: #dcfce7; color: #166534; }
+        .POST { background: #fef9c3; color: #854d0e; }
+        .PUT { background: #e0f2fe; color: #0369a1; }
+        .DELETE { background: #fee2e2; color: #991b1b; }
+
+        .path { font-family: monospace; font-size: 13px; font-weight: 600; flex: 1; }
+        
+        .badge { font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 12px; }
+        .badge-pub { background: #f1f5f9; color: #475569; }
+        .badge-log { background: #fef3c7; color: #92400e; }
+        .badge-adm { background: #fee2e2; color: #991b1b; }
+
+        .endpoint-content { display: none; padding: 18px; border-top: 1px solid var(--border); background: #fff; font-size: 13px; }
+        .endpoint.active .endpoint-content { display: block; }
+
+        h3 { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; margin: 16px 0 6px; letter-spacing: 0.5px; }
+        h3:first-child { margin-top: 0; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 6px; }
+        th, td { border: 1px solid var(--border); padding: 8px 10px; text-align: left; }
+        th { background: #f8fafc; font-weight: 600; color: #475569; }
+        code { font-family: monospace; background: #f1f5f9; padding: 2px 4px; border-radius: 4px; color: #0f172a; font-size: 12px; }
+        pre { background: #0f172a; color: #e2e8f0; padding: 12px; border-radius: 6px; overflow-x: auto; font-family: monospace; font-size: 12px; margin-top: 6px; }
+        
+        .empty { text-align: center; padding: 32px; color: var(--muted); display: none; }
     </style>
 </head>
-
 <body>
 
-    <div class="container">
+<div class="container">
+    <header>
+        <h1>Documentação do Backend</h1>
+        <p>Endpoints, parâmetros, controle de acesso e exemplos de retorno.</p>
+    </header>
 
-        <header>
-            <div class="logo">
-                <div class="logo-icon">A</div>
-                API DOCS
-            </div>
-            <div class="status">DOCUMENTAÇÃO DISPONÍVEL</div>
-        </header>
+    <nav class="modnav" id="modnav"></nav>
 
-        <section class="hero">
-            <div class="tag">DEVELOPER RESOURCES / V1.0</div>
-            <h1>Explore nossa<br><span>API.</span></h1>
-            <p>
-                Documentação técnica dos serviços disponíveis no sistema.
-                Explore endpoints, consulte parâmetros e visualize exemplos
-                de requisições e respostas.
-            </p>
-        </section>
-
-        <section class="stats">
-            <div class="stat">
-                <strong id="total">36</strong>
-                <small>Endpoints identificados</small>
-            </div>
-            <div class="stat">
-                <strong>06</strong>
-                <small>Módulos disponíveis</small>
-            </div>
-            <div class="stat">
-                <strong>REST</strong>
-                <small>Arquitetura da API</small>
-            </div>
-        </section>
-
-        <div class="toolbar">
-            <h2>Endpoints disponíveis</h2>
-            <input type="text" class="search" id="search" placeholder="Pesquisar rota ou descrição...">
-        </div>
-
+    <div class="toolbar">
+        <input type="text" id="search" placeholder="Pesquisar rota ou descrição...">
         <div class="filters">
-            <button class="filter active" data-filter="ALL">TODOS</button>
+            <button class="filter active" data-filter="ALL">TODAS</button>
             <button class="filter" data-filter="GET">GET</button>
             <button class="filter" data-filter="POST">POST</button>
             <button class="filter" data-filter="PUT">PUT</button>
             <button class="filter" data-filter="DELETE">DELETE</button>
         </div>
-
-        <main id="documentation"></main>
-
-        <div class="empty" id="empty">
-            Nenhum endpoint encontrado.
-        </div>
-
-        <footer>
-            <span>API DOCUMENTATION — VERSION 1.0</span>
-            <span>DEVELOPED WITH PRECISION.</span>
-        </footer>
-
     </div>
 
-    <script>
-
-        // Prefixos assumidos para os routers:
-        // /ator, /serie, /resenha, /filme,
-        // /episodio e /diretor.
-
-        const modules = [
-
-            {
-                name: "Atores",
-                prefix: "/ator",
-                endpoints: [
-
-                    {
-                        method: "GET",
-                        path: "/",
-                        description: "Listar todos os atores",
-                        detail: "Retorna todos os registros da tabela ator.",
-                        response: `{
-  "atores": [
-    {
-      "id": 1,
-      "nome": "Nome do ator"
-    }
-  ]
-}`
-                    },
-
-                    {
-                        method: "GET",
-                        path: "/nome/:nome",
-                        description: "Buscar ator pelo nome",
-                        detail: "Retorna o identificador do ator correspondente ao nome informado.",
-                        params: ":nome — Nome do ator.",
-                        response: `{
-  "ator": {
-    "id": 1
-  }
-}`
-                    },
-
-                    {
-                        method: "GET",
-                        path: "/:id",
-                        description: "Buscar ator pelo ID",
-                        protected: true,
-                        detail: "Retorna os dados de um ator específico.",
-                        params: ":id — Identificador do ator.",
-                        response: `{
-  "ator": {}
-}`
-                    },
-
-                    {
-                        method: "POST",
-                        path: "/",
-                        description: "Cadastrar ator",
-                        detail: "Cadastra um ator e permite enviar sua fotografia.",
-                        body: `{
-  "nome": "Nome do ator",
-  "nacionalidade": "Brasileira",
-  "data_nascimento": "1990-01-01",
-  "biografia": "Biografia do ator",
-  "qtde_premios": 3
-}`,
-                        extra: "Content-Type: multipart/form-data. Campo de arquivo: arquivo."
-                    },
-
-                    {
-                        method: "DELETE",
-                        path: "/:id",
-                        description: "Excluir ator",
-                        protected: true,
-                        params: ":id — Identificador do ator.",
-                        detail: "Exclui o ator e remove sua fotografia, quando não for uma imagem padrão."
-                    }
-                ]
-            },
-
-            {
-                name: "Séries",
-                prefix: "/serie",
-                endpoints: [
-
-                    {
-                        method: "GET",
-                        path: "/",
-                        description: "Listar séries",
-                        detail: "Retorna todas as séries cadastradas.",
-                        response: `{
-  "series": []
-}`
-                    },
-
-                    {
-                        method: "GET",
-                        path: "/titulo/:titulo",
-                        description: "Buscar série pelo título",
-                        protected: true,
-                        params: ":titulo — Título da série.",
-                        detail: "Busca o id de uma série específica pelo seu título.",
-                        response: `{
-  "serie": {
-    "id": 1
-  }
-}`
-                    },
-
-                    {
-                        method: "GET",
-                        path: "/:id",
-                        description: "Buscar série pelo ID",
-                        protected: true,
-                        params: ":id — Identificador da série.",
-                        detail: "Busca uma série específica pelo seu identificador.",
-                        response: `{
-  "serie": {}
-}`
-                    },
-
-                    {
-                        method: "POST",
-                        path: "/",
-                        description: "Cadastrar série",
-                        detail: "Cadastra uma nova série e permite enviar um cartaz.",
-                        body: `{
-  "titulo": "Nome da série",
-  "diretor": "Nome do diretor",
-  "sinopse": "Descrição da série",
-  "faixa_etaria": "12 anos",
-  "qtde_premios": 5
-}`,
-                        extra: "Content-Type: multipart/form-data. Campo de arquivo: arquivo."
-                    },
-
-                    {
-                        method: "PUT",
-                        path: "/:id",
-                        description: "Atualizar série",
-                        protected: true,
-                        params: ":id — Identificador da série.",
-                        detail: "Atualiza os dados da série e permite substituir o cartaz.",
-                        body: `{
-  "titulo": "Novo título",
-  "diretor": "Novo diretor",
-  "sinopse": "Nova descrição",
-  "faixa_etaria": "16 anos",
-  "qtde_premios": 8
-}`,
-                        extra: "O envio de um novo cartaz é opcional. Campo de arquivo: arquivo."
-                    },
-
-                    {
-                        method: "DELETE",
-                        path: "/:id",
-                        description: "Excluir série",
-                        protected: true,
-                        params: ":id — Identificador da série.",
-                        detail: "Remove a série e seu cartaz, quando não for uma imagem padrão."
-                    }
-                ]
-            },
-
-            {
-                name: "Resenhas",
-                prefix: "/resenha",
-                endpoints: [
-
-                    {
-                        method: "GET",
-                        path: "/",
-                        description: "Listar todas as resenhas",
-                        detail: "Retorna conjuntamente as resenhas de filmes e séries.",
-                        response: `{
-  "resenhas_filme": [],
-  "resenhas_serie": []
-}`
-                    },
-
-                    {
-                        method: "GET",
-                        path: "/publico",
-                        description: "Listar resenhas do público",
-                        detail: "Retorna as resenhas publicadas por usuários que não são críticos.",
-                        response: `{
-  "resenhas_filme": [],
-  "resenhas_serie": []
-}`
-                    },
-
-                    {
-                        method: "GET",
-                        path: "/critico",
-                        description: "Listar resenhas da crítica",
-                        detail: "Retorna as resenhas publicadas por usuários classificados como críticos.",
-                        response: `{
-  "resenhas_filme": [],
-  "resenhas_serie": []
-}`
-                    },
-
-                    {
-                        method: "POST",
-                        path: "/filme",
-                        description: "Criar resenha de filme",
-                        detail: "Registra uma avaliação e uma resenha vinculada a um usuário e a um filme.",
-                        body: `{
-  "usuario_id": 1,
-  "filme_id": 2,
-  "resenha": "Texto da resenha",
-  "avaliacao": 9
-}`
-                    },
-
-                    {
-                        method: "POST",
-                        path: "/serie",
-                        description: "Criar resenha de série",
-                        detail: "Registra uma avaliação e uma resenha vinculada a um usuário e a uma série.",
-                        body: `{
-  "usuario_id": 1,
-  "serie_id": 2,
-  "resenha": "Texto da resenha",
-  "avaliacao": 8
-}`
-                    },
-
-                    {
-                        method: "PUT",
-                        path: "/filme/:id",
-                        description: "Atualizar resenha de filme",
-                        params: ":id — Identificador da resenha.",
-                        detail: "Atualiza o texto e a avaliação da resenha.",
-                        body: `{
-  "resenha": "Texto atualizado",
-  "avaliacao": 10
-}`
-                    },
-
-                    {
-                        method: "PUT",
-                        path: "/serie/:id",
-                        description: "Atualizar resenha de série",
-                        params: ":id — Identificador da resenha.",
-                        detail: "Atualiza o texto e a avaliação da resenha.",
-                        body: `{
-  "resenha": "Texto atualizado",
-  "avaliacao": 9
-}`
-                    },
-
-                    {
-                        method: "DELETE",
-                        path: "/filme/:id",
-                        description: "Excluir resenha de filme",
-                        params: ":id — Identificador da resenha.",
-                        detail: "Remove a resenha de filme correspondente."
-                    },
-
-                    {
-                        method: "DELETE",
-                        path: "/serie/:id",
-                        description: "Excluir resenha de série",
-                        params: ":id — Identificador da resenha.",
-                        detail: "Remove a resenha de série correspondente."
-                    }
-                ]
-            },
-
-            {
-                name: "Filmes",
-                prefix: "/filme",
-                endpoints: [
-
-                    {
-                        method: "GET",
-                        path: "/",
-                        description: "Listar filmes",
-                        detail: "Retorna todos os filmes cadastrados.",
-                        response: `{
-  "filmes": []
-}`
-                    },
-
-                    {
-                        method: "GET",
-                        path: "/premiado",
-                        description: "Listar filmes por premiação",
-                        detail: "Organiza os filmes em ordem decrescente de quantidade de prêmios.",
-                        response: `{
-  "filmes": []
-}`
-                    },
-
-                    {
-                        method: "GET",
-                        path: "/titulo/:titulo",
-                        description: "Buscar ID pelo título",
-                        params: ":titulo — Título do filme.",
-                        detail: "Retorna somente o identificador do filme correspondente ao título.",
-                        response: `{
-  "filme": {
-    "id": 1
-  }
-}`
-                    },
-
-                    {
-                        method: "GET",
-                        path: "/:id",
-                        description: "Buscar filme pelo ID",
-                        protected: true,
-                        params: ":id — Identificador do filme.",
-                        detail: "Retorna os dados completos do filme.",
-                        response: `{
-  "filme": {}
-}`
-                    },
-
-                    {
-                        method: "POST",
-                        path: "/",
-                        description: "Cadastrar filme",
-                        detail: "Cadastra um filme associado a um diretor e permite enviar um cartaz.",
-                        body: `{
-  "titulo": "Nome do filme",
-  "diretor": 1,
-  "sinopse": "Descrição",
-  "faixa_etaria": "12 anos",
-  "duracao": 120,
-  "qtde_premios": 5
-}`,
-                        extra: "Content-Type: multipart/form-data. Campo de arquivo: arquivo. O campo diretor recebe o ID do diretor."
-                    },
-
-                    {
-                        method: "DELETE",
-                        path: "/:id",
-                        description: "Excluir filme",
-                        protected: true,
-                        params: ":id — Identificador do filme.",
-                        detail: "Exclui o filme e remove seu cartaz, quando não for uma imagem padrão."
-                    }
-                ]
-            },
-
-            {
-                name: "Episódios",
-                prefix: "/episodio",
-                endpoints: [
-
-                    {
-                        method: "GET",
-                        path: "/",
-                        description: "Listar episódios",
-                        detail: "Retorna todos os episódios cadastrados.",
-                        response: `{
-  "episodios": []
-}`
-                    },
-
-                    {
-                        method: "GET",
-                        path: "/serie/:id",
-                        description: "Buscar episódios de uma série",
-                        params: ":id — Identificador da série.",
-                        detail: "Retorna os episódios de uma série, ordenados por temporada e ID.",
-                        response: `{
-  "episodios": []
-}`
-                    },
-
-                    {
-                        method: "GET",
-                        path: "/:id",
-                        description: "Buscar episódio pelo ID",
-                        protected: true,
-                        params: ":id — Identificador do episódio.",
-                        detail: "Retorna um episódio específico.",
-                        response: `{
-  "episodio": {}
-}`
-                    },
-
-                    {
-                        method: "POST",
-                        path: "/",
-                        description: "Cadastrar episódio",
-                        detail: "Cadastra um episódio vinculado a uma série.",
-                        body: `{
-  "titulo": "Episódio piloto",
-  "sinopse": "Descrição",
-  "duracao": 45,
-  "temporada": 1,
-  "serie_id": 1
-}`
-                    },
-
-                    {
-                        method: "PUT",
-                        path: "/:id",
-                        description: "Atualizar episódio",
-                        protected: true,
-                        params: ":id — Identificador do episódio.",
-                        detail: "Atualiza os dados de um episódio existente.",
-                        body: `{
-  "titulo": "Novo título",
-  "sinopse": "Nova descrição",
-  "duracao": 50,
-  "temporada": 2,
-  "serie_id": 1
-}`
-                    },
-
-                    {
-                        method: "DELETE",
-                        path: "/:id",
-                        description: "Excluir episódio",
-                        protected: true,
-                        params: ":id — Identificador do episódio.",
-                        detail: "Remove o episódio correspondente ao identificador informado."
-                    }
-                ]
-            },
-
-            {
-                name: "Diretores",
-                prefix: "/diretor",
-                endpoints: [
-
-                    {
-                        method: "GET",
-                        path: "/",
-                        description: "Listar diretores",
-                        detail: "Retorna todos os diretores cadastrados.",
-                        response: `{
-  "diretores": []
-}`
-                    },
-
-                    {
-                        method: "GET",
-                        path: "/nome/:nome",
-                        description: "Buscar ID pelo nome",
-                        params: ":nome — Nome do diretor.",
-                        detail: "Retorna o identificador do diretor correspondente ao nome.",
-                        response: `{
-  "diretor": {
-    "id": 1
-  }
-}`
-                    },
-
-                    {
-                        method: "GET",
-                        path: "/:id",
-                        description: "Buscar diretor pelo ID",
-                        protected: true,
-                        params: ":id — Identificador do diretor.",
-                        detail: "Retorna os dados de um diretor específico.",
-                        response: `{
-  "diretor": {}
-}`
-                    },
-
-                    {
-                        method: "POST",
-                        path: "/",
-                        description: "Cadastrar diretor",
-                        detail: "Cadastra um diretor e permite enviar sua fotografia.",
-                        body: `{
-  "nome": "Nome do diretor",
-  "nacionalidade": "Brasileira",
-  "data_nascimento": "1970-01-01",
-  "biografia": "Biografia",
-  "qtde_premios": 5
-}`,
-                        extra: "Content-Type: multipart/form-data. Campo de arquivo: arquivo."
-                    },
-
-                    {
-                        method: "DELETE",
-                        path: "/:id",
-                        description: "Excluir diretor",
-                        protected: true,
-                        params: ":id — Identificador do diretor.",
-                        detail: "Remove o diretor e sua fotografia, quando não for uma imagem padrão."
-                    }
-                ]
-            }
-
-        ];
-
-        // RENDERIZAÇÃO
-
-        const documentation = document.getElementById("documentation");
-
-        function renderModules() {
-
-            documentation.innerHTML = "";
-
-            modules.forEach((module, index) => {
-
-                const section = document.createElement("section");
-                section.className = "category";
-
-                section.innerHTML = `
-            <div class="category-header">
-                <h3>${String(index + 1).padStart(2, "0")} / ${module.name}</h3>
-                <span>${module.prefix}</span>
-            </div>
-        `;
-
-                module.endpoints.forEach(endpoint => {
-
-                    const fullPath = module.prefix + endpoint.path;
-
-                    const card = document.createElement("div");
-                    card.className = "endpoint";
-
-                    card.dataset.method = endpoint.method;
-                    card.dataset.search = (
-                        fullPath + " " +
-                        endpoint.description + " " +
-                        module.name
-                    ).toLowerCase();
-
-                    const details = [
-                        `<h4>Descrição</h4>
-                 <p>${endpoint.detail || endpoint.description}</p>`
-                    ];
-
-                    if (endpoint.params) {
-                        details.push(`
-                    <h4>Parâmetros</h4>
-                    <p>${endpoint.params}</p>
-                `);
-                    }
-
-                    if (endpoint.body) {
-                        details.push(`
-                    <h4>Corpo da requisição</h4>
-                    <pre>${endpoint.body}</pre>
-                `);
-                    }
-
-                    if (endpoint.extra) {
-                        details.push(`
-                    <h4>Informações adicionais</h4>
-                    <p>${endpoint.extra}</p>
-                `);
-                    }
-
-                    if (endpoint.response) {
-                        details.push(`
-                    <h4>Exemplo de resposta</h4>
-                    <pre>${endpoint.response}</pre>
-                `);
-                    }
-
-                    card.innerHTML = `
-                <div class="endpoint-top">
-                    <span class="method ${endpoint.method}">
-                        ${endpoint.method}
-                    </span>
-
-                    <span class="path">${fullPath}</span>
-
-                    ${endpoint.protected
-                            ? '<span class="protected">PROTEGIDO</span>'
-                            : ''
-                        }
-
-                    <span class="description">
-                        ${endpoint.description}
-                    </span>
-
-                    <span class="arrow">⌄</span>
-                </div>
-
-                <div class="endpoint-content">
-                    <div class="content-inner">
-
-                        <div class="detail-row">
-                            <span class="tag">ENDPOINT</span>
-                            <button class="copy">COPIAR ROTA</button>
+    <main id="documentation"></main>
+    <div class="empty" id="empty">Nenhum endpoint encontrado.</div>
+</div>
+
+<script>
+    const p = (name, desc, ex) => ({ name, desc, ex });
+    const f = (name, type, req, rules) => ({ name, type, req, rules });
+    const ok = (body) => body;
+
+    const modules = [
+        {
+            name: "Raiz",
+            endpoints: [
+                { method: "GET", path: "/", title: "Status do servidor", auth: null, res: ok(`{\n  "msg": "Bem vindo ao express_template_docker!!!"\n}`) }
+            ]
+        },
+        {
+            name: "Atores",
+            endpoints: [
+                { method: "GET", path: "/ator", title: "Listar atores", auth: null, res: ok(`{\n  "atores": [\n    {\n      "id": 1,\n      "nome": "Wagner Moura",\n      ...\n    },\n    ...\n  ]\n}`) },
+                { method: "GET", path: "/ator/nome/:nome", title: "Buscar ID do ator pelo nome", auth: null, params: [p("nome", "Nome exato", "Wagner")], res: ok(`{\n  "ator": {\n    "id": 1\n  }\n}`) },
+                { method: "GET", path: "/ator/:id", title: "Buscar ator por ID", auth: null, params: [p("id", "ID do ator", 1)], res: ok(`{\n  "ator": {\n    "id": 1,\n    "nome": "Wagner Moura",\n    ...\n  }\n}`) },
+                { method: "POST", path: "/ator", title: "Cadastrar ator", auth: "admin", fields: [f("nome", "Texto", "Sim", "Nome do ator"), f("arquivo", "File", "Não", "Foto opcional")], res: ok(`{\n  "ator": {\n    "id": 1,\n    "nome": "Wagner Moura",\n    ...\n  }\n}`) },
+                { method: "PUT", path: "/ator/:id", title: "Atualizar ator", auth: "admin", params: [p("id", "ID do ator", 1)], fields: [f("biografia", "Texto", "Não", "Nova bio"), f("qtde_premios", "Int", "Não", "Prêmios"), f("arquivo", "File", "Não", "Nova foto")], res: ok(`{\n  "msg": "Ator atualizado com sucesso!",\n  "ator": {\n    ...\n  }\n}`) },
+                { method: "DELETE", path: "/ator/:id", title: "Excluir ator", auth: "admin", params: [p("id", "ID do ator", 1)], res: ok(`{\n  "msg": "Ator deletado com sucesso"\n}`) },
+                { method: "POST", path: "/ator/:id/filme/:filme", title: "Associar ator a filme", auth: "admin", params: [p("id", "Ator ID", 1), p("filme", "Filme ID", 2)], res: ok(`{\n  "msg": "Associação realizada com sucesso!"\n}`) },
+                { method: "DELETE", path: "/ator/:id/filme/:filme", title: "Desassociar ator de filme", auth: "admin", params: [p("id", "Ator ID", 1), p("filme", "Filme ID", 2)], res: ok(`{\n  "msg": "Desassociação realizada com sucesso!"\n}`) },
+                { method: "POST", path: "/ator/:id/serie/:serie", title: "Associar ator a série", auth: "admin", params: [p("id", "Ator ID", 1), p("serie", "Série ID", 1)], res: ok(`{\n  "msg": "Associação realizada com sucesso!"\n}`) },
+                { method: "DELETE", path: "/ator/:id/serie/:filme", title: "Desassociar ator de série", auth: "admin", params: [p("id", "Ator ID", 1), p("filme", "Série ID", 1)], res: ok(`{\n  "msg": "Desassociação realizada com sucesso!"\n}`) }
+            ]
+        },
+        {
+            name: "Diretores",
+            endpoints: [
+                { method: "GET", path: "/diretor", title: "Listar diretores", auth: null, res: ok(`{\n  "diretores": [\n    {\n      "id": 1,\n      "nome": "Werner Herzog",\n      ...\n    },\n    ...\n  ]\n}`) },
+                { method: "GET", path: "/diretor/nome/:nome", title: "Buscar ID por nome", auth: null, params: [p("nome", "Nome exato", "Werner")], res: ok(`{\n  "diretor": {\n    "id": 1\n  }\n}`) },
+                { method: "GET", path: "/diretor/:id", title: "Buscar diretor por ID", auth: null, params: [p("id", "ID do diretor", 1)], res: ok(`{\n  "diretor": {\n    "id": 1,\n    "nome": "Werner Herzog",\n    ...\n  }\n}`) },
+                { method: "GET", path: "/diretor/:id/dirige", title: "Listar produções do diretor", auth: null, params: [p("id", "ID do diretor", 1)], res: ok(`{\n  "filmes": [\n    "Filme A",\n    ...\n  ],\n  "series": [\n    "Série B",\n    ...\n  ]\n}`) },
+                { method: "POST", path: "/diretor", title: "Cadastrar diretor", auth: "admin", fields: [f("nome", "Texto", "Sim", ""), f("nacionalidade", "Texto", "Sim", ""), f("data_nascimento", "Data", "Sim", "AAAA-MM-DD")], res: ok(`{\n  "diretor": {\n    ...\n  }\n}`) },
+                { method: "PUT", path: "/diretor/:id", title: "Atualizar diretor", auth: "admin", params: [p("id", "ID do diretor", 1)], fields: [f("biografia", "Texto", "Não", "")], res: ok(`{\n  "diretor": {\n    ...\n  }\n}`) },
+                { method: "DELETE", path: "/diretor/:id", title: "Excluir diretor", auth: "admin", params: [p("id", "ID do diretor", 1)], res: ok(`{\n  "msg": "Diretor deletado com sucesso"\n}`) }
+            ]
+        },
+        {
+            name: "Episódios",
+            endpoints: [
+                { method: "GET", path: "/episodio", title: "Listar episódios", auth: null, res: ok(`{\n  "episodios": [\n    {\n      "id": 1,\n      "titulo": "Piloto",\n      ...\n    },\n    ...\n  ]\n}`) },
+                { method: "GET", path: "/episodio/:id/serie/:serie", title: "Buscar episódio de série", auth: null, params: [p("id", "Episódio ID", 1), p("serie", "Série ID", 1)], res: ok(`{\n  "episodios": [\n    {\n      ...\n    }\n  ]\n}`) },
+                { method: "POST", path: "/episodio", title: "Cadastrar episódio", auth: "admin", fields: [f("titulo", "Texto", "Sim", ""), f("duracao", "Int", "Sim", "> 0"), f("temporada", "Int", "Sim", ">= 1"), f("serie_id", "Int", "Sim", "")], res: ok(`{\n  "episodio": {\n    ...\n  }\n}`) },
+                { method: "PUT", path: "/episodio/:id", title: "Atualizar episódio", auth: "admin", params: [p("id", "ID do episódio", 1)], fields: [f("titulo", "Texto", "Sim", "")], res: ok(`{\n  "episodio": {\n    ...\n  }\n}`) },
+                { method: "DELETE", path: "/episodio/:id", title: "Excluir episódio", auth: "admin", params: [p("id", "ID do episódio", 1)], res: ok(`{\n  "msg": "Episódio deletado com sucesso."\n}`) }
+            ]
+        },
+        {
+            name: "Filmes",
+            endpoints: [
+                { method: "GET", path: "/filme", title: "Listar filmes", auth: null, res: ok(`{\n  "filmes": [\n    {\n      "id": 1,\n      "titulo": "Fitzcarraldo",\n      ...\n    },\n    ...\n  ]\n}`) },
+                { method: "GET", path: "/filme/premiado", title: "Listar filmes por prêmios", auth: null, res: ok(`{\n  "filmes": [\n    {\n      ...\n    },\n    ...\n  ]\n}`) },
+                { method: "GET", path: "/filme/titulo/:titulo", title: "Buscar ID por título", auth: null, params: [p("titulo", "Título exato", "Fitzcarraldo")], res: ok(`{\n  "filme": {\n    "id": 1\n  }\n}`) },
+                { method: "GET", path: "/filme/:id", title: "Buscar filme por ID", auth: null, params: [p("id", "ID do filme", 1)], res: ok(`{\n  "filme": {\n    ...\n  }\n}`) },
+                { method: "POST", path: "/filme", title: "Cadastrar filme", auth: "admin", fields: [f("titulo", "Texto", "Sim", ""), f("diretor", "Int", "Sim", ""), f("sinopse", "Texto", "Sim", ""), f("faixa_etaria", "Int", "Sim", "1 a 18"), f("duracao", "Int", "Sim", "> 0")], res: ok(`{\n  "filme": {\n    ...\n  }\n}`) },
+                { method: "PUT", path: "/filme/:id", title: "Atualizar filme", auth: "admin", params: [p("id", "ID do filme", 1)], fields: [f("titulo", "Texto", "Sim", "")], res: ok(`{\n  "filme": {\n    ...\n  }\n}`) },
+                { method: "DELETE", path: "/filme/:id", title: "Excluir filme", auth: "admin", params: [p("id", "ID do filme", 1)], res: ok(`{\n  "msg": "Filme deletado com sucesso"\n}`) }
+            ]
+        },
+        {
+            name: "Resenhas",
+            endpoints: [
+                { method: "GET", path: "/resenha", title: "Listar todas as resenhas", auth: null, res: ok(`{\n  "resenhas_filme": [\n    {\n      ...\n    },\n    ...\n  ],\n  "resenhas_serie": [\n    {\n      ...\n    },\n    ...\n  ]\n}`) },
+                { method: "GET", path: "/resenha/autor/:id", title: "Resenhas por autor", auth: null, params: [p("id", "ID do autor", 1)], res: ok(`{\n  "resenhas_filme": [\n    {\n      ...\n    }\n  ],\n  "resenhas_serie": [\n    {\n      ...\n    }\n  ]\n}`) },
+                { method: "GET", path: "/resenha/publico", title: "Resenhas do público", auth: null, res: ok(`{\n  "resenhas_filme": [\n    {\n      ...\n    }\n  ],\n  "resenhas_serie": [\n    {\n      ...\n    }\n  ]\n}`) },
+                { method: "GET", path: "/resenha/critico", title: "Resenhas da crítica", auth: null, res: ok(`{\n  "resenhas_filme": [\n    {\n      ...\n    }\n  ],\n  "resenhas_serie": [\n    {\n      ...\n    }\n  ]\n}`) },
+                { method: "GET", path: "/resenha/avaliacao_media/filme/:id", title: "Média de avaliações de filme", auth: null, params: [p("id", "ID do filme", 1)], res: ok(`{\n  "avaliacao_media": 85.5\n}`) },
+                { method: "GET", path: "/resenha/avaliacao_media/serie/:id", title: "Média de avaliações de série", auth: null, params: [p("id", "ID da série", 1)], res: ok(`{\n  "avaliacao_media": 90.0\n}`) },
+                { method: "POST", path: "/resenha/filme", title: "Criar resenha de filme", auth: "token", fields: [f("filme_id", "Int", "Sim", ""), f("resenha", "Texto", "Sim", ""), f("avaliacao", "Int", "Sim", "0 a 100")], res: ok(`{\n  "msg": "Resenha adicionada com sucesso!",\n  "resenha": {\n    ...\n  }\n}`) },
+                { method: "POST", path: "/resenha/serie", title: "Criar resenha de série", auth: "token", fields: [f("serie_id", "Int", "Sim", ""), f("resenha", "Texto", "Sim", ""), f("avaliacao", "Int", "Sim", "0 a 100")], res: ok(`{\n  "msg": "Resenha adicionada com sucesso!",\n  "resenha": {\n    ...\n  }\n}`) },
+                { method: "PUT", path: "/resenha/filme/:id", title: "Atualizar resenha de filme", auth: "token", params: [p("id", "ID da resenha", 1)], fields: [f("filme_id", "Int", "Sim", ""), f("resenha", "Texto", "Sim", ""), f("avaliacao", "Int", "Sim", "0 a 100")], res: ok(`{\n  "msg": "Resenha atualizada com sucesso!",\n  "resenha": {\n    ...\n  }\n}`) },
+                { method: "PUT", path: "/resenha/serie/:id", title: "Atualizar resenha de série", auth: "token", params: [p("id", "ID da resenha", 1)], fields: [f("serie_id", "Int", "Sim", ""), f("resenha", "Texto", "Sim", ""), f("avaliacao", "Int", "Sim", "0 a 100")], res: ok(`{\n  "msg": "Resenha atualizada com sucesso!",\n  "resenha": {\n    ...\n  }\n}`) },
+                { method: "DELETE", path: "/resenha/filme/:id", title: "Excluir resenha de filme", auth: "token", params: [p("id", "ID do filme", 1)], res: ok(`{\n  "msg": "Resenha apagada com sucesso!"\n}`) },
+                { method: "DELETE", path: "/resenha/serie/:id", title: "Excluir resenha de série", auth: "token", params: [p("id", "ID da série", 1)], res: ok(`{\n  "msg": "Resenha apagada com sucesso!"\n}`) }
+            ]
+        },
+        {
+            name: "Séries",
+            endpoints: [
+                { method: "GET", path: "/serie", title: "Listar séries", auth: null, res: ok(`{\n  "series": [\n    {\n      "id": 1,\n      "titulo": "Série Exemplo",\n      ...\n    },\n    ...\n  ]\n}`) },
+                { method: "GET", path: "/serie/titulo/:titulo", title: "Buscar ID por título", auth: null, params: [p("titulo", "Título exato", "Série Exemplo")], res: ok(`{\n  "serie": {\n    "id": 1\n  }\n}`) },
+                { method: "GET", path: "/serie/:id", title: "Buscar série por ID", auth: null, params: [p("id", "ID da série", 1)], res: ok(`{\n  "serie": {\n    ...\n  }\n}`) },
+                { method: "POST", path: "/serie", title: "Cadastrar série", auth: "admin", fields: [f("titulo", "Texto", "Sim", ""), f("diretor", "Int", "Sim", ""), f("faixa_etaria", "Int", "Sim", "1 a 18")], res: ok(`{\n  "serie": {\n    ...\n  }\n}`) },
+                { method: "PUT", path: "/serie/:id", title: "Atualizar série", auth: "admin", params: [p("id", "ID da série", 1)], fields: [f("titulo", "Texto", "Não", "")], res: ok(`{\n  "serie": {\n    ...\n  }\n}`) },
+                { method: "DELETE", path: "/serie/:id", title: "Excluir série", auth: "admin", params: [p("id", "ID da série", 1)], res: ok(`{\n  "msg": "Série deletada com sucesso."\n}`) }
+            ]
+        },
+        {
+            name: "Usuários",
+            endpoints: [
+                { method: "GET", path: "/usuario", title: "Listar usuários", auth: null, res: ok(`{\n  "usuarios": [\n    {\n      "id": 1,\n      "nome": "Usuário Exemplo",\n      ...\n    },\n    ...\n  ]\n}`) },
+                { method: "GET", path: "/usuario/:id", title: "Buscar usuário por ID", auth: null, params: [p("id", "ID do usuário", 1)], res: ok(`{\n  "usuario": {\n    ...\n  }\n}`) },
+                { method: "POST", path: "/usuario", title: "Cadastrar usuário", auth: null, fields: [f("nome", "Texto", "Sim", ""), f("email", "Texto", "Sim", ""), f("senha", "Texto", "Sim", "")], res: ok(`{\n  "msg": "Usuário criado com sucesso!",\n  "usuario": {\n    ...\n  }\n}`) },
+                { method: "POST", path: "/usuario/login", title: "Login de usuário", auth: null, fields: [f("email", "Texto", "Sim", ""), f("senha", "Texto", "Sim", "")], res: ok(`{\n  "msg": "Login realizado com sucesso!",\n  "token": "eyJhbGciOiJIUzI1NiIs..."\n}`) },
+                { method: "PUT", path: "/usuario", title: "Atualizar perfil próprio", auth: "token", fields: [f("nome", "Texto", "Não", ""), f("senha", "Texto", "Não", "")], res: ok(`{\n  "msg": "Usuário alterado com sucesso!",\n  "usuario": {\n    ...\n  }\n}`) },
+                { method: "PUT", path: "/usuario/:id/critico", title: "Alterar status de crítico", auth: "admin", params: [p("id", "ID do usuário", 1)], fields: [f("critico", "Bool", "Sim", "")], res: ok(`{\n  "msg": "Usuário alterado com sucesso!",\n  "usuario": {\n    ...\n  }\n}`) },
+                { method: "PUT", path: "/usuario/:id/administrador", title: "Alterar status de administrador", auth: "admin", params: [p("id", "ID do usuário", 1)], fields: [f("administrador", "Bool", "Sim", "")], res: ok(`{\n  "msg": "Usuário alterado com sucesso!",\n  "usuario": {\n    ...\n  }\n}`) },
+                { method: "DELETE", path: "/usuario", title: "Excluir própria conta", auth: "token", res: ok(`{\n  "msg": "Usuário apagado com sucesso!",\n  "usuario": {\n    ...\n  }\n}`) }
+            ]
+        }
+    ];
+
+    const container = document.getElementById("documentation");
+    const nav = document.getElementById("modnav");
+
+    function render() {
+        container.innerHTML = "";
+        nav.innerHTML = "";
+
+        modules.forEach(mod => {
+            const id = "mod-" + mod.name.toLowerCase();
+            nav.innerHTML += `<a href="#${id}">${mod.name}</a>`;
+
+            let html = `<div class="category" id="${id}"><h2>${mod.name}</h2>`;
+            
+            mod.endpoints.forEach(ep => {
+                let badge = '<span class="badge badge-pub">Pública</span>';
+                if (ep.auth === "token") badge = '<span class="badge badge-log">Usuários Logados</span>';
+                if (ep.auth === "admin") badge = '<span class="badge badge-adm">Administrador</span>';
+
+                html += `
+                    <div class="endpoint" data-method="${ep.method}">
+                        <div class="endpoint-top" onclick="this.parentElement.classList.toggle('active')">
+                            <span class="method ${ep.method}">${ep.method}</span>
+                            <span class="path">${ep.path}</span>
+                            ${badge}
+                            <span style="color:var(--muted); font-size:13px;">${ep.title}</span>
                         </div>
-
-                        ${details.join("")}
-
-                    </div>
-                </div>
-            `;
-
-                    card.querySelector(".endpoint-top")
-                        .addEventListener("click", () => {
-                            card.classList.toggle("active");
-                        });
-
-                    card.querySelector(".copy")
-                        .addEventListener("click", async (event) => {
-                            event.stopPropagation();
-
-                            try {
-                                await navigator.clipboard.writeText(fullPath);
-
-                                event.target.textContent = "COPIADO!";
-
-                                setTimeout(() => {
-                                    event.target.textContent = "COPIAR ROTA";
-                                }, 1500);
-
-                            } catch {
-                                event.target.textContent = "ERRO AO COPIAR";
-                            }
-                        });
-
-                    section.appendChild(card);
-                });
-
-                documentation.appendChild(section);
+                        <div class="endpoint-content">
+                            ${ep.params ? `<h3>Parâmetros de URL</h3><table><tr><th>Nome</th><th>Descrição</th><th>Exemplo</th></tr>${ep.params.map(pr => `<tr><td><code>:${pr.name}</code></td><td>${pr.desc}</td><td><code>${pr.ex}</code></td></tr>`).join('')}</table>` : ''}
+                            ${ep.fields ? `<h3>Parâmetros do Corpo</h3><table><tr><th>Campo</th><th>Tipo</th><th>Obrigatório</th><th>Regras</th></tr>${ep.fields.map(fl => `<tr><td><code>${fl.name}</code></td><td>${fl.type}</td><td>${fl.req}</td><td>${fl.rules}</td></tr>`).join('')}</table>` : ''}
+                            <h3>Exemplo de Retorno (Sucesso)</h3>
+                            <pre>${ep.res}</pre>
+                        </div>
+                    </div>`;
             });
+            html += `</div>`;
+            container.innerHTML += html;
+        });
+    }
 
-            updateStats();
-        }
+    render();
 
-        // FILTROS E PESQUISA
+    const search = document.getElementById("search");
+    let activeFilter = "ALL";
 
-        let activeFilter = "ALL";
+    function filter() {
+        const query = search.value.toLowerCase();
+        let visible = 0;
 
-        const search = document.getElementById("search");
-
-        function filterEndpoints() {
-
-            const query = search.value.toLowerCase();
-            let visible = 0;
-
-            document.querySelectorAll(".endpoint").forEach(card => {
-
-                const matchesSearch =
-                    card.dataset.search.includes(query);
-
-                const matchesMethod =
-                    activeFilter === "ALL" ||
-                    card.dataset.method === activeFilter;
-
-                const show = matchesSearch && matchesMethod;
-
-                card.style.display = show ? "block" : "none";
-
-                if (show) visible++;
-            });
-
-            document.querySelectorAll(".category").forEach(section => {
-
-                const hasVisible = [
-                    ...section.querySelectorAll(".endpoint")
-                ].some(card => card.style.display !== "none");
-
-                section.style.display = hasVisible ? "block" : "none";
-            });
-
-            document.getElementById("empty").style.display =
-                visible === 0 ? "block" : "none";
-        }
-
-        search.addEventListener("input", filterEndpoints);
-
-        document.querySelectorAll(".filter").forEach(button => {
-
-            button.addEventListener("click", () => {
-
-                document.querySelector(".filter.active")
-                    ?.classList.remove("active");
-
-                button.classList.add("active");
-
-                activeFilter = button.dataset.filter;
-
-                filterEndpoints();
-            });
+        document.querySelectorAll(".endpoint").forEach(el => {
+            const text = el.innerText.toLowerCase();
+            const method = el.dataset.method;
+            const matchSearch = text.includes(query);
+            const matchMethod = activeFilter === "ALL" || method === activeFilter;
+            
+            const show = matchSearch && matchMethod;
+            el.style.display = show ? "block" : "none";
+            if (show) visible++;
         });
 
-        // CONTAGEM AUTOMÁTICA
+        document.getElementById("empty").style.display = visible === 0 ? "block" : "none";
+    }
 
-        function updateStats() {
+    search.addEventListener("input", filter);
 
-            const total = modules.reduce(
-                (sum, module) => sum + module.endpoints.length,
-                0
-            );
-
-            document.getElementById("total").textContent = total;
-        }
-
-        renderModules();
-
-    </script>
+    document.querySelectorAll(".filter").forEach(btn => {
+        btn.addEventListener("click", () => {
+            document.querySelector(".filter.active").classList.remove("active");
+            btn.classList.add("active");
+            activeFilter = btn.dataset.filter;
+            filter();
+        });
+    });
+</script>
 
 </body>
-
 </html>
