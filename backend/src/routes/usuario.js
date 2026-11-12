@@ -155,7 +155,7 @@ router.put("/", verificarToken, upload.single("arquivo"), async (req, res) => {
             const senhaHash = await bcrypt.hash(senha, 12);
             var re = await db.query("UPDATE usuario SET senha=$1 WHERE id=$2 RETURNING *", [senhaHash, req.user]);
             if (!re.rowCount) {
-                return res.status(400).json({ msg: "Erro ao alterar nome." })
+                return res.status(400).json({ msg: "Erro ao alterar senha." })
             }
         }
 
