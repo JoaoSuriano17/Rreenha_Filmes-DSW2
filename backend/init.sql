@@ -190,6 +190,3 @@ INSERT INTO serie_ator (id_serie, id_ator) VALUES (1, 1);
 INSERT INTO serie_ator (id_serie, id_ator) VALUES (1, 2);
 INSERT INTO serie_ator (id_serie, id_ator) VALUES (2, 1);
 INSERT INTO serie_ator (id_serie, id_ator) VALUES (2, 2);
-
-em resenha filme, o insert into está insertando para resenha_serie, e não para resenha_filme
-a consulta r1 do post de resenha_serie está chamando filme_id ao inves de serie_id
