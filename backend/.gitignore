@@ -5,3 +5,4 @@ dist/
 *.log
 db_data/
 .vscode/
+src/uploads/

@@ -18,42 +18,7 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.get("/:id/serie/:serie", tipo, async (req, res) => {
-    try {
-        //Verificando o parâmetro série da URL: 
-        if (isNaN(req.params.serie)) {
-            return res.json({ msg: "O id da série deve ser um número inteiro!" })
-        }
-
-        const r = await db.query("SELECT * FROM episodio WHERE id = $1 AND serie_id = $2", [req.params.id, req.params.serie]);
-        if (!r.rowCount) {
-            return res.status(404).json({ msg: "Não há episódio com esse identificar nessa série." });
-        }
-
-        return res.status(200).json({ episodios: r.rows });
-    } catch (erro) {
-        return res.status(500).json({ msg: erro.message });
-    }
-});
-
-/*router.get("/serie/:serie", tipo, async (req, res) => {
-    try {
-        if (isNaN(req.params.serie)){
-            return res.json({msg:"O id da série deve ser um número inteiro!"})
-        }
-
-        const r = await db.query("SELECT * FROM episodio WHERE serie_id=$1 ORDER BY temporada, id", [req.params.serie]);
-        if (!r.rowCount) {
-            return res.status(404).json({ msg: "Não há episódios cadastrados nessa série." });
-        }
-
-        return res.status(200).json({ episodios: r.rows });
-    } catch (erro) {
-        return res.status(500).json({ msg: erro.message });
-    }
-});*/
-
-/*router.get("/:id", tipo, async (req, res) => {
+router.get("/:id", tipo, async (req, res) => {
     try {
         const r = await db.query("SELECT * FROM episodio WHERE id=$1", [req.params.id]);
         if (!r.rowCount) {
@@ -64,18 +29,35 @@ router.get("/:id/serie/:serie", tipo, async (req, res) => {
     } catch (erro) {
         return res.status(500).json({ msg: erro.message });
     }
-});*/
+});
+
+router.get("/serie/:serie", tipo, async (req, res) => {
+    try {
+        if(isNaN(req.params.serie)){
+            return res.status(400).json({msg:"O id da série deve ser um número inteiro!"})
+        }
+
+        const r = await db.query("SELECT * FROM episodio WHERE serie_id=$1 ORDER BY temporada, id", [req.params.serie]);
+        if (!r.rowCount) {
+            return res.status(404).json({msg:"Não há episódios cadastrados nessa série."});
+        }
+
+        return res.status(200).json({ episodios: r.rows });
+    } catch (erro) {
+        return res.status(500).json({ msg: erro.message });
+    }
+});
 
 router.post("/", verificarAdministrador, async (req, res) => {
     try {
         const { titulo, sinopse, duracao, temporada, serie_id } = req.body;
-
-        if (!titulo && !serie_id && !duracao && !sinopse && !temporada) {
-            return res.status(400).json({ msg: "O episódio deve possuir todos os parâmetros." });
-        }
+        if(!titulo){return res.status(400).json({msg:"Título não informado!"});}
+        if(!serie_id){return res.status(400).json({msg:"Id da série não informado!"});}
+        if(!duracao){return res.status(400).json({msg:"Duração não informada!"});}
+        if(!sinopse){return res.status(400).json({msg:"Sinopse não informada!"});}
 
         // Verificando os atributos: 
-        if (isNaN(duracao) || duracao < 1) {
+        if(isNaN(duracao) || duracao < 1) {
             return res.status(400).json({ msg: "A duração deve ser um número inteiro maior que 0." })
         }
         if (isNaN(temporada) || temporada < 1) {

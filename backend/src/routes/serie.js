@@ -112,7 +112,7 @@ router.put("/:id", tipo, verificarAdministrador, upload.single("arquivo"), async
             return res.status(400).json({ msg: "A faixa etária deve ser um número inteiro igual ou maior que 1." })
         }
         if (!isNaN(qtde_premios) || qtde_premios < 1) {
-            return res.status(400).json({ msg: "A faixa etária deve ser um número inteiro igual ou maior que 1." })
+            return res.status(400).json({ msg: "A quantidade de prêmios deve ser um número inteiro igual ou maior que 1." })
         }
 
         if (req.file) {

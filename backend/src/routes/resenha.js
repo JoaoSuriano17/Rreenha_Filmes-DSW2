@@ -249,14 +249,14 @@ router.put("/serie/:id", tipo, tokenArmazenar, async (req, res) => {
 
 //DELETE - filme e série
 router.delete("/filme/:id", tipo, tokenArmazenar, async (req, res) => {
-    const r = await db.query("DELETE FROM resenha_filme WHERE usuario_id=$1 AND filme_id RETURNING *", [req.usuario_id, req.params.id]);
+    const r = await db.query("DELETE FROM resenha_filme WHERE usuario_id=$1 AND filme_id=$2 RETURNING *", [req.usuario_id, req.params.id]);
     if (!r.rowCount){
         return res.status(400).json({msg: "Erro ao deletar resenha de filme."})
     }
     return res.status(200).json({ msg: "Resenha apagada com sucesso!"});
 })
 router.delete("/serie/:id", async (req, res) => {
-    const r = await db.query("DELETE FROM resenha_serie WHERE usuario_id=$1 AND serie_id RETURNING *", [req.usuario_id, req.params.id]);
+    const r = await db.query("DELETE FROM resenha_serie WHERE usuario_id=$1 AND serie_id=$2 RETURNING *", [req.usuario_id, req.params.id]);
     if (!r.rowCount){
         return res.status(400).json({msg: "Erro ao deletar resenha de série."})
     }

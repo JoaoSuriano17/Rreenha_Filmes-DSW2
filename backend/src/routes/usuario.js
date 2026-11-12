@@ -70,7 +70,7 @@ router.get("/:id", async (req, res) => {
 //POST - Criação (Requer: nome, email, senha)
 router.post("/", upload.single("arquivo"), async (req, res) => {
     try {
-        let { nome, email, senha, critico, administrador } = req.body || {};
+        let {nome, email, senha, critico, administrador} = req.body || {};
         if (!nome) { return res.status(400).json({ msg: "Nome não informado!" }); }
         if (!email) { return res.status(400).json({ msg: "E-mail não informado!" }); }
         if (!senha) { return res.status(400).json({ msg: "Senha não informada!" }); }
@@ -99,19 +99,8 @@ router.post("/", upload.single("arquivo"), async (req, res) => {
             fotografia = arquivo.arquivo.id;
         }
         const senhaHash = await bcrypt.hash(senha, 12);
-        if (critico) {
-            if (critico == "True" || critico == "true") {
-                critico = true
-            }
-        }
-        critico = false
-
-        if (administrador) {
-            if (administrador == "True" || administrador == "true") {
-                administrador = true
-            }
-        }
-        administrador = true
+        critico=(critico=="true"||critico=="True"||critico=="TRUE")?true:false;
+        administrador=(administrador=="true"||administrador=="True"||administrador=="TRUE")?true:false;
 
         const r = await db.query("INSERT INTO usuario(nome, email, critico, administrador, senha, fotografia) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, nome, email, critico, administrador, fotografia", [nome, email, critico, administrador, senhaHash, fotografia]);
 
@@ -190,9 +179,10 @@ router.put("/", verificarToken, upload.single("arquivo"), async (req, res) => {
 router.put("/:id/critico", verificarAdministrador, async (req, res) => {
     try {
         const id = req.params.id || {};
-        if (!id) { return res.status(400).json({ msg: "Id não informado!" }); }
+        if (!id) { return res.status(400).json({msg:"Id não informado!"});}
         const critico = req.body || {};
-        if (!critico) { return res.status(400).json({ msg: "Não foi informado se o usuário é crítico!" }); }
+        if (!critico){return res.status(400).json({msg:"Não foi informado se o usuário é crítico!"});}
+        if (!(critico=="true"||critico=="True"||critico=="TRUE"||critico=="false"||critico=="False"||critico=="FALSE")){return res.status(400).json({msg:"O valor de crítico deve ser true ou false!"});}
         const r = await db.query("UPDATE usuario SET critico=$1 RETURNING *", [critico]);
         return res.status(200).json({ msg: "Usuário alterado com sucesso!", usuario: r.rows[0] });
     } catch (erro) {
@@ -206,11 +196,12 @@ router.put("/:id/administrador", verificarAdministrador, async (req, res) => {
         const id = req.params.id || {};
         if (!id) { return res.status(400).json({ msg: "Id não informado!" }); }
         const administrador = req.body || {};
-        if (!administrador) { return res.status(400).json({ msg: "Não foi informado se o usuário é administrador!" }); }
+        if (!administrador){return res.status(400).json({msg:"Não foi informado se o usuário é administrador!"});}
+        if (!(administrador=="true"||administrador=="True"||administrador=="TRUE"||administrador=="false"||administrador=="False"||administrador=="FALSE")){return res.status(400).json({msg:"O valor de administrador deve ser true ou false!"});}
         const r = await db.query("UPDATE usuario SET administrador=$1 RETURNING *", [administrador]);
-        return res.status(200).json({ msg: "Usuário alterado com sucesso!", usuario: r.rows[0] });
+        return res.status(200).json({msg:"Usuário alterado com sucesso!", usuario:r.rows[0]});
     } catch (erro) {
-        return res.status(500).json({ msg: erro.message });
+        return res.status(500).json({msg:erro.message});
     }
 });
 
