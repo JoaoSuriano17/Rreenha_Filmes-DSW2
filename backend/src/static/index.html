@@ -112,8 +112,28 @@
                 { method: "GET", path: "/ator", title: "Listar atores", auth: null, res: ok(`{\n  "atores": [\n    {\n      "id": 1,\n      "nome": "Wagner Moura",\n      ...\n    },\n    ...\n  ]\n}`) },
                 { method: "GET", path: "/ator/nome/:nome", title: "Buscar ID do ator pelo nome", auth: null, params: [p("nome", "Nome exato", "Wagner")], res: ok(`{\n  "ator": {\n    "id": 1\n  }\n}`) },
                 { method: "GET", path: "/ator/:id", title: "Buscar ator por ID", auth: null, params: [p("id", "ID do ator", 1)], res: ok(`{\n  "ator": {\n    "id": 1,\n    "nome": "Wagner Moura",\n    ...\n  }\n}`) },
-                { method: "POST", path: "/ator", title: "Cadastrar ator", auth: "admin", fields: [f("nome", "Texto", "Sim", "Nome do ator"), f("arquivo", "File", "Não", "Foto opcional")], res: ok(`{\n  "ator": {\n    "id": 1,\n    "nome": "Wagner Moura",\n    ...\n  }\n}`) },
-                { method: "PUT", path: "/ator/:id", title: "Atualizar ator", auth: "admin", params: [p("id", "ID do ator", 1)], fields: [f("biografia", "Texto", "Não", "Nova bio"), f("qtde_premios", "Int", "Não", "Prêmios"), f("arquivo", "File", "Não", "Nova foto")], res: ok(`{\n  "msg": "Ator atualizado com sucesso!",\n  "ator": {\n    ...\n  }\n}`) },
+                {
+                    method: "POST", path: "/ator", title: "Cadastrar ator", auth: "admin",
+                    fields: [
+                        f("nome", "VARCHAR(150)", "Sim", "Obrigatório"),
+                        f("nacionalidade", "VARCHAR(70)", "Não", "Opcional"),
+                        f("data_nascimento", "DATE", "Não", "Entre 1895-12-28 e 2026-10-19"),
+                        f("biografia", "TEXT", "Não", "Opcional"),
+                        f("qtde_premios", "INT", "Não", "Padrão 0, >= 0"),
+                        f("arquivo", "File (Imagem)", "Não", "Fotografia do ator")
+                    ],
+                    res: ok(`{\n  "ator": {\n    "id": 1,\n    "nome": "Wagner Moura",\n    ...\n  }\n}`)
+                },
+                {
+                    method: "PUT", path: "/ator/:id", title: "Atualizar ator", auth: "admin",
+                    params: [p("id", "ID do ator", 1)],
+                    fields: [
+                        f("biografia", "TEXT", "Não", "Pelo menos um campo deve ser enviado"),
+                        f("qtde_premios", "INT", "Não", ">= 0"),
+                        f("arquivo", "File (Imagem)", "Não", "Nova fotografia")
+                    ],
+                    res: ok(`{\n  "msg": "Ator atualizado com sucesso!",\n  "ator": {\n    ...\n  }\n}`)
+                },
                 { method: "DELETE", path: "/ator/:id", title: "Excluir ator", auth: "admin", params: [p("id", "ID do ator", 1)], res: ok(`{\n  "msg": "Ator deletado com sucesso"\n}`) },
                 { method: "POST", path: "/ator/:id/filme/:filme", title: "Associar ator a filme", auth: "admin", params: [p("id", "Ator ID", 1), p("filme", "Filme ID", 2)], res: ok(`{\n  "msg": "Associação realizada com sucesso!"\n}`) },
                 { method: "DELETE", path: "/ator/:id/filme/:filme", title: "Desassociar ator de filme", auth: "admin", params: [p("id", "Ator ID", 1), p("filme", "Filme ID", 2)], res: ok(`{\n  "msg": "Desassociação realizada com sucesso!"\n}`) },
@@ -128,8 +148,28 @@
                 { method: "GET", path: "/diretor/nome/:nome", title: "Buscar ID por nome", auth: null, params: [p("nome", "Nome exato", "Werner")], res: ok(`{\n  "diretor": {\n    "id": 1\n  }\n}`) },
                 { method: "GET", path: "/diretor/:id", title: "Buscar diretor por ID", auth: null, params: [p("id", "ID do diretor", 1)], res: ok(`{\n  "diretor": {\n    "id": 1,\n    "nome": "Werner Herzog",\n    ...\n  }\n}`) },
                 { method: "GET", path: "/diretor/:id/dirige", title: "Listar produções do diretor", auth: null, params: [p("id", "ID do diretor", 1)], res: ok(`{\n  "filmes": [\n    "Filme A",\n    ...\n  ],\n  "series": [\n    "Série B",\n    ...\n  ]\n}`) },
-                { method: "POST", path: "/diretor", title: "Cadastrar diretor", auth: "admin", fields: [f("nome", "Texto", "Sim", ""), f("nacionalidade", "Texto", "Sim", ""), f("data_nascimento", "Data", "Sim", "AAAA-MM-DD")], res: ok(`{\n  "diretor": {\n    ...\n  }\n}`) },
-                { method: "PUT", path: "/diretor/:id", title: "Atualizar diretor", auth: "admin", params: [p("id", "ID do diretor", 1)], fields: [f("biografia", "Texto", "Não", "")], res: ok(`{\n  "diretor": {\n    ...\n  }\n}`) },
+                {
+                    method: "POST", path: "/diretor", title: "Cadastrar diretor", auth: "admin",
+                    fields: [
+                        f("nome", "VARCHAR(150)", "Sim", "Obrigatório"),
+                        f("nacionalidade", "VARCHAR(70)", "Sim", "Obrigatório"),
+                        f("data_nascimento", "DATE", "Sim", "Entre 1895-12-28 e 2026-10-19"),
+                        f("biografia", "TEXT", "Não", "Opcional"),
+                        f("qtde_premios", "INT", "Não", "Padrão 0, >= 0"),
+                        f("arquivo", "File (Imagem)", "Não", "Fotografia do diretor")
+                    ],
+                    res: ok(`{\n  "diretor": {\n    ...\n  }\n}`)
+                },
+                {
+                    method: "PUT", path: "/diretor/:id", title: "Atualizar diretor", auth: "admin",
+                    params: [p("id", "ID do diretor", 1)],
+                    fields: [
+                        f("biografia", "TEXT", "Não", "Opcional"),
+                        f("qtde_premios", "INT", "Não", ">= 0"),
+                        f("arquivo", "File (Imagem)", "Não", "Nova fotografia")
+                    ],
+                    res: ok(`{\n  "diretor": {\n    ...\n  }\n}`)
+                },
                 { method: "DELETE", path: "/diretor/:id", title: "Excluir diretor", auth: "admin", params: [p("id", "ID do diretor", 1)], res: ok(`{\n  "msg": "Diretor deletado com sucesso"\n}`) }
             ]
         },
@@ -138,8 +178,28 @@
             endpoints: [
                 { method: "GET", path: "/episodio", title: "Listar episódios", auth: null, res: ok(`{\n  "episodios": [\n    {\n      "id": 1,\n      "titulo": "Piloto",\n      ...\n    },\n    ...\n  ]\n}`) },
                 { method: "GET", path: "/episodio/:id/serie/:serie", title: "Buscar episódio de série", auth: null, params: [p("id", "Episódio ID", 1), p("serie", "Série ID", 1)], res: ok(`{\n  "episodios": [\n    {\n      ...\n    }\n  ]\n}`) },
-                { method: "POST", path: "/episodio", title: "Cadastrar episódio", auth: "admin", fields: [f("titulo", "Texto", "Sim", ""), f("duracao", "Int", "Sim", "> 0"), f("temporada", "Int", "Sim", ">= 1"), f("serie_id", "Int", "Sim", "")], res: ok(`{\n  "episodio": {\n    ...\n  }\n}`) },
-                { method: "PUT", path: "/episodio/:id", title: "Atualizar episódio", auth: "admin", params: [p("id", "ID do episódio", 1)], fields: [f("titulo", "Texto", "Sim", "")], res: ok(`{\n  "episodio": {\n    ...\n  }\n}`) },
+                {
+                    method: "POST", path: "/episodio", title: "Cadastrar episódio", auth: "admin",
+                    fields: [
+                        f("titulo", "VARCHAR(85)", "Sim", "Obrigatório"),
+                        f("sinopse", "TEXT", "Não", "Opcional"),
+                        f("duracao", "INT", "Sim", "Inteiro > 0"),
+                        f("temporada", "INT", "Não", "Padrão 1, >= 1"),
+                        f("serie_id", "INT (FK)", "Sim", "ID da série existente")
+                    ],
+                    res: ok(`{\n  "episodio": {\n    ...\n  }\n}`)
+                },
+                {
+                    method: "PUT", path: "/episodio/:id", title: "Atualizar episódio", auth: "admin",
+                    params: [p("id", "ID do episódio", 1)],
+                    fields: [
+                        f("titulo", "VARCHAR(85)", "Não", "Opcional"),
+                        f("sinopse", "TEXT", "Não", "Opcional"),
+                        f("duracao", "INT", "Não", "> 0"),
+                        f("temporada", "INT", "Não", ">= 1")
+                    ],
+                    res: ok(`{\n  "episodio": {\n    ...\n  }\n}`)
+                },
                 { method: "DELETE", path: "/episodio/:id", title: "Excluir episódio", auth: "admin", params: [p("id", "ID do episódio", 1)], res: ok(`{\n  "msg": "Episódio deletado com sucesso."\n}`) }
             ]
         },
@@ -150,8 +210,32 @@
                 { method: "GET", path: "/filme/premiado", title: "Listar filmes por prêmios", auth: null, res: ok(`{\n  "filmes": [\n    {\n      ...\n    },\n    ...\n  ]\n}`) },
                 { method: "GET", path: "/filme/titulo/:titulo", title: "Buscar ID por título", auth: null, params: [p("titulo", "Título exato", "Fitzcarraldo")], res: ok(`{\n  "filme": {\n    "id": 1\n  }\n}`) },
                 { method: "GET", path: "/filme/:id", title: "Buscar filme por ID", auth: null, params: [p("id", "ID do filme", 1)], res: ok(`{\n  "filme": {\n    ...\n  }\n}`) },
-                { method: "POST", path: "/filme", title: "Cadastrar filme", auth: "admin", fields: [f("titulo", "Texto", "Sim", ""), f("diretor", "Int", "Sim", ""), f("sinopse", "Texto", "Sim", ""), f("faixa_etaria", "Int", "Sim", "1 a 18"), f("duracao", "Int", "Sim", "> 0")], res: ok(`{\n  "filme": {\n    ...\n  }\n}`) },
-                { method: "PUT", path: "/filme/:id", title: "Atualizar filme", auth: "admin", params: [p("id", "ID do filme", 1)], fields: [f("titulo", "Texto", "Sim", "")], res: ok(`{\n  "filme": {\n    ...\n  }\n}`) },
+                {
+                    method: "POST", path: "/filme", title: "Cadastrar filme", auth: "admin",
+                    fields: [
+                        f("titulo", "VARCHAR(100)", "Sim", "Obrigatório"),
+                        f("diretor", "INT (FK)", "Sim", "ID do diretor existente"),
+                        f("sinopse", "TEXT", "Sim", "Obrigatório na rota"),
+                        f("faixa_etaria", "INT", "Sim", "Entre 0 e 18"),
+                        f("duracao", "INT", "Sim", "> 0"),
+                        f("qtde_premios", "INT", "Não", "Padrão 0, >= 0"),
+                        f("arquivo", "File (Imagem)", "Não", "Cartaz do filme")
+                    ],
+                    res: ok(`{\n  "filme": {\n    ...\n  }\n}`)
+                },
+                {
+                    method: "PUT", path: "/filme/:id", title: "Atualizar filme", auth: "admin",
+                    params: [p("id", "ID do filme", 1)],
+                    fields: [
+                        f("titulo", "VARCHAR(100)", "Não", "Opcional"),
+                        f("sinopse", "TEXT", "Não", "Opcional"),
+                        f("faixa_etaria", "INT", "Não", "Entre 0 e 18"),
+                        f("duracao", "INT", "Não", "> 0"),
+                        f("qtde_premios", "INT", "Não", ">= 0"),
+                        f("arquivo", "File (Imagem)", "Não", "Novo cartaz")
+                    ],
+                    res: ok(`{\n  "filme": {\n    ...\n  }\n}`)
+                },
                 { method: "DELETE", path: "/filme/:id", title: "Excluir filme", auth: "admin", params: [p("id", "ID do filme", 1)], res: ok(`{\n  "msg": "Filme deletado com sucesso"\n}`) }
             ]
         },
@@ -164,10 +248,44 @@
                 { method: "GET", path: "/resenha/critico", title: "Resenhas da crítica", auth: null, res: ok(`{\n  "resenhas_filme": [\n    {\n      ...\n    }\n  ],\n  "resenhas_serie": [\n    {\n      ...\n    }\n  ]\n}`) },
                 { method: "GET", path: "/resenha/avaliacao_media/filme/:id", title: "Média de avaliações de filme", auth: null, params: [p("id", "ID do filme", 1)], res: ok(`{\n  "avaliacao_media": 85.5\n}`) },
                 { method: "GET", path: "/resenha/avaliacao_media/serie/:id", title: "Média de avaliações de série", auth: null, params: [p("id", "ID da série", 1)], res: ok(`{\n  "avaliacao_media": 90.0\n}`) },
-                { method: "POST", path: "/resenha/filme", title: "Criar resenha de filme", auth: "token", fields: [f("filme_id", "Int", "Sim", ""), f("resenha", "Texto", "Sim", ""), f("avaliacao", "Int", "Sim", "0 a 100")], res: ok(`{\n  "msg": "Resenha adicionada com sucesso!",\n  "resenha": {\n    ...\n  }\n}`) },
-                { method: "POST", path: "/resenha/serie", title: "Criar resenha de série", auth: "token", fields: [f("serie_id", "Int", "Sim", ""), f("resenha", "Texto", "Sim", ""), f("avaliacao", "Int", "Sim", "0 a 100")], res: ok(`{\n  "msg": "Resenha adicionada com sucesso!",\n  "resenha": {\n    ...\n  }\n}`) },
-                { method: "PUT", path: "/resenha/filme/:id", title: "Atualizar resenha de filme", auth: "token", params: [p("id", "ID da resenha", 1)], fields: [f("filme_id", "Int", "Sim", ""), f("resenha", "Texto", "Sim", ""), f("avaliacao", "Int", "Sim", "0 a 100")], res: ok(`{\n  "msg": "Resenha atualizada com sucesso!",\n  "resenha": {\n    ...\n  }\n}`) },
-                { method: "PUT", path: "/resenha/serie/:id", title: "Atualizar resenha de série", auth: "token", params: [p("id", "ID da resenha", 1)], fields: [f("serie_id", "Int", "Sim", ""), f("resenha", "Texto", "Sim", ""), f("avaliacao", "Int", "Sim", "0 a 100")], res: ok(`{\n  "msg": "Resenha atualizada com sucesso!",\n  "resenha": {\n    ...\n  }\n}`) },
+                {
+                    method: "POST", path: "/resenha/filme", title: "Criar resenha de filme", auth: "token",
+                    fields: [
+                        f("filme_id", "INT (FK)", "Sim", "ID do filme existente"),
+                        f("resenha", "TEXT", "Sim", "Obrigatório"),
+                        f("avaliacao", "INT", "Sim", "Inteiro entre 0 e 100")
+                    ],
+                    res: ok(`{\n  "msg": "Resenha adicionada com sucesso!",\n  "resenha": {\n    ...\n  }\n}`)
+                },
+                {
+                    method: "POST", path: "/resenha/serie", title: "Criar resenha de série", auth: "token",
+                    fields: [
+                        f("serie_id", "INT (FK)", "Sim", "ID da série existente"),
+                        f("resenha", "TEXT", "Sim", "Obrigatório"),
+                        f("avaliacao", "INT", "Sim", "Inteiro entre 0 e 100")
+                    ],
+                    res: ok(`{\n  "msg": "Resenha adicionada com sucesso!",\n  "resenha": {\n    ...\n  }\n}`)
+                },
+                {
+                    method: "PUT", path: "/resenha/filme/:id", title: "Atualizar resenha de filme", auth: "token",
+                    params: [p("id", "ID da resenha", 1)],
+                    fields: [
+                        f("filme_id", "INT (FK)", "Sim", "Para validação da autoria"),
+                        f("resenha", "TEXT", "Sim", "Obrigatório"),
+                        f("avaliacao", "INT", "Sim", "Inteiro entre 0 e 100")
+                    ],
+                    res: ok(`{\n  "msg": "Resenha atualizada com sucesso!",\n  "resenha": {\n    ...\n  }\n}`)
+                },
+                {
+                    method: "PUT", path: "/resenha/serie/:id", title: "Atualizar resenha de série", auth: "token",
+                    params: [p("id", "ID da resenha", 1)],
+                    fields: [
+                        f("serie_id", "INT (FK)", "Sim", "Para validação da autoria"),
+                        f("resenha", "TEXT", "Sim", "Obrigatório"),
+                        f("avaliacao", "INT", "Sim", "Inteiro entre 0 e 100")
+                    ],
+                    res: ok(`{\n  "msg": "Resenha atualizada com sucesso!",\n  "resenha": {\n    ...\n  }\n}`)
+                },
                 { method: "DELETE", path: "/resenha/filme/:id", title: "Excluir resenha de filme", auth: "token", params: [p("id", "ID do filme", 1)], res: ok(`{\n  "msg": "Resenha apagada com sucesso!"\n}`) },
                 { method: "DELETE", path: "/resenha/serie/:id", title: "Excluir resenha de série", auth: "token", params: [p("id", "ID da série", 1)], res: ok(`{\n  "msg": "Resenha apagada com sucesso!"\n}`) }
             ]
@@ -178,8 +296,31 @@
                 { method: "GET", path: "/serie", title: "Listar séries", auth: null, res: ok(`{\n  "series": [\n    {\n      "id": 1,\n      "titulo": "Série Exemplo",\n      ...\n    },\n    ...\n  ]\n}`) },
                 { method: "GET", path: "/serie/titulo/:titulo", title: "Buscar ID por título", auth: null, params: [p("titulo", "Título exato", "Série Exemplo")], res: ok(`{\n  "serie": {\n    "id": 1\n  }\n}`) },
                 { method: "GET", path: "/serie/:id", title: "Buscar série por ID", auth: null, params: [p("id", "ID da série", 1)], res: ok(`{\n  "serie": {\n    ...\n  }\n}`) },
-                { method: "POST", path: "/serie", title: "Cadastrar série", auth: "admin", fields: [f("titulo", "Texto", "Sim", ""), f("diretor", "Int", "Sim", ""), f("faixa_etaria", "Int", "Sim", "1 a 18")], res: ok(`{\n  "serie": {\n    ...\n  }\n}`) },
-                { method: "PUT", path: "/serie/:id", title: "Atualizar série", auth: "admin", params: [p("id", "ID da série", 1)], fields: [f("titulo", "Texto", "Não", "")], res: ok(`{\n  "serie": {\n    ...\n  }\n}`) },
+                {
+                    method: "POST", path: "/serie", title: "Cadastrar série", auth: "admin",
+                    fields: [
+                        f("titulo", "VARCHAR(100)", "Sim", "Obrigatório"),
+                        f("diretor", "INT (FK)", "Sim", "ID do diretor existente"),
+                        f("sinopse", "TEXT", "Não", "Opcional"),
+                        f("faixa_etaria", "INT", "Não", "Entre 0 e 18"),
+                        f("qtde_premios", "INT", "Não", "Padrão 0, >= 0"),
+                        f("arquivo", "File (Imagem)", "Não", "Cartaz da série")
+                    ],
+                    res: ok(`{\n  "serie": {\n    ...\n  }\n}`)
+                },
+                {
+                    method: "PUT", path: "/serie/:id", title: "Atualizar série", auth: "admin",
+                    params: [p("id", "ID da série", 1)],
+                    fields: [
+                        f("titulo", "VARCHAR(100)", "Não", "Opcional"),
+                        f("diretor", "INT (FK)", "Não", "Opcional"),
+                        f("sinopse", "TEXT", "Não", "Opcional"),
+                        f("faixa_etaria", "INT", "Não", "Entre 0 e 18"),
+                        f("qtde_premios", "INT", "Não", ">= 0"),
+                        f("arquivo", "File (Imagem)", "Não", "Novo cartaz")
+                    ],
+                    res: ok(`{\n  "serie": {\n    ...\n  }\n}`)
+                },
                 { method: "DELETE", path: "/serie/:id", title: "Excluir série", auth: "admin", params: [p("id", "ID da série", 1)], res: ok(`{\n  "msg": "Série deletada com sucesso."\n}`) }
             ]
         },
@@ -188,11 +329,47 @@
             endpoints: [
                 { method: "GET", path: "/usuario", title: "Listar usuários", auth: null, res: ok(`{\n  "usuarios": [\n    {\n      "id": 1,\n      "nome": "Usuário Exemplo",\n      ...\n    },\n    ...\n  ]\n}`) },
                 { method: "GET", path: "/usuario/:id", title: "Buscar usuário por ID", auth: null, params: [p("id", "ID do usuário", 1)], res: ok(`{\n  "usuario": {\n    ...\n  }\n}`) },
-                { method: "POST", path: "/usuario", title: "Cadastrar usuário", auth: null, fields: [f("nome", "Texto", "Sim", ""), f("email", "Texto", "Sim", ""), f("senha", "Texto", "Sim", "")], res: ok(`{\n  "msg": "Usuário criado com sucesso!",\n  "usuario": {\n    ...\n  }\n}`) },
-                { method: "POST", path: "/usuario/login", title: "Login de usuário", auth: null, fields: [f("email", "Texto", "Sim", ""), f("senha", "Texto", "Sim", "")], res: ok(`{\n  "msg": "Login realizado com sucesso!",\n  "token": "eyJhbGciOiJIUzI1NiIs..."\n}`) },
-                { method: "PUT", path: "/usuario", title: "Atualizar perfil próprio", auth: "token", fields: [f("nome", "Texto", "Não", ""), f("senha", "Texto", "Não", "")], res: ok(`{\n  "msg": "Usuário alterado com sucesso!",\n  "usuario": {\n    ...\n  }\n}`) },
-                { method: "PUT", path: "/usuario/:id/critico", title: "Alterar status de crítico", auth: "admin", params: [p("id", "ID do usuário", 1)], fields: [f("critico", "Bool", "Sim", "")], res: ok(`{\n  "msg": "Usuário alterado com sucesso!",\n  "usuario": {\n    ...\n  }\n}`) },
-                { method: "PUT", path: "/usuario/:id/administrador", title: "Alterar status de administrador", auth: "admin", params: [p("id", "ID do usuário", 1)], fields: [f("administrador", "Bool", "Sim", "")], res: ok(`{\n  "msg": "Usuário alterado com sucesso!",\n  "usuario": {\n    ...\n  }\n}`) },
+                {
+                    method: "POST", path: "/usuario", title: "Cadastrar usuário", auth: null,
+                    fields: [
+                        f("nome", "VARCHAR(150)", "Sim", "Obrigatório"),
+                        f("email", "VARCHAR(85)", "Sim", "Único, formato válido, sem espaços/vírgulas"),
+                        f("senha", "CHAR(60)", "Sim", "Sem espaços"),
+                        f("critico", "BOOLEAN", "Não", "Opcional"),
+                        f("administrador", "BOOLEAN", "Não", "Opcional"),
+                        f("arquivo", "File (Imagem)", "Não", "Fotografia de perfil")
+                    ],
+                    res: ok(`{\n  "msg": "Usuário criado com sucesso!",\n  "usuario": {\n    ...\n  }\n}`)
+                },
+                {
+                    method: "POST", path: "/usuario/login", title: "Login de usuário", auth: null,
+                    fields: [
+                        f("email", "VARCHAR(85)", "Sim", "Obrigatório"),
+                        f("senha", "CHAR(60)", "Sim", "Obrigatório")
+                    ],
+                    res: ok(`{\n  "msg": "Login realizado com sucesso!",\n  "token": "eyJhbGciOiJIUzI1NiIs..."\n}`)
+                },
+                {
+                    method: "PUT", path: "/usuario", title: "Atualizar perfil próprio", auth: "token",
+                    fields: [
+                        f("nome", "VARCHAR(150)", "Não", "Opcional"),
+                        f("senha", "CHAR(60)", "Não", "Sem espaços"),
+                        f("arquivo", "File (Imagem)", "Não", "Nova fotografia")
+                    ],
+                    res: ok(`{\n  "msg": "Usuário alterado com sucesso!",\n  "usuario": {\n    ...\n  }\n}`)
+                },
+                {
+                    method: "PUT", path: "/usuario/:id/critico", title: "Alterar status de crítico", auth: "admin",
+                    params: [p("id", "ID do usuário", 1)],
+                    fields: [f("critico", "BOOLEAN", "Sim", "true ou false")],
+                    res: ok(`{\n  "msg": "Usuário alterado com sucesso!",\n  "usuario": {\n    ...\n  }\n}`)
+                },
+                {
+                    method: "PUT", path: "/usuario/:id/administrador", title: "Alterar status de administrador", auth: "admin",
+                    params: [p("id", "ID do usuário", 1)],
+                    fields: [f("administrador", "BOOLEAN", "Sim", "true ou false")],
+                    res: ok(`{\n  "msg": "Usuário alterado com sucesso!",\n  "usuario": {\n    ...\n  }\n}`)
+                },
                 { method: "DELETE", path: "/usuario", title: "Excluir própria conta", auth: "token", res: ok(`{\n  "msg": "Usuário apagado com sucesso!",\n  "usuario": {\n    ...\n  }\n}`) }
             ]
         }
