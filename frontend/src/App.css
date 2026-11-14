@@ -333,3 +333,132 @@ footer{
 .blue{
   color: rgb(17, 17, 186);
 }
+
+.hero-especial {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 65px);
+    min-height: 650px;
+    overflow: hidden;
+    margin: 0;
+    margin-bottom: -5%;
+}
+
+.hero-content-especial {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 46%;
+    height: 100%;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 35px 40px 75px;
+    background-color: aliceblue;
+    font-family: Arial, sans-serif;
+
+    clip-path: polygon(
+        12% 0,
+        100% 0,
+        100% 100%,
+        0 100%
+    );
+}
+
+.tudo {
+    width: 100%;
+    max-width: 400px;
+    margin: 0;
+    padding: 30px 25px 15px;
+    background-color: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(30, 50, 70, 0.2);
+    border-radius: 14px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.tamanho {
+    width: 100%;
+    max-width: none;
+    margin: 0 0 20px;
+}
+
+.tudo h2 {
+    color: #202b3a;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+.inputs label {
+    font-weight: 600;
+    color: #343a40;
+    margin-bottom: 6px;
+}
+
+.input_usuario {
+    width: 100%;
+    height: 42px;
+    padding: 8px 12px;
+    margin-bottom: 18px;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    background-color: white;
+}
+
+.inputs input[type="file"] {
+    max-width: 100%;
+    margin-bottom: 15px;
+    color: #343a40;
+    font-size: 14px;
+}
+
+.btn_enviar {
+    margin-top: 8px;
+    margin-bottom: 20px;
+    padding: 10px 25px;
+
+    background-color: #252f40;
+    color: white;
+    border: none;
+    border-radius: 7px;
+
+    font-weight: 600;
+}
+
+.btn_enviar:hover {
+    background-color: #416b9c;
+    transform: translateY(-2px);
+}
+
+.formulario a {
+    color: #276bb0;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.formulario a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 900px) {
+    .hero-content-especial {
+        width: 55%;
+        padding: 30px 20px 30px 65px;
+    }
+}
+
+@media (max-width: 650px) {
+    .hero-content-especial {
+        width: 90%;
+        height: 100%;
+    }
+}
+
+.usuario-nav{
+  color: white;
+}
+
+.deslogar:hover{
+  color: blue;
+}

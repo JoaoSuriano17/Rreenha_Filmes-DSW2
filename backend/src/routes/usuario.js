@@ -124,7 +124,7 @@ router.post("/login", async (req, res) => {
             { data: r.rows[0].id },
             senhaTokenJWT
         );
-        return res.status(200).json({ msg: "Login realizado com sucesso!", token: tokenJWT });
+        return res.status(200).json({ msg: "Login realizado com sucesso!", token: tokenJWT, id:r.rows[0].id });
     } catch (erro) {
         return res.status(500).json({ msg: erro.message });
     }

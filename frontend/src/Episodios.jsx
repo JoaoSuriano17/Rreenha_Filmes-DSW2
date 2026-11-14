@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { BsArrowLeft, BsInstagram, BsSearch, BsTiktok, BsTwitterX, BsYoutube } from "react-icons/bs"
+import { BsArrowLeft } from "react-icons/bs"
 import { Link, useParams } from "react-router-dom"
 
 function Episodios(props){
@@ -8,44 +8,6 @@ function Episodios(props){
 
     const [serie, setSerie]=useState([])
     const [episodios, setEpisodios] = useState([])
-
-    const [search, setSearch]=useState("")
-
-    async function pesquisar(e) {
-        e.preventDefault();
-
-        try {
-            const titulo = await props.titulo(search);
-            if (titulo != null) {
-                window.location.href = "/filme/"+titulo;
-                return;
-            }
-
-            const serie = await props.titulos(search);
-            if (serie != null) {
-                window.location.href = "/serie/"+serie;
-                return;
-            }
-
-            const ator = await props.nomea(search);
-            if (ator != null) {
-                window.location.href = "/ator/"+ator;
-                return;
-            }
-
-            const diretor = await props.nomed(search);
-            if (diretor != null) {
-                window.location.href = "/diretor/"+diretor;
-                return;
-            }
-
-            alert("Não há nada cadastrado com esse nome");
-        } catch (erro) {
-            console.log("Erro na pesquisa:", erro);
-            alert("Ocorreu um erro ao realizar a pesquisa");
-        }
-    }
-
     const [temporada, setTemporada] = useState(1);
 
     useEffect(()=>{
@@ -87,18 +49,6 @@ function Episodios(props){
 
     return(
         <>
-            <nav className="navbar bg-black fg-2">
-                <div className="container-fluid">
-                <Link to={"/"} className="link Rreenha">Rreenha Filmes</Link>
-                <form className="d-flex" role="search" onSubmit={pesquisar}>
-                    <input className="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search" value={search} onChange={(e)=>{setSearch(e.target.value)}}/>
-                    <button className="search" type="submit"><BsSearch></BsSearch></button>
-                </form>
-                </div>
-            </nav>
-
-
-
             <div className="grid-episodios">
                 <div className="cabecalhoeps">
                     <Link className="link voltar" to={"/serie/"+serie.id}><BsArrowLeft /> Voltar</Link>
@@ -128,22 +78,6 @@ function Episodios(props){
                     ))}
                 </div>
             </div>
-
-
-
-            <footer>
-                <div className='redes-footer'>
-                    <span>Nos siga nas nossas redes sociais</span>
-                    <div className='redes-icones'>
-                        <a href='https://www.youtube.com/@LOUDBrawlStars'><BsYoutube></BsYoutube></a>
-                        <a href='https://www.tiktok.com/@loud.brawlstars'><BsTiktok></BsTiktok></a>
-                        <a href='https://www.instagram.com/teamhmble/'><BsInstagram></BsInstagram></a>
-                        <a href='https://x.com/TeamHmble'><BsTwitterX></BsTwitterX></a>
-                    </div>
-                </div>
-
-                <span className='cop'>©2026. Rreenha_Filmes. Todos os direitos reservados.</span>
-            </footer>
         </>
     )
 }

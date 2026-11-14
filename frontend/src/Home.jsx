@@ -1,8 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { useEffect, useState } from 'react';
-import {BsInstagram, BsSearch, BsTiktok, BsTwitterX, BsYoutube} from "react-icons/bs"
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
 
 function Home(props){
 
@@ -11,44 +10,7 @@ function Home(props){
     const [atores, setAtores]=useState([])
     const [series, setSeries]=useState([])
 
-    const [search, setSearch]=useState("")
-
     const navigate=useNavigate()
-
-    async function pesquisar(e) {
-        e.preventDefault();
-
-        try {
-            const titulo = await props.titulo(search);
-            if (titulo != null) {
-                window.location.href = "/filme/"+titulo;
-                return;
-            }
-
-            const serie = await props.titulos(search);
-            if (serie != null) {
-                window.location.href = "/serie/"+serie;
-                return;
-            }
-
-            const ator = await props.nomea(search);
-            if (ator != null) {
-                window.location.href = "/ator/"+ator;
-                return;
-            }
-
-            const diretor = await props.nomed(search);
-            if (diretor != null) {
-                window.location.href = "/diretor/"+diretor;
-                return;
-            }
-
-            alert("Não há nada cadastrado com esse nome");
-        } catch (erro) {
-            console.log("Erro na pesquisa:", erro);
-            alert("Ocorreu um erro ao realizar a pesquisa");
-        }
-    }
 
     useEffect(()=>{
         async function filmes_classicos(){
@@ -99,16 +61,6 @@ function Home(props){
 
     return(
         <>
-            <nav className="navbar bg-black fg-2">
-                <div className="container-fluid">
-                <Link to={"/"} className="link Rreenha">Rreenha Filmes</Link>
-                <form className="d-flex" role="search" onSubmit={pesquisar}>
-                    <input className="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search" value={search} onChange={(e)=>{setSearch(e.target.value)}}/>
-                    <button className="search" type="submit"><BsSearch></BsSearch></button>
-                </form>
-                </div>
-            </nav>
-
             <div className="hero">
                 <div id="carouselExampleInterval" className="carousel slide" data-bs-ride="carousel" data-bs-interval="3000" data-bs-pause="false">
                 <div className="carousel-inner">
@@ -220,20 +172,6 @@ function Home(props){
             <div className='d-flex justify-content-center'>
                 <button className="btncatalogo" onClick={()=>{navigate("/series")}}>Explorar catálogo completo</button>
             </div>
-
-            <footer>
-                <div className='redes-footer'>
-                    <span>Nos siga nas nossas redes sociais</span>
-                    <div className='redes-icones'>
-                        <a href='https://www.youtube.com/@LOUDBrawlStars'><BsYoutube></BsYoutube></a>
-                        <a href='https://www.tiktok.com/@loud.brawlstars'><BsTiktok></BsTiktok></a>
-                        <a href='https://www.instagram.com/teamhmble/'><BsInstagram></BsInstagram></a>
-                        <a href='https://x.com/TeamHmble'><BsTwitterX></BsTwitterX></a>
-                    </div>
-                </div>
-
-                <span className='cop'>©2026. Rreenha_Filmes. Todos os direitos reservados.</span>
-            </footer>
         </>
     )
 }
