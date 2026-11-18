@@ -6,7 +6,6 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use("/hello", require("./routes/rota"));
 app.use("/ator", require("./routes/ator"));
 app.use("/diretor", require("./routes/diretor"));
 app.use("/episodio", require("./routes/episodio"));

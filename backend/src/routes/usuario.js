@@ -4,11 +4,11 @@ const db = require("../db");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const senhaTokenJWT = "senhaSecretissimaIFSP";
-
 const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
 
 const verificarAdministrador = require("../middleware/verificarAdministrador");
+const tipo = require("../middleware/tipo");
 
 // Função middleware que recebe o token do usuário, verifica se é válido e de um usuário permitido. Se der erro, bloqueia a requisição.
 function verificarToken(req, res, next) {
@@ -43,30 +43,29 @@ function verificarToken(req, res, next) {
 //GET - Todos
 router.get("/", async (req, res) => {
     try {
-        const r = await db.query("SELECT id, nome, email, critico, administrador, fotografia FROM usuario");
-        if (!r.rowCount) {
-            return res.status(400).json({ msg: "Não há usuários cadastrados." });
+        const requisicao1 = await db.query("SELECT id, nome, email, critico, administrador, fotografia FROM usuario");
+        if (!requisicao1.rowCount) {
+            return res.status(400).json({msg: "Não há usuários cadastrados."});
         }
-        return res.status(200).json({ usuarios: r.rows });
+        return res.status(200).json({usuarios: requisicao1.rows});
     } catch (erro) {
-        return res.status(500).json({ msg: erro.message });
+        return res.status(500).json({msg: erro.message});
     }
 });
+
 //GET - Específico, por id
-router.get("/:id", async (req, res) => {
+router.get("/:id", tipo, async (req, res) => {
     try {
-        const id = req.params.id || {};
-        if (!id) { return res.status(400).json({ msg: "Id do usuário não informado!" }); }
-        //conferir se id é válido/numérico
-        const r = await db.query("SELECT id, nome, email, critico, administrador, fotografia FROM usuario WHERE id=$1", [id]);
-        if (!r.rowCount) {
-            return res.status(400).json({ msg: "Não há usuários cadastrados." });
+        const requisicao1 = await db.query("SELECT id, nome, email, critico, administrador, fotografia FROM usuario WHERE id=$1", [id]);
+        if (!requisicao1.rowCount) {
+            return res.status(400).json({msg: "Ator inexistente."});
         }
-        return res.status(200).json({ usuario: r.rows[0] });
+        return res.status(200).json({usuario: requisicao1.rows[0]});
     } catch (erro) {
-        return res.status(500).json({ msg: erro.message });
+        return res.status(500).json({msg: erro.message});
     }
 });
+
 //POST - Criação (Requer: nome, email, senha)
 router.post("/", upload.single("arquivo"), async (req, res) => {
     try {

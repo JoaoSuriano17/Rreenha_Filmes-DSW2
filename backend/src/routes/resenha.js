@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
+const jwt = require("jsonwebtoken");
+const senhaTokenJWT = "senhaSecretissimaIFSP";
 
 const tipo = require("../middleware/tipo");
 const verificarAdministrador = require("../middleware/verificarAdministrador");
 
-const jwt = require("jsonwebtoken");
-const senhaTokenJWT = "senhaSecretissimaIFSP";
 
 function tokenArmazenar(req, res, next) {   
     const authorization = req.headers.authorization;
@@ -27,115 +27,108 @@ function tokenArmazenar(req, res, next) {
     }
 }
 
-/*router.get("/filmes", tipo, tokenArmazenar, async (req, res) => {
+//Get - todas as resenhas do usuário. TESTAR
+router.get("/", tipo, tokenArmazenar, async (req, res) => {
     try {
-        const r = await db.query("SELECT resenha_filme.resenha, resenha_filme.avaliacao, filme.titulo, diretor.nome FROM resenha_filme JOIN filme ON resenha_filme.filme_id = filme.id JOIN diretor ON filme.diretor = diretor.id WHERE usuario_id = $1", [req.usuario_id])
-        if (!r.rowCount) {
-            return res.status(400).json({ msg:"O requerinte não possui resenha nesse filme." });
+        const requisicao1 = await db.query("SELECT resenha_filme.resenha, resenha_filme.avaliacao, filme.titulo, diretor.nome FROM resenha_filme JOIN filme ON resenha_filme.filme_id = filme.id JOIN diretor ON filme.diretor = diretor.id WHERE usuario_id = $1", [req.usuario_id])
+        if (!requisicao1.rowCount) {
+            return res.status(400).json({ msg:"O requerinte não possui resenhas." });
         }
-        return res.status(200).json({resenha: r.rows[0]});
+        return res.status(200).json({resenha: requisicao1.rows[0]});
     } catch (erro) {
-        return res.status(500).json({ msg: erro.message });
+        return res.status(500).json({msg: erro.message});
     }
-})*/
+})
 
 
 //GET - todas resenhas, de filmes e séries
 router.get("/", async (req, res) => {
     try {
-        const rf = await db.query("SELECT * FROM resenha_filme");
-        const rs = await db.query("SELECT * FROM resenha_serie");
-        if (!rf.rowCount && !rs.rowCount) {
-            return res.status(400).json({ msg: "Não há resenhas cadastradas." });
+        const requisicaoFilme = await db.query("SELECT * FROM resenha_filme");
+        const requisicaoSerie = await db.query("SELECT * FROM resenha_serie");
+        if (!requisicaoFilme.rowCount && !requisicaoSerie.rowCount) {
+            return res.status(400).json({msg: "Não há resenhas cadastradas."});
         }
-        return res.status(200).json({ resenhas_filme: rf.rows, resenhas_serie: rs.rows });
+        return res.status(200).json({resenhas_filme: requisicaoFilme.rows, resenhas_serie: requisicaoSerie.rows});
     } catch (erro) {
         return res.status(500).json({ msg: erro.message });
     }
 })
 
 //GET - resenhas de um usuário específico; requer id
-router.get("/autor/:id", async (req, res)=>{
+router.get("/autor/:id", tipo, async (req, res)=>{
     try{
-        const id=req.params.id||{};
-        if(!id){
-            return res.status(400).json({msg:"Id não informado!"});
-        }
-        const rf=await db.query("SELECT * FROM resenha_filme WHERE usuario_id=$1", [id]);
-        const rs=await db.query("SELECT * FROM resenha_serie WHERE usuario_id=$1", [id]);
-        return res.status(200).json({resenhas_filme: rf.rows, resenhas_serie: rs.rows});
+        const requisicaoFilme = await db.query("SELECT * FROM resenha_filme WHERE usuario_id=$1", [req.params.id]);
+        const requisicaoSerie =await db.query("SELECT * FROM resenha_serie WHERE usuario_id=$1", [req.params.id]);
+        return res.status(200).json({resenhas_filme: requisicaoFilme.rows, resenhas_serie: requisicaoSerie.rows});
     }catch(erro){
-        return res.status(500).json({msg:erro.message});
+        return res.status(500).json({msg: erro.message});
     }
 })
 
 //GET - resenhas do público ou da crítica
 router.get("/publico", async (req, res) => {
     try {
-        const rf = await db.query("SELECT resenha_filme.* FROM resenha_filme JOIN usuario ON resenha_filme.usuario_id=usuario.id WHERE usuario.critico=false");
-        const rs = await db.query("SELECT resenha_serie.* FROM resenha_serie JOIN usuario ON resenha_serie.usuario_id=usuario.id WHERE usuario.critico=false");
-        if (!rf.rowCount && !rs.rowCount) {
-            return res.status(400).json({ msg: "Não há resenhas do público cadastradas." });
+        const requisicaoFilme = await db.query("SELECT resenha_filme.* FROM resenha_filme JOIN usuario ON resenha_filme.usuario_id=usuario.id WHERE usuario.critico=false");
+        const requisicaoSerie = await db.query("SELECT resenha_serie.* FROM resenha_serie JOIN usuario ON resenha_serie.usuario_id=usuario.id WHERE usuario.critico=false");
+        if (!requisicaoFilme.rowCount && !requisicaoSerie.rowCount) {
+            return res.status(400).json({ msg: "Não há resenhas de usuários comuns cadastradas." });
         }
-        return res.status(200).json({ resenhas_filme: rf.rows, resenhas_serie: rs.rows });
+        return res.status(200).json({resenhas_filme: requisicaoFilme.rows, resenhas_serie: requisicaoSerie.rows});
     } catch (erro) {
-        return res.status(500).json({ msg: erro.message });
+        return res.status(500).json({msg: erro.message});
     }
 })
+
 router.get("/critico", async (req, res) => {
     try {
-        const rf = await db.query("SELECT resenha_filme.* FROM resenha_filme JOIN usuario ON resenha_filme.usuario_id=usuario.id WHERE usuario.critico=true");
-        const rs = await db.query("SELECT resenha_serie.* FROM resenha_serie JOIN usuario ON resenha_serie.usuario_id=usuario.id WHERE usuario.critico=true");
-        if (!rf.rowCount && !rs.rowCount) {
-            return res.status(400).json({ msg: "Não há resenhas da crítica cadastradas." });
+        const requisicaoFilme = await db.query("SELECT resenha_filme.* FROM resenha_filme JOIN usuario ON resenha_filme.usuario_id=usuario.id WHERE usuario.critico=true");
+        const requisicaoSerie = await db.query("SELECT resenha_serie.* FROM resenha_serie JOIN usuario ON resenha_serie.usuario_id=usuario.id WHERE usuario.critico=true");
+        if (!requisicaoFilme.rowCount && !requisicaoSerie.rowCount) {
+            return res.status(400).json({ msg: "Não há resenhas de críticos cadastradas."});
         }
-        return res.status(200).json({ resenhas_filme: rf.rows, resenhas_serie: rs.rows });
+        return res.status(200).json({ resenhas_filme: requisicaoFilme.rows, resenhas_serie: requisicaoSerie.rows });
     } catch (erro) {
-        return res.status(500).json({ msg: erro.message });
+        return res.status(500).json({msg: erro.message});
     }
 })
 
 //GET - avaliação média, de filme e série; requer id do filme ou série
-router.get("/avaliacao_media/filme/:id", async (req, res)=>{
+router.get("/avaliacao_media/filme/:id", tipo, async (req, res)=>{
     try{
-        const id=req.params.id||{};
-        if(!id){
-            return res.status(400).json({msg:"Id do filme não informado!"});
+        const requisicao1 = await db.query("SELECT * FROM filme WHERE id = $1", [filme_id]);
+        if(!requisicao1.rowCount){
+            res.status(404).json({msg: "Filme inexistente."});
         }
-        const r0=await db.query("SELECT * FROM filme WHERE id = $1", [filme_id]);
-        if(!r0.rowCount){
-            res.status(404).json({msg:"Filme inexistente."});
-        }
-        const r=await db.query("SELECT avaliacao FROM resenha_filme WHERE filme_id=$1", [id]);
+
+        const requisicao2 = await db.query("SELECT avaliacao FROM resenha_filme WHERE filme_id=$1", [id]);
         let am=0;
-        for(row of r.rows){
+        for(row of requisicao2.rows){
             am+=row.avaliacao;
         }
         am/=r.rows.length;
-        return res.status(200).json({avaliacao_media:am});
+        return res.status(200).json({avaliacao_media: am});
     }catch(erro){
-        return res.status(500).json({msg:erro.message});
+        return res.status(500).json({msg: erro.message});
     }
 })
-router.get("/avaliacao_media/serie/:id", async (req, res)=>{
+
+router.get("/avaliacao_media/serie/:id", tipo, async (req, res)=>{
     try{
-        const id=req.params.id||{};
-        if(!id){
-            return res.status(400).json({msg:"Id da série não informado!"});
+        const requisicao1=await db.query("SELECT * FROM serie WHERE id = $1", [serie_id]);
+        if(!requisicao1.rowCount){
+            res.status(404).json({msg: "Série inexistente."});
         }
-        const r0=await db.query("SELECT * FROM serie WHERE id = $1", [serie_id]);
-        if(!r0.rowCount){
-            res.status(404).json({msg:"Série inexistente."});
-        }
-        const r=await db.query("SELECT avaliacao FROM resenha_serie WHERE serie_id=$1", [id]);
+
+        const requisicao2=await db.query("SELECT avaliacao FROM resenha_serie WHERE serie_id=$1", [id]);
         let am=0;
-        for(row of r.rows){
+        for(row of requisicao2.rows){
             am+=row.avaliacao;
         }
         am/=r.rows.length;
-        return res.status(200).json({avaliacao_media:am});
+        return res.status(200).json({avaliacao_media: am});
     }catch(erro){
-        return res.status(500).json({msg:erro.message});
+        return res.status(500).json({msg: erro.message});
     }
 })
 
@@ -168,6 +161,7 @@ router.post("/filme", tokenArmazenar, async (req, res) => {
         return res.status(500).json({ msg: erro.message });
     }
 })
+
 router.post("/serie", tokenArmazenar, async (req, res) => {
     try {
         const { serie_id, resenha, avaliacao } = req.body || {};

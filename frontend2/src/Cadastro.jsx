@@ -5,45 +5,19 @@ function Cadastro(props) {
   const [email, setEmail] = useState("")
   const [nome, setNome] = useState("")
   const [senha, setSenha] = useState("")
-  const [critico, setCritico] = useState("")
+  const [critico, setCritico] = useState(false)
 
   // Usado para guardar o arquivo a ser enviado.
   const [arquivo, setArquivo] = useState(null);
-  const [inp, setInput] = useState("");
   
-  function resetForm(e) {
-    if (e) {
-      e.preventDefault();
-    }
-    setInput("");
-    setArquivo(null);
+  function resetForm() {
+    formData.append("nome", "");
+    formData.append("email", "");
+    formData.append("senha", "");
+    formData.append("critico", false);
+    formData.append("arquivo", null);
   }
 
-  async function cadastrar(e) {
-    e.preventDefault();
-
-    const formData = new FormData();
-    formData.append("arquivo", arquivo);
-
-    let res = await fetch(`${url}`, { method: "POST", body: formData });
-    if (!res.ok) {
-      const json = await res.json();
-      alert(`Erro: ${json.msg}`);
-      return;
-    }
-    alert("Cadastrado com sucesso!");
-    resetForm();
-    carregarDados();
-  }
-
-  function changeFile(e) {
-    if (e.target.files.length > 0) {
-      // Guarda os dados do arquivo.
-      setArquivo(e.target.files[0]);
-      // Guarda o nome do arquivo.
-      setInput(e.target.files[0].name);
-    }
-  }  
   return(
     <div>
         <h1>Cadastro</h1>
@@ -51,13 +25,22 @@ function Cadastro(props) {
             <label> Nome <br /> <input type="text" value={nome} onChange={(e)=>{setNome(e.target.value)}}/></label> <br />
             <label> E-mail <br /> <input type="text" required value={email} onChange={(e)=>{setEmail(e.target.value)}}/></label> <br />
             <label> Senha <br /> <input type="password" required value={senha} onChange={(e)=>{setSenha(e.target.value)}}/></label><br />
-            <label><input type="checkbox" required value={critico} onChange={(e)=>{setSenha(e.target.value)}}/> Crítico</label> <br /> <br />
-            <label><input type="file" accept="image/*" required value={arquivo} onChange={(e)=>{setSenha(e.target.value)}}/> Foto perfil</label> <br /> <br />
+            <label><input type="checkbox" checked={critico} onChange={(e)=>{setCritico(e.target.checked)}}/> Crítico</label> <br /> <br />
+            <input type="file" accept="image/*" onChange={(e) => setArquivo(e.target.files[0])}/> <br /><br />
             <button onClick={(e)=>{
-                e.preventDefault()
-                const formData = new FormData()
-                formData.append("arquivo", arquivo)
-                props.cadastro({nome: nome, email: email, senha: senha, critico: critico?critico:false})}}>Adicionar</button>
+                e.preventDefault();
+                const formData = new FormData();
+                formData.append("nome", nome);
+                formData.append("email", email);
+                formData.append("senha", senha);
+                formData.append("critico", critico);
+                if (arquivo){
+                  formData.append("arquivo", arquivo);
+                }
+                props.cadastro(formData)
+            }}>Enviar</button>
+
+            <button onClick={(e)=> {resetForm()}}>Resetar</button>
         </form>
     </div>
   )

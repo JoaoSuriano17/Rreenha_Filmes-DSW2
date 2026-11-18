@@ -1,33 +1,33 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
+const multer = require("multer");
+const upload = multer({storage: multer.memoryStorage()});
 
 const tipo = require("../middleware/tipo")
 const verificarAdministrador = require("../middleware/verificarAdministrador");
 
-const multer = require("multer");
-const upload = multer({ storage: multer.memoryStorage() });
 
 router.get("/", async (req, res) => {
     try {
-        const r = await db.query("SELECT * FROM ator");
-        if (!r.rowCount) {
+        const requisicao1 = await db.query("SELECT * FROM ator");
+        if (!requisicao1.rowCount) {
             return res.status(400).json({ msg: "Não há atores cadastrados." });
         }
-        return res.status(200).json({ atores: r.rows });
+        return res.status(200).json({atores: r.rows});
     } catch (erro) {
-        return res.status(500).json({ msg: erro.message });
+        return res.status(500).json({msg: erro.message});
     }
 })
 
-//Pegar o id do ator pelo nome. Usado na pesquisa da navbar
+//Seria útil testar com for; e se o usuário não colocar letra maiúscula?
 router.get("/nome/:nome", async (req, res) => {
     try {
-        const r = await db.query("SELECT id FROM ator WHERE nome=$1", [req.params.nome])
-        if (r.rowCount == 0) {
-            return res.status(404).json({ msg: "Não existe ator com esse nome" })
+        const requisicao1 = await db.query("SELECT id FROM ator WHERE nome=$1", [req.params.nome])
+        if (!requisicao1.rowCount) {
+            return res.status(404).json({msg: "Não existe ator com esse nome."})
         }
-        return res.json({ ator: r.rows[0] })
+        return res.json({ator: requisicao1.rows[0]})
     } catch (erro) {
         return res.status(500).json({ msg: erro.message })
     }
@@ -35,14 +35,14 @@ router.get("/nome/:nome", async (req, res) => {
 
 router.get("/:id", tipo, async (req, res) => {
     try {
-        const r = await db.query("SELECT * FROM ator WHERE id=$1", [req.params.id])
-        if (!r.rowCount) {
-            return res.status(400).json({ msg: "Não há ator com esse id cadastrado." });
+        const requisicao1 = await db.query("SELECT * FROM ator WHERE id=$1", [req.params.id])
+        if (!requisicao1.rowCount) {
+            return res.status(400).json({ msg: "Ator inexistente." });
         }
-        return res.json({ ator: r.rows[0] })
+        return res.json({ator: r.rows[0]})
 
     } catch (erro) {
-        return res.status(500).json({ msg: erro.message })
+        return res.status(500).json({msg: erro.message})
     }
 })
 
@@ -54,35 +54,34 @@ router.post("/", verificarAdministrador, upload.single("arquivo"), async (req, r
             return res.status(400).json({ msg: "O ator deve ter pelo menos um nome" })
         }
 
-        var r2;
+        var requisicao1;
         if (!req.file) {
-            r2 = await db.query("INSERT INTO ator(nome, nacionalidade, data_nascimento, biografia, qtde_premios, fotografia) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [nome, nacionalidade, data_nascimento, biografia, qtde_premios, 1])
+            requisicao1 = await db.query("INSERT INTO ator(nome, nacionalidade, data_nascimento, biografia, qtde_premios, fotografia) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [nome, nacionalidade, data_nascimento, biografia, qtde_premios, 1])
         } else {
             const formData = new FormData();
             formData.append("arquivo", new Blob([req.file.buffer], { type: req.file.mimetype }), req.file.originalname);
 
-            const r = await fetch("http://localhost:3000/arquivo", { method: "POST", body: formData })
-            if (!r.ok) {
+            const requisicao2 = await fetch("http://localhost:3000/arquivo", { method: "POST", body: formData })
+            if (!requisicao2.ok) {
                 return res.status(500).json({ msg: "Erro ao salvar a imagem" });
             }
 
-            const arquivo = await r.json();
+            const arquivo = await requisicao2.json();
 
-            r2 = await db.query("INSERT INTO ator(nome, nacionalidade, data_nascimento, biografia, qtde_premios, fotografia) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [nome, nacionalidade, data_nascimento, biografia, qtde_premios, arquivo.id])
+            requisicao1 = await db.query("INSERT INTO ator(nome, nacionalidade, data_nascimento, biografia, qtde_premios, fotografia) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [nome, nacionalidade, data_nascimento, biografia, qtde_premios, arquivo.id])
         }
 
-        if (!r2.rowCount) {
-            return res.status(500).json({ msg: "Erro ao cadastrar o ator" });
+        if (!requisicao1.rowCount) {
+            return res.status(500).json({msg: "Erro ao cadastrar ator."});
         }
 
-        return res.json({ ator: r2.rows[0] })
+        return res.json({ator: r2.rows[0]})
     } catch (erro) {
-        return res.status(500).json({ msg: erro.message })
+        return res.status(500).json({msg: erro.message})
     }
 })
 
 //PUT
-
 router.put("/:id", tipo, verificarAdministrador, upload.single("arquivo"), async (req, res) => {
     try {
         const { biografia, qtde_premios } = req.body;

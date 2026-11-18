@@ -1,0 +1,70 @@
+/* Reset básico para remover margens padrão */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Estilo principal da barra de navegação */
+.navbar {
+    display: flex;
+    justify-content: space-between; /* Separa o logo dos links */
+    align-items: center; /* Centraliza verticalmente */
+    background-color: #1e293b; /* Cor de fundo escura */
+    padding: 1rem 2rem;
+}
+
+/* Estilo do logotipo */
+.logo {
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* Lista de links */
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem; /* Espaçamento entre os links */
+    align-items: center;
+}
+
+/* Links individuais */
+.nav-links a {
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #ffffff;
+}
+
+/* Botão de destaque (CTA) */
+.btn-contato {
+    background-color: #3b82f6;
+    color: #ffffff !important;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.btn-contato:hover {
+    background-color: #2563eb;
+}
+
+img{
+    max-width: 50px;
+    max-height: 50px;
+}
+
+/* Adaptação simples para telas menores (celulares) */
+@media (max-width: 600px) {
+    .navbar {
+    flex-direction: column;
+    gap: 1rem;
+    }
+}

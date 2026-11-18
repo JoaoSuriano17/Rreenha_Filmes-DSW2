@@ -1,49 +1,49 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
+const multer = require("multer");
+const upload = multer({storage: multer.memoryStorage()});
 
 const tipo = require("../middleware/tipo");
 const verificarAdministrador = require("../middleware/verificarAdministrador")
 
-const multer = require("multer");
-const upload = multer({ storage: multer.memoryStorage() });
 
 router.get("/", async (req, res) => {
     try {
-        const r = await db.query("SELECT * FROM serie");
-        if (!r.rowCount) {
-            return res.status(400).json({ msg: "Não há séries cadastradas." });
+        const requisicao1 = await db.query("SELECT * FROM serie");
+        if (!requisicao1.rowCount) {
+            return res.status(400).json({msg: "Não há séries cadastradas."});
         }
 
-        return res.status(200).json({ series: r.rows });
+        return res.status(200).json({series: r.rows});
     } catch (erro) {
-        return res.status(500).json({ msg: erro.message });
+        return res.status(500).json({msg: erro.message});
     }
 });
 
-//Pegar o id da serie pelo titulo. Usado na pesquisa da navbar
+//Pegar o id da serie pelo titulo. Usado na pesquisa da navbar. Seria melhor usar um for?
 router.get("/titulo/:titulo", async (req, res) => {
     try {
-        const r = await db.query("SELECT id FROM serie WHERE titulo=$1", [req.params.titulo])
-        if (r.rowCount == 0) {
-            return res.status(404).json({ msg: "Não existe série com esse título" })
+        const requisicao1 = await db.query("SELECT id FROM serie WHERE titulo=$1", [req.params.titulo])
+        if (!requisicao1.rowCount) {
+            return res.status(404).json({ msg: "Não existe série com esse título." })
         }
-        return res.json({ serie: r.rows[0] })
+        return res.json({serie: requisicao1.rows[0]})
     } catch (erro) {
-        return res.status(500).json({ msg: erro.message })
+        return res.status(500).json({msg: erro.message})
     }
 })
 
 router.get("/:id", tipo, async (req, res) => {
     try {
-        const r = await db.query("SELECT * FROM serie WHERE id=$1", [req.params.id]);
-        if (!r.rowCount) {
-            return res.status(404).json({ msg: "Não há série com esse id cadastrada." });
+        const requisicao1 = await db.query("SELECT * FROM serie WHERE id=$1", [req.params.id]);
+        if (!requisicao1.rowCount) {
+            return res.status(404).json({ msg: "Série inexistente."});
         }
 
-        return res.json({ serie: r.rows[0] });
+        return res.json({serie: requisicao1.rows[0]});
     } catch (erro) {
-        return res.status(500).json({ msg: erro.message });
+        return res.status(500).json({msg: erro.message});
     }
 });
 

@@ -1,36 +1,69 @@
 import {Route, Routes, useNavigate} from "react-router-dom"
 import Login from "./Login";
 import Cadastro from "./Cadastro";
+import Home from "./Home";
+import "./App.css"
+import { useEffect, useState } from "react";
 
 function App() {
   let nav = useNavigate();
+  const [autenticado, setAutenticado] = useState(localStorage.getItem("token") == null? false : true);
+  let token = localStorage;
 
   async function CadastroUsuario(user) {
-    const cadastro = await fetch("http://localhost:3000/usuario", {
+    let cadastro = await fetch("http://localhost:3000/usuario", {
+      method: "POST",
+      /*headers:{
+        "Content-type" : "application/json"
+      },*/
+      //body: JSON.stringify(user)
+      body: user
+    })
+
+    cadastro = await cadastro.json()
+    LoginUsuario({email: user.get("email"), senha: user.get("senha")})
+  }
+
+  async function LoginUsuario(user) {
+    let login = await fetch("http://localhost:3000/usuario/login", {
       method: "POST",
       headers:{
         "Content-type" : "application/json"
       },
-      body: JSON.stringify(usuarioTentativa)
-
+      body: JSON.stringify(user)
     })
-
-    LoginUsuario({email: user.email, senha: user.senha})
+    
+    login = await login.json()
+    localStorage.setItem("token", login.token);
+    setAutenticado(true);
+    nav("/");
+    console.log(token.getItem("token"))
   }
 
-  async function LoginUsuario(user) {
-    console.log("LoginUsuario")
-      
-    nav("/")
+  let botoesLoginCadastro
+  if(autenticado){
+    botoesLoginCadastro = <><li><a href="/login" className="logo">Login</a></li> <li><a href="/cadastro" className="logo">Cadastro</a></li></>
   }
   
   return(
     <>
-      <h1>Código</h1>
+      <header>
+        <nav className="navbar">
+          <a href="/" className="logo">Rreenha Filmes</a>
+          {/*Links para navegação*/}
+          <ul className="nav-links">
+            {botoesLoginCadastro}
+            <li><a href="/usuario" className="logo">Avaliações</a></li>
+            <li><a href="/usuario" className="logo"><img src="https://png.pngtree.com/png-vector/20190927/ourlarge/pngtree-user-icon-symbol-design-user-icon-isolated-design-png-image_1746919.jpg"/></a></li>
+          </ul>
+        </nav>
+      </header>
+
       <Routes>
-        <Route path="/" element={<p>Está no "/"</p>}></Route>
+        <Route path="/" element={<Home/>}></Route>
         <Route path="/cadastro" element={<Cadastro cadastro={CadastroUsuario}/>}></Route>
         <Route path="/login" element={<Login login={LoginUsuario}/>}></Route>
+        <Route path="/usuario" element={<p>Informações do usuário</p>}></Route>
       </Routes>
     </>
   )

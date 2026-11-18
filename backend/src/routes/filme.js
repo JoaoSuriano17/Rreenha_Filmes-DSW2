@@ -1,60 +1,60 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
+const multer = require("multer");
+const upload = multer({ storage: multer.memoryStorage() });
 
 const tipo = require("../middleware/tipo")
-
-const multer = require("multer");
 const verificarAdministrador = require("../middleware/verificarAdministrador");
-const upload = multer({ storage: multer.memoryStorage() });
+
 
 router.get("/", async (req, res) => {
     try {
-        const r = await db.query("SELECT * FROM filme");
-        if (!r.rowCount) {
-            return res.status(400).json({ msg: "Não há filmes cadastrados." });
+        const requisicao1 = await db.query("SELECT * FROM filme");
+        if (!requisicao1.rowCount) {
+            return res.status(400).json({msg:"Não há filmes cadastrados."});
         }
-        return res.status(200).json({ filmes: r.rows });
+        return res.status(200).json({filmes: requisicao1.rows});
     } catch (erro) {
-        return res.status(500).json({ msg: erro.message });
+        return res.status(500).json({msg: erro.message});
     }
 })
 
 //Mostrar os filmes do mais premiados ao menos premiado
 router.get("/premiado", async (req, res) => {
     try {
-        const r = await db.query("SELECT * FROM filme ORDER BY qtde_premios DESC");
-        if (!r.rowCount) {
-            return res.status(400).json({ msg: "Não há filme cadastrado com esse nome." });
+        const requisicao1 = await db.query("SELECT * FROM filme ORDER BY qtde_premios DESC");
+        if (!requisicao1.rowCount) {
+            return res.status(400).json({msg: "Não há filmes cadastrados."});
         }
-        return res.status(200).json({ filmes: r.rows });
+        return res.status(200).json({filmes: requisicao1.rows});
     } catch (erro) {
-        return res.status(500).json({ msg: erro.message });
+        return res.status(500).json({msg: erro.message});
     }
 })
 
-//Pegar o id do filme pelo titulo. Usado na pesquisa da navbar
+//Pegar o id do filme pelo titulo. Usado na pesquisa da navbar. Será que é melhor usar um for?
 router.get("/titulo/:titulo", async (req, res) => {
     try {
-        const r = await db.query("SELECT id FROM filme WHERE titulo=$1", [req.params.titulo])
-        if (r.rowCount == 0) {
-            return res.status(404).json({ msg: "Não existe filme com esse título" })
+        const requisicao1 = await db.query("SELECT id FROM filme WHERE titulo=$1", [req.params.titulo])
+        if (!requisicao1.rowCount) {
+            return res.status(404).json({ msg: "Não existe filme com esse título." })
         }
-        return res.json({ filme: r.rows[0] })
+        return res.json({filme: requisicao1.rows[0]})
     } catch (erro) {
-        return res.status(500).json({ msg: erro.message })
+        return res.status(500).json({msg: erro.message})
     }
 })
 
 router.get("/:id", tipo, async (req, res) => {
     try {
-        const r = await db.query("SELECT * FROM filme WHERE id=$1", [req.params.id])
-        if (r.rowCount == 0) {
-            return res.status(404).json({ msg: "Não existe filme com esse id" })
+        const requisicao1 = await db.query("SELECT * FROM filme WHERE id=$1", [req.params.id])
+        if (!requisicao1.rowCount) {
+            return res.status(404).json({msg: "Filme inexistente."})
         }
-        return res.json({ filme: r.rows[0] })
+        return res.json({filme: requisicao1.rows[0]})
     } catch (erro) {
-        return res.status(500).json({ msg: erro.message })
+        return res.status(500).json({msg: erro.message})
     }
 })
 

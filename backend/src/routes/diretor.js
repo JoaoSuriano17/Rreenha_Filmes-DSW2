@@ -1,48 +1,48 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
+const multer = require("multer");
+const upload = multer({storage: multer.memoryStorage()});
 
 const tipo = require("../middleware/tipo")
 const verificarAdministrador = require("../middleware/verificarAdministrador");
 
-const multer = require("multer");
-const upload = multer({ storage: multer.memoryStorage() });
 
 router.get("/", async (req, res) => {
     try {
-        const r = await db.query("SELECT * FROM diretor");
-        if (!r.rowCount) {
+        const requisicao1 = await db.query("SELECT * FROM diretor");
+        if (!requisicao1.rowCount) {
             return res.status(400).json({ msg: "Não há diretores cadastrados." });
         }
-        return res.status(200).json({ diretores: r.rows });
+        return res.status(200).json({diretores: r.rows});
     } catch (erro) {
-        return res.status(500).json({ msg: erro.message });
+        return res.status(500).json({msg: erro.message});
     }
 })
 
 //Pegar o id do diretor pelo nome. Usado na pesquisa da navbar
 router.get("/nome/:nome", async (req, res) => {
     try {
-        const r = await db.query("SELECT id FROM diretor WHERE nome=$1", [req.params.nome])
-        if (r.rowCount == 0) {
-            return res.status(404).json({ msg: "Não existe diretor com esse nome" })
+        const requisicao1 = await db.query("SELECT id FROM diretor WHERE nome=$1", [req.params.nome])
+        if (!requisicao1.rowCount) {
+            return res.status(404).json({msg: "Não existe diretor com esse nome."})
         }
-        return res.json({ diretor: r.rows[0] })
+        return res.json({diretor: requisicao1.rows[0]})
     } catch (erro) {
-        return res.status(500).json({ msg: erro.message })
+        return res.status(500).json({msg: erro.message})
     }
 })
 
 router.get("/:id", tipo, async (req, res) => {
     try {
-        const r = await db.query("SELECT * FROM diretor WHERE id=$1", [req.params.id])
-        if (!r.rowCount) {
-            return res.status(400).json({ msg: "Não há diretor com esse id cadastrado." });
+        const requisicao1 = await db.query("SELECT * FROM diretor WHERE id=$1", [req.params.id])
+        if (!requisicao1.rowCount) {
+            return res.status(400).json({msg: "Diretor inexistente."});
         }
-        return res.json({ diretor: r.rows[0] })
+        return res.json({diretor: requisicao1.rows[0]})
 
     } catch (erro) {
-        return res.status(500).json({ msg: erro.message })
+        return res.status(500).json({msg: erro.message})
     }
 })
 
