@@ -2,6 +2,7 @@ import {Route, Routes, useNavigate} from "react-router-dom"
 import Login from "./Login";
 import Cadastro from "./Cadastro";
 import Home from "./Home";
+import Usuario from "./Usuario";
 import "./App.css"
 import { useEffect, useState } from "react";
 
@@ -40,8 +41,12 @@ function App() {
     console.log(token.getItem("token"))
   }
 
+  async function SelecionaFilmes(params) {
+    
+  }
+
   let botoesLoginCadastro
-  if(autenticado){
+  if(!autenticado){
     botoesLoginCadastro = <><li><a href="/login" className="logo">Login</a></li> <li><a href="/cadastro" className="logo">Cadastro</a></li></>
   }
   
@@ -63,7 +68,7 @@ function App() {
         <Route path="/" element={<Home/>}></Route>
         <Route path="/cadastro" element={<Cadastro cadastro={CadastroUsuario}/>}></Route>
         <Route path="/login" element={<Login login={LoginUsuario}/>}></Route>
-        <Route path="/usuario" element={<p>Informações do usuário</p>}></Route>
+        <Route path="/usuario" element={<Usuario />}></Route>
       </Routes>
     </>
   )

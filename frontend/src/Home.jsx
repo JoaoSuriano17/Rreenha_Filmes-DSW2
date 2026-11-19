@@ -4,61 +4,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate} from 'react-router-dom';
 
 function Home(props){
-
-    const [classico, setClassico]=useState([])
-    const [premiados, setPremiados]=useState([])
-    const [atores, setAtores]=useState([])
-    const [series, setSeries]=useState([])
-
-    const navigate=useNavigate()
-
-    useEffect(()=>{
-        async function filmes_classicos(){
-            try{
-                const r=await props.classico()
-                console.log(r)
-                setClassico(r)
-            }catch(erro){
-                console.log(erro)
-            }
-        }
-
-        async function filmes_premiados(){
-            try{
-                const r=await props.premios()
-                console.log(r)
-                setPremiados(r)
-            }catch(erro){
-                console.log(erro)
-            }
-        }
-
-        async function atores(){
-            try{
-                const r=await props.atores()
-                console.log(r)
-                setAtores(r)
-            }catch(erro){
-                console.log(erro)
-            }
-        }
-
-        async function series(){
-            try{
-                const r=await props.series()
-                console.log(r)
-                setSeries(r)
-            }catch(erro){
-                console.log(erro)
-            }
-        }
-
-        filmes_classicos()
-        filmes_premiados()
-        atores()
-        series()
-    }, [])
-
+    
     return(
         <>
             <div className="hero">
@@ -93,6 +39,7 @@ function Home(props){
             <div className='grid-filme grid-filme-menor'>
                 <h4 className='text-center'>Explore nossos catálogos</h4>
                 <div className='d-flex justify-content-center catalogos'>
+                    {/*Pode ser um button com um link dentro???*/}
                     <button className="btncatalogos" onClick={()=>{navigate("/filmes")}}>Filmes</button>
                     <button className="btncatalogos" onClick={()=>{navigate("/atores")}}>Atores</button>
                     <button className="btncatalogos" onClick={()=>{navigate("/diretores")}}>Diretores</button>
@@ -102,7 +49,7 @@ function Home(props){
 
             <h1 className='procurados'>Veja os filmes mais procurados no nosso site</h1>
             <div className="filmes_classicos">
-                {classico.filmes?.filter(filme => filme.id<5).map((filme, index) => (
+                {props.filmes?.filter(filme => filme.id<5).map((filme, index) => (
                     <div className="card cardhome" key={filme.id ?? index}>
                         <Link to={"/filme/"+filme.id}>
                             <img src={`http://localhost:3000/arquivo/${filme.cartaz}`} alt="Image" className='imagem_classicos'/>
@@ -120,7 +67,7 @@ function Home(props){
 
             <h1 className='procurados'>Veja os filmes mais premiados</h1>
             <div className="filmes_classicos">
-                {premiados.filmes?.slice(0, 4).map((filme, index) => (
+                {props.filmes_premiados?.slice(0, 4).map((filme, index) => (
                     <div className="card" key={filme.id ?? index}>
                         <Link to={"/filme/"+filme.id}>
                             <img src={`http://localhost:3000/arquivo/${filme.cartaz}`} alt="Image" className='imagem_classicos'/>
@@ -139,7 +86,7 @@ function Home(props){
 
             <h1 className='procurados'>Veja os atores mais procurados no nosso site</h1>
             <div className="filmes_classicos">
-                {atores.atores?.filter(ator => ator.id<5).map((ator, index) => (
+                {props.atores?.filter(ator => ator.id<5).map((ator, index) => (
                     <div className="card" key={ator.id ?? index}>
                         <Link to={"/ator/"+ator.id}>
                             <img src={`http://localhost:3000/arquivo/${ator.fotografia}`} alt="Image" className='ator'/>
@@ -157,7 +104,7 @@ function Home(props){
 
             <h1 className='procurados'>Veja as séries mais procuradas no nosso site</h1>
             <div className="filmes_classicos">
-                {series.series?.filter(serie => serie.id<5).map((serie, index) => (
+                {props.series?.filter(serie => serie.id<5).map((serie, index) => (
                     <div className="card cardhome" key={serie.id ?? index}>
                         <Link to={"/serie/"+serie.id}>
                             <img src={`http://localhost:3000/arquivo/${serie.cartaz}`} alt="Image" className='imagem_classicos'/>

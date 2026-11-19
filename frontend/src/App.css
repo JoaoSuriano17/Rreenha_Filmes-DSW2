@@ -1,3 +1,4 @@
+/* Texto hero - "RREENHA ..." */
 .hero-content {
   position: absolute;
   top: 52%;
@@ -15,6 +16,7 @@
   padding: 0;
 }
 
+/* Sobre o carrosel */
 #carouselExampleInterval {
   width: 100%;
   max-width: 100%;
@@ -22,13 +24,11 @@
   margin: 0;
   padding: 0;
 }
-
 #carouselExampleInterval .carousel-inner,
 #carouselExampleInterval .carousel-item {
   width: 100% !important;
   height: 730px;
 }
-
 #carouselExampleInterval .carousel-item img {
   width: 100% !important;
   height: 100%;
@@ -49,6 +49,7 @@
   pointer-events: none;
 }
 
+/* Textos integrantes da hero */
 .texto1{
   font-size: 90px;
 }
@@ -62,19 +63,21 @@
   font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
+/* Relação com a pesquisa - nav */
 .search{
   border-radius: 10px;
   border: 0px;
-}
-
-.cardhome{
-  width: 15rem;
 }
 
 .procurados{
   text-align: center;
   margin-top: 20px;
   margin-bottom: 10px;
+}
+
+/* Home - parte principal */
+.cardhome{
+  width: 15rem;
 }
 
 .filmes_classicos{
@@ -90,6 +93,7 @@
   width: 100%;
 }
 
+/* Grid - define o modelo padrão das entidades */
 .grid-filme{
   margin-left: 15%;
   margin-right: 15%;
@@ -99,6 +103,7 @@
   padding-right: 1%;
 }
 
+/* Parte específica */
 .combo{
   display: flex;
   margin-top: 2%;
@@ -117,6 +122,7 @@
   color: lightslategray;
 }
 
+/* Footer - Correção */
 footer{
   background-color: black;
   color: white;
@@ -145,11 +151,13 @@ footer{
   color: white;
 }
 
+/* Não lembra */
 .cop{
   color: gainsboro;
   margin-left: 1%;
 }
 
+/* Atores - div */
 .ator{
   height: 250px;
   width: 100%;
@@ -157,6 +165,7 @@ footer{
   border-radius: 5px;
 }
 
+/* TODOS OS CATÁLOGOS */
 .btncatalogo{
   background-color: rgb(91, 91, 239);
   margin-top: 15px;
@@ -185,15 +194,18 @@ footer{
   border-radius: 3px;
 }
 
+/* Só tira o coisinho que fica embaixo; claro que é nos links */
 .link{
   text-decoration: none;
 }
 
+/* Da nav */
 .Rreenha{
   color: white;
   font-size: 20px;
 }
 
+/* Não lembra */
 .pegar_filme{
   margin-left: auto;
   margin-right: auto;
@@ -209,6 +221,7 @@ footer{
   text-align: center;
 }
 
+/* Tamanho diferente para pessoa */
 .imagem_catalogo_pessoa{
   width: 100%;
   height: 150px;
@@ -218,13 +231,7 @@ footer{
 
 .catalogos{
   gap: 20px;
-}
-
-.btncatalogos{
-  background-color: rgb(84, 84, 84);
-  color: white;
-  border-radius: 5px;
-  margin-bottom: 5px;
+  flex-wrap: wrap;
 }
 
 .grid-filme-menor{
@@ -235,6 +242,15 @@ footer{
   padding-top: 10px;
 }
 
+/* Hero */
+.btncatalogos{
+  background-color: rgb(84, 84, 84);
+  color: white;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+/* Animações da Home */
 .card:hover{
   border: 2px black solid;
 }
@@ -251,6 +267,11 @@ footer{
   color: rgb(146, 146, 146);
 }
 
+.deslogar:hover{
+  color: blue;
+}
+
+/* Alguma coisa de episódios e cabeçalho de outra coisa */
 .listaeps{
   margin-top: -10px;
   background-color: gray;
@@ -280,6 +301,7 @@ footer{
   margin-left: 5px;
 }
 
+/* Título */
 .tserie{
   color: rgb(68, 68, 68);
 }
@@ -310,9 +332,10 @@ footer{
 }
 
 .temporadas button.ativo {
-    background-color: gray;
+  background-color: gray;
 }
 
+/* Botão de voltar - só está em séries (implementar) */
 .voltar{
   color: white;
   margin-left: 3%;
@@ -334,6 +357,7 @@ footer{
   color: rgb(17, 17, 186);
 }
 
+/* Hero - partes específicas - cadastro e login */
 .hero-especial {
     position: relative;
     width: 100%;
@@ -366,6 +390,7 @@ footer{
     );
 }
 
+/* Não lembro */
 .tudo {
     width: 100%;
     max-width: 400px;
@@ -377,18 +402,21 @@ footer{
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
 }
 
-.tamanho {
-    width: 100%;
-    max-width: none;
-    margin: 0 0 20px;
-}
-
+/* Não lembro */
 .tudo h2 {
     color: #202b3a;
     font-weight: 700;
     margin-bottom: 30px;
 }
 
+/* Não lembro */
+.tamanho {
+    width: 100%;
+    max-width: none;
+    margin: 0 0 20px;
+}
+
+/* Cadastro e login */
 .inputs label {
     font-weight: 600;
     color: #343a40;
@@ -431,34 +459,34 @@ footer{
     transform: translateY(-2px);
 }
 
+/* Não lembro */
 .formulario a {
     color: #276bb0;
     font-weight: 600;
     text-decoration: none;
 }
 
+/* Não lembro */
 .formulario a:hover {
     text-decoration: underline;
 }
 
-@media (max-width: 900px) {
-    .hero-content-especial {
-        width: 55%;
-        padding: 30px 20px 30px 65px;
-    }
-}
-
-@media (max-width: 650px) {
-    .hero-content-especial {
-        width: 90%;
-        height: 100%;
-    }
-}
-
+/* Account do nome */
 .usuario-nav{
   color: white;
 }
 
-.deslogar:hover{
-  color: blue;
+/* Hero */
+@media (max-width: 900px) {
+  .hero-content-especial {
+    width: 55%;
+    padding: 30px 20px 30px 65px;
+  }
+}
+
+@media (max-width: 650px) {
+  .hero-content-especial {
+    width: 90%;
+    height: 100%;
+  }
 }

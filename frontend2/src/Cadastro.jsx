@@ -37,6 +37,7 @@ function Cadastro(props) {
                 if (arquivo){
                   formData.append("arquivo", arquivo);
                 }
+                
                 props.cadastro(formData)
             }}>Enviar</button>
 

@@ -1,32 +1,26 @@
 import { useState } from "react";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Cadastro(props) {
     const [nome, setNome] = useState("");
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
+    const [critico, setCritico] = useState("");
     const [arquivo, setArquivo] = useState("");
 
-    async function enviar(e){
+    function enviar(e){
         e.preventDefault();
-        try {
-            const sucesso=await props.cadastrar(nome, email, senha, arquivo);
-            if (sucesso==true){
-                alert("Cadastro realizado!!")
-                await props.login(email, senha)
-                navigate("/")
-            }
-        } catch (error) {
-            alert("Erro ao cadastrar:", error);
+        const formData = new FormData();
+        formData.append("nome", nome);
+        formData.append("email", email);
+        formData.append("senha", senha);
+        formData.append("critico", critico);
+        if (arquivo){
+            formData.append("arquivo", arquivo);
         }
+        
+        props.cadastro(formData)
     };
-
-    function changeFile(e) {
-        if (e.target.files.length > 0) {
-            // Guarda os dados do arquivo.
-            setArquivo(e.target.files[0]);
-        }
-    }
 
     return (
         <>
@@ -54,16 +48,19 @@ function Cadastro(props) {
                             <form onSubmit={enviar} className="formulario">
                                 <div className="inputs">
                                     <label htmlFor="email">Email</label>
-                                    <input id="email" type="text" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="username" className="input_usuario"/>
+                                    <input id="email" type="text" name="email" value={email} onChange={(e) => {setEmail(e.target.value)}} required autoComplete="username" className="input_usuario"/>
 
                                     <label htmlFor="name">Nome</label>
-                                    <input id="name" type="text" name="name" value={nome} onChange={(e) => setNome(e.target.value)} required autoComplete="name" className="input_usuario"/>
+                                    <input id="name" type="text" name="name" value={nome} onChange={(e) => {setNome(e.target.value)}} required autoComplete="name" className="input_usuario"/>
 
                                     <label htmlFor="password">Senha</label>
-                                    <input id="password" type="password" name="password" value={senha} onChange={(e) => setSenha(e.target.value)} required autoComplete="new-password" className="input_usuario"/>
+                                    <input id="password" type="password" name="password" value={senha} onChange={(e) => {setSenha(e.target.value)}} required autoComplete="new-password" className="input_usuario"/>
+
+                                    <label htmlFor="password">Crítico</label>
+                                    <label><input id="critico" type="checkbox" checked={critico} onChange={(e) => {setCritico(e.target.checked)}}/> </label> <br /> <br />
 
                                     <label htmlFor="img">Foto de Perfil</label>
-                                    <input id="img" type="file" name="img" accept="image/*" onChange={changeFile}/>
+                                    <input id="img" type="file" name="img" accept="image/*" onChange={(e) => {setArquivo(e.target.files[0])}}/>
                                 </div>
 
                                 <div className="d-flex justify-content-center">

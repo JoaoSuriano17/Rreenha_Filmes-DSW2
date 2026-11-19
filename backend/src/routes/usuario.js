@@ -56,7 +56,7 @@ router.get("/", async (req, res) => {
 //GET - Específico, por id
 router.get("/:id", tipo, async (req, res) => {
     try {
-        const requisicao1 = await db.query("SELECT id, nome, email, critico, administrador, fotografia FROM usuario WHERE id=$1", [id]);
+        const requisicao1 = await db.query("SELECT id, nome, email, critico, administrador, fotografia FROM usuario WHERE id=$1", [req.params.id]);
         if (!requisicao1.rowCount) {
             return res.status(400).json({msg: "Ator inexistente."});
         }

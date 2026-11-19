@@ -15,7 +15,7 @@ router.get("/", async (req, res) => {
             return res.status(400).json({msg: "Não há séries cadastradas."});
         }
 
-        return res.status(200).json({series: r.rows});
+        return res.status(200).json({series: requisicao1.rows});
     } catch (erro) {
         return res.status(500).json({msg: erro.message});
     }

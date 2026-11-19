@@ -1,23 +1,13 @@
 import { useState } from "react";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function Login(props) {
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
 
-    const navigate=useNavigate()
-
-    async function enviar(e){
+    function enviar(e){
         e.preventDefault();
-        try {
-            const sucesso=await props.login(email, senha);
-            if (sucesso==true){
-                alert("Login realizado!!")
-                navigate("/")
-            }
-        } catch (error) {
-            alert("Erro ao fazer o login:", error);
-        }
+        props.login(email, senha)
     };
 
     return (
