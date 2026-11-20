@@ -46,7 +46,7 @@ router.get("/", async (req, res) => {
 
 // GET /arquivo/:id
 // Retorna o conteúdo binário da imagem.
-router.get("/:id", async (req, res) => {
+/*router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -76,6 +76,38 @@ router.get("/:id", async (req, res) => {
       msg: "Erro ao buscar a imagem."
     });
   }
+});*/
+
+router.get("/:id", async (req, res) => {
+    try {
+        const id = Number(req.params.id);
+
+        if (!Number.isInteger(id) || id <= 0) {
+            return res.status(400).json({
+                msg: "ID de arquivo inválido."
+            });
+        }
+
+        const r = await db.query(
+            `SELECT conteudo, tipo_mime
+             FROM arquivo_imagem
+             WHERE id = $1`,
+            [id]
+        );
+
+        if (!r.rowCount) {
+            return res.status(404).json({
+                msg: "Arquivo não encontrado."
+            });
+        }
+
+        res.setHeader("Content-Type", r.rows[0].tipo_mime);
+        return res.send(r.rows[0].conteudo);
+
+    } catch (erro) {
+        console.log("Erro ao buscar imagem:", erro);
+        return res.status(500).json({ msg: "Erro ao buscar imagem." });
+    }
 });
 
 // POST /arquivo

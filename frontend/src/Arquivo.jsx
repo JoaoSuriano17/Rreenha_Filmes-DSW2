@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 function Arquivo() {
-  const [data, setData] = useState([]);
+  /*const [data, setData] = useState([]);
 
   // Usado para guardar o arquivo a ser enviado.
   const [arquivo, setArquivo] = useState(null);
@@ -352,7 +352,7 @@ function Arquivo() {
         </section>
       </main>
     </>
-  );
+  );*/
 }
 
 export default Arquivo;

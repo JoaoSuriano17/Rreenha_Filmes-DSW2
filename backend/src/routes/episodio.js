@@ -12,7 +12,7 @@ router.get("/", async (req, res) => {
             return res.status(400).json({msg: "Não há episódios cadastrados."});
         }
 
-        return res.status(200).json({episodios: r.rows});
+        return res.status(200).json({episodios: requisicao1.rows});
     } catch (erro) {
         return res.status(500).json({msg: erro.message});
     }

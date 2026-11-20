@@ -39,7 +39,7 @@ router.get("/:id", tipo, async (req, res) => {
         if (!requisicao1.rowCount) {
             return res.status(400).json({ msg: "Ator inexistente." });
         }
-        return res.json({ator: r.rows[0]})
+        return res.json({ator: requisicao1.rows[0]})
 
     } catch (erro) {
         return res.status(500).json({msg: erro.message})
