@@ -274,8 +274,7 @@ function App() {
       }
       
       const r2=await r.json()
-
-      return r2
+      return r2.diretor
     }catch(erro){
       console.log("Erro: "+erro)
     }
@@ -443,19 +442,19 @@ function App() {
       {/* Se logado, algumas rotas não deveriam ser adentradas👌*/}
 
       <Routes>
-        <Route path="/" element={<Home filmes={filmes} logado={login} arquivos={arquivos} filmes_premiados={filmesPremiados} atores={atores} series={series}></Home>}></Route> {/*  👌  */}
+        <Route path="/" element={<Home filmes={filmes} logado={login} arquivos={arquivos} filmes_premiados={filmesPremiados} atores={atores} series={series}></Home>}></Route>
         <Route path="/arquivo" element={<Arquivo></Arquivo>}></Route>
-        <Route path="/filme/:id" element={<Filme filmes={filmes} diretores={diretores}></Filme>}></Route> {/*  👌  */}
-        <Route path="/ator/:id" element={<Ator ator={ator}></Ator>}></Route>
+        {/*  👌  */} <Route path="/filme/:id" element={<Filme filmes={filmes} diretores={diretores}></Filme>}></Route> 
+        {/*  👌  */} <Route path="/ator/:id" element={<Ator atores={atores}></Ator>}></Route>
         <Route path="/diretor/:id" element={<Diretor diretor={diretor}></Diretor>}></Route>
-        <Route path="/filmes" element={<ListaCardsFilmes filmes={filmes} pesquisar={filme_titulo}></ListaCardsFilmes>}></Route> {/*  👌  */}
-        <Route path="/atores" element={<ListaCardsAtores atores={atores} pesquisar={ator_nome}></ListaCardsAtores>}></Route> {/*  👌  */}
-        <Route path="/diretores" element={<ListaCardsDiretores diretores={diretores} pesquisar={diretor_nome}></ListaCardsDiretores>}></Route> {/*  👌  */}
+        {/*  👌  */} <Route path="/filmes" element={<ListaCardsFilmes filmes={filmes} pesquisar={filme_titulo}></ListaCardsFilmes>}></Route>
+        {/*  👌  */} <Route path="/atores" element={<ListaCardsAtores atores={atores} pesquisar={ator_nome}></ListaCardsAtores>}></Route>
+        {/*  👌  */} <Route path="/diretores" element={<ListaCardsDiretores diretores={diretores} pesquisar={diretor_nome}></ListaCardsDiretores>}></Route>
         <Route path="/serie/:id" element={<Serie serie={serie} diretor={diretor}></Serie>}></Route>
         <Route path="/serie/:id/episodios" element={<Episodios episodios={episodios} serie={serie}></Episodios>}></Route>
         <Route path="/series" element={<CatalogoSeries catalogo={series}></CatalogoSeries>}></Route>
-        <Route path="/cadastro" element={<Cadastro cadastro={Cadastrar}></Cadastro>}></Route> {/*  👌  */}
-        <Route path="/login" element={<Login login={Logar}></Login>}></Route> {/*  👌  */}
+        {/*  👌  */} <Route path="/cadastro" element={<Cadastro cadastro={Cadastrar}></Cadastro>}></Route> 
+        {/*  👌  */} <Route path="/login" element={<Login login={Logar}></Login>}></Route> 
 
         <Route path="/:sla" element={<Erro></Erro>}></Route>
       </Routes>

@@ -2,8 +2,8 @@ import { Link, useParams } from "react-router-dom";
 
 function Filme(props){
     const { id } = useParams()
-    console.log(props.filmes)
-    console.log(props.diretores)
+    
+    const diretor = props.diretores.find(d => d.id == props.filmes[id].diretor)
     return(
         <>
             <p className="categoria">Filme</p>
@@ -21,7 +21,7 @@ function Filme(props){
                     <hr></hr>
                     <p><b>Quantidade de prêmios:</b> {props.filmes[id].qtde_premios}</p>
                     <hr></hr>
-                    <p><b>Diretor:</b> <Link className="link" to={"/diretor/"+ props.diretores[props.filmes[id].diretor]}> {props.diretores.nome}</Link></p>
+                    <p><b>Diretor:</b> <Link className="link" to={`/diretor/${diretor.id}`}> {props.diretores[props.filmes[id].diretor].nome}</Link></p>
                 </div>
             </div>
 
