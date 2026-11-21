@@ -5,7 +5,12 @@ import Episodio from "./Episodio"
 
 function ListaEpisodios(props){
     const {id}=useParams()
+    const serie = props.series.find(e => e.id == id);
+    if (!serie) {
+        return <h1>Carregando ...</h1>;
+    }
 
+    
     let episodiosSerie = []
     for (let a of props.episodios){
         if (a.serie_id == id){
@@ -14,8 +19,10 @@ function ListaEpisodios(props){
     }
 
     let cardEpisodios = []
-    for (let a of episodiosSerie){
-        cardEpisodios.push(<Episodio episodio={a} key={a.id}></Episodio>)
+    if (episodiosSerie.length > 0){
+        for (let a of episodiosSerie){
+            cardEpisodios.push(<Episodio episodio={a} key={a.id}></Episodio>)
+        }
     }
 
     return(
@@ -24,9 +31,9 @@ function ListaEpisodios(props){
                 <div className="cabecalhoeps">
                     <Link className="link voltar" to={"/serie/"+ id}><BsArrowLeft /> Voltar</Link>
                     <div className="d-flex">
-                        <img src={props.series[id].cartaz != null ? `http://localhost:3000/arquivo/${props.series[id].cartaz}`: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDlpiGLqA9GhqWx1nWZgjwmfm8IcuDv6gNcvdamF50Hg&s=10"} onError={(e) => {e.currentTarget.style.display = 'none';}} alt="Image" className='imagem_catalogo_pessoa' />
+                        <img src={serie.cartaz != null ? `http://localhost:3000/arquivo/${serie.cartaz}`: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDlpiGLqA9GhqWx1nWZgjwmfm8IcuDv6gNcvdamF50Hg&s=10"} onError={(e) => {e.currentTarget.style.display = 'none';}} alt="Image" className='imagem_catalogo_pessoa' />
                         <div>
-                            <h4 className="tserie">{props.series[id].titulo}</h4>
+                            <h4 className="tserie">{serie.titulo}</h4>
                             <h2>Lista de episódios</h2>
                         </div>
                     </div>

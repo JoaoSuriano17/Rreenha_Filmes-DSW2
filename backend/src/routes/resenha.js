@@ -40,6 +40,23 @@ router.get("/", tipo, tokenArmazenar, async (req, res) => {
     }
 })
 
+router.get("/filme/:id", tipo, async (req, res) => {
+    try {
+        const requisicao1 = await db.query("SELECT usuario.nome, usuario.email, resenha_filme.resenha, resenha_filme.avaliacao FROM resenha_filme JOIN filme ON resenha_filme.filme_id = filme.id JOIN usuario ON usuario.id = resenha_filme.usuario_id WHERE filme.id = $1", [req.params.id])
+        return res.status(200).json({id_filme: req.params.id, resenhas: requisicao1.rows[0]});
+    } catch (erro) {
+        return res.status(500).json({msg: erro.message});
+    }
+})
+
+router.get("/serie/:id", tipo, async (req, res) => {
+    try {
+        const requisicao1 = await db.query("SELECT usuario.nome, usuario.email, resenha_serie.resenha, resenha_serie.avaliacao FROM resenha_serie JOIN serie ON resenha_serie.serie_id = serie.id JOIN usuario ON usuario.id = resenha_serie.usuario_id WHERE serie.id = $1", [req.params.id])
+        return res.status(200).json({id_serie: req.params.id, resenhas: requisicao1.rows[0]});
+    } catch (erro) {
+        return res.status(500).json({msg: erro.message});
+    }
+})
 
 //GET - todas resenhas, de filmes e séries
 router.get("/", async (req, res) => {

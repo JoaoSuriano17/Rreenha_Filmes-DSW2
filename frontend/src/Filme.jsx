@@ -5,12 +5,17 @@ function Filme(props) {
 
     const filme = props.filmes.find(f => f.id == id);
     if (!filme) {
-        return <h1>Carregando filme...</h1>;
+        return <h1>Carregando ...</h1>;
     }
 
     const diretor = props.diretores.find(d => d.id == filme.diretor);
     const atoresFilme = props.filmes_atores.find(a => a.id_filme == id);
+    const resenhasFilme = props.filmes_resenha.find(rf => rf.id_filme == id);
+    if (!diretor || !atoresFilme || !resenhasFilme){
+        return <h1>Carregando ...</h1>
+    }
 
+    console.log(resenhasFilme)
     let cardAtores = [];
     if (atoresFilme) {
         for (let a of atoresFilme.atores) {
@@ -23,6 +28,22 @@ function Filme(props) {
                         </div>
                     </div>
                 </Link>
+            )
+        }}
+    
+    let cardResenhas = [];
+    let y = 0
+    if (resenhasFilme.resenhas[0]) {
+        for (let a of resenhasFilme.resenhas) {
+            cardResenhas.push(
+                <div className="card cardcatalogo" key={y}>
+                    <div className="card-body">
+                        <h5 className="card-title">{a.nome}</h5>
+                        <p>{a.email}</p>
+                        <p>{a.resenha}</p>
+                        <p>{a.avaliacao}</p>
+                    </div>
+                </div>
             )
         }}
 
@@ -57,6 +78,10 @@ function Filme(props) {
             <div className="grid-atores">
                 <h2><span className="blue">|</span> Elenco Principal</h2>
                 {cardAtores}
+            </div>
+
+            <div>
+                {cardResenhas}
             </div>
         </>
     )

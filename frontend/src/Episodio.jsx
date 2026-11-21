@@ -1,9 +1,4 @@
-import { useEffect, useState } from "react"
-import { BsArrowLeft } from "react-icons/bs"
-import { Link, useParams } from "react-router-dom"
-
 function Episodio(props) {
-    const { id } = useParams()
 
     return (
         <>

@@ -1,15 +1,20 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
-function Filme(props) {
+function Serie(props) {
     const { id } = useParams();
+    const navigate = useNavigate()
 
     const serie = props.series.find(f => f.id == id);
     if (!serie) {
-        return <h1>Carregando serie...</h1>;
+        return <h1>Carregando...</h1>;
     }
 
     const diretor = props.diretores.find(d => d.id == serie.diretor);
     const atoresSerie = props.series_atores.find(a => a.id_serie == id);
+    const resenhasSerie = props.series_resenha.find(rf => rf.id_serie == id);
+    if (!diretor || !atoresSerie || !resenhasSerie) {
+        return <h1>Carregando...</h1>;
+    }
 
     let cardAtores = [];
     if (atoresSerie) {
@@ -27,6 +32,23 @@ function Filme(props) {
         }
     }
 
+    let cardResenhas = [];
+    let y = 0
+    if (resenhasSerie.resenhas[0]) {        
+        for (let a of resenhasSerie.resenhas) {
+            cardResenhas.push(
+                <div className="card cardcatalogo" key={y}>
+                    <div className="card-body">
+                        <h5 className="card-title">{a.nome}</h5>
+                        <p>{a.email}</p>
+                        <p>{a.resenha}</p>
+                        <p>{a.avaliacao}</p>
+                    </div>
+                </div>
+            )
+            y++
+        }}
+
     return (
         <>
             <p className="categoria">Série</p>
@@ -40,7 +62,7 @@ function Filme(props) {
                     </h5>
                 </div>
                 <div className="">
-                    <button className="listaeps" onClick={() => { navigate(`/serie/${id}/episodios`) }}>Ver a lista de episódios</button>
+                    <Link to={`/serie/${id}/episodios`}><button className="listaeps">Ver a lista de episódios</button></Link>
                     <hr></hr>
                     <p><b>Faixa etária:</b> {serie.faixa_etaria} anos</p>
                     <hr></hr>
@@ -54,39 +76,12 @@ function Filme(props) {
                 <h2><span className="blue">|</span> Elenco Principal</h2>
                 {cardAtores}
             </div>
-        </>
-    )
-}
 
-export default Filme;
-/*import { useEffect, useState } from "react"
-import { Link, useNavigate, useParams } from "react-router-dom"
-
-function Serie(props){
-    const { id } = useParams()
-    const navigate = useNavigate()
-
-    return(
-        <>
-            <p className="categoria">Série</p>
-            <div className="grid-filme">
-                <h1 className="titulo">{props.series[id].titulo}</h1>
-                <div className="combo">
-                    <img src={props.series[id].fotografia != null ? `http://localhost:3000/arquivo/${props.series[id].fotografia}`: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDlpiGLqA9GhqWx1nWZgjwmfm8IcuDv6gNcvdamF50Hg&s=10"} onError={(e) => {e.currentTarget.style.display = 'none';}} alt="Image" className='imagem_catalogo_pessoa' />
-                    <h5>Sinopse: <br/> <span className="sinopse">{props.series[id].sinopse}</span></h5>
-                </div>
-                <div className="">
-                    <button className="listaeps" onClick={()=>{navigate(`/serie/${id}/episodios`)}}>Ver a lista de episódios</button>
-                    <hr></hr>
-                    <p><b>Faixa etária:</b> {props.series[id].faixa_etaria} anos</p>
-                    <hr></hr>
-                    <p><b>Quantidade de prêmios:</b> {props.series[id].qtde_premios}</p>
-                    <hr></hr>
-                    <p><b>Diretor:</b> <Link className="link" to={"/diretor/"+ props.series[id].diretor}>{props.diretores[props.series[id].diretor].nome}</Link></p>
-                </div>
+            <div>
+                {cardResenhas}
             </div>
         </>
     )
 }
 
-export default Serie*/
+export default Serie;

@@ -18,6 +18,7 @@ import ListaCardsDiretores from "./ListaCardsDiretores";
 import ListaCardsSeries from "./ListaCardsSeries";
 import ListaEpisodios from "./ListaEpisodios";
 import HomeAdm from "./Administrador/HomeAdm";
+import Usuario from "./Usuario";
 
 function App() {
   const nav = useNavigate()
@@ -37,6 +38,8 @@ function App() {
   const [usuarios, setUsuarios] = useState([])
   const [atoresFilmes, setAtoresFilmes] = useState([])
   const [atoresSeries, setAtoresSeries] = useState([])
+  const [resenhasFilmes, setResenhasFilmes] = useState([])
+  const [resenhasSeries, setResenhasSeries] = useState([])
 
   useEffect(() => {
     SelecionarFilmes();
@@ -51,14 +54,16 @@ function App() {
   useEffect(() => {
     if (filmes.length > 0) {
         SelecionarAtoresFilme();
+        SelecionarResenhasFilme();
     }
   }, [filmes])
 
   useEffect(() => {
-    if (filmes.length > 0) {
+    if (series.length > 0) {
         SelecionarAtoresSerie();
+        SelecionarResenhasSerie();
     }
-  }, [filmes])
+  }, [series])
 
 
   async function SelecionarFilmes () {
@@ -199,7 +204,35 @@ function App() {
       setAtoresSeries(atores_series)
   }
   
+  async function SelecionarResenhasFilme() {
+      let resenhas_filmes = []
+      for (let a of filmes){
+          const r=await fetch(`http://localhost:3000/resenha/filme/${a.id}`)
+          if(!r.ok || r.msg == "Este filme não possui resenhas."){
+            continue;
+          }
+          const r2=await r.json()
+          if (!r2.msg){
+            resenhas_filmes.push({id_filme: a.id, resenhas: [r2.resenhas]})
+          }
+      }
+      setResenhasFilmes(resenhas_filmes)
+  }
 
+  async function SelecionarResenhasSerie() {
+      let resenhas_series = []
+      for (let a of series){
+          const r=await fetch(`http://localhost:3000/resenha/serie/${a.id}`)
+          if(!r.ok || r.msg == "Este filme não possui resenhas."){
+            continue;
+          }
+          const r2=await r.json()
+          if (!r2.msg){
+            resenhas_series.push({id_serie: a.id, resenhas: [r2.resenhas]})          
+          }
+      }
+      setResenhasSeries(resenhas_series)
+  }
 
 
 
@@ -323,6 +356,20 @@ function App() {
 
 
 
+  async function AlterarUsuario(novoUser){
+    try{
+      console.log("Alterando...")
+      console.log(novoUser)
+    }catch(erro){
+      console.log("Erro: "+erro)
+    }
+  }
+
+
+
+
+
+
 
 
 
@@ -417,8 +464,8 @@ function App() {
       <Routes>
         {/*  👌  */} <Route path="/" element={<Home filmes={filmes} logado={login} arquivos={arquivos} filmes_premiados={filmesPremiados} atores={atores} series={series}></Home>}></Route>
         {/*  👌  */} <Route path="/arquivo" element={<Arquivo></Arquivo>}></Route>
-        {/*  👌  */} <Route path="/filme/:id" element={<Filme filmes={filmes} diretores={diretores} atores={atores} filmes_atores={atoresFilmes}></Filme>}></Route> 
-        {/*  👌  */} <Route path="/serie/:id" element={<Serie series={series} diretores={diretores} atores={atores} series_atores={atoresSeries}></Serie>}></Route>
+        {/*  👌  */} <Route path="/filme/:id" element={<Filme filmes={filmes} diretores={diretores} atores={atores} filmes_atores={atoresFilmes} filmes_resenha={resenhasFilmes}></Filme>}></Route> 
+        {/*  👌  */} <Route path="/serie/:id" element={<Serie series={series} diretores={diretores} atores={atores} series_atores={atoresSeries} series_resenha={resenhasSeries}></Serie>}></Route>
         {/*  👌  */} <Route path="/ator/:id" element={<Ator atores={atores}></Ator>}></Route>
         {/*  👌  */} <Route path="/diretor/:id" element={<Diretor diretores={diretores}></Diretor>}></Route>
         {/*  👌  */} <Route path="/filmes" element={<ListaCardsFilmes filmes={filmes} pesquisar={filme_titulo}></ListaCardsFilmes>}></Route>
@@ -429,6 +476,7 @@ function App() {
         {/*  👌  */} <Route path="/cadastro" element={<Cadastro cadastro={Cadastrar}></Cadastro>}></Route> 
         {/*  👌  */} <Route path="/login" element={<Login login={Logar}></Login>}></Route> 
         <Route path="/adm" element={<HomeAdm usuarios={usuarios}></HomeAdm>}></Route>
+        <Route path="/user" element={<Usuario usuarios={usuarios} edit={AlterarUsuario} filmes_resenha={resenhasFilmes} series_resenha={resenhasSeries}></Usuario>}></Route>
 
         <Route path="/:sla" element={<Erro></Erro>}></Route>
       </Routes>
