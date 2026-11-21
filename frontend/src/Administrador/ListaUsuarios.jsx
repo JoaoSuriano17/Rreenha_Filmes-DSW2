@@ -12,7 +12,7 @@ function ListaUsuarios(props) {
 
     let cardsUsuarios = [];
     for (let a of usuarios){
-        cardsUsuarios.push(<CardUsuario usuario={a} key={a.id}></CardUsuario>)
+        cardsUsuarios.push(<CardUsuario usuario={a} key={a.id} adm={props.adm}></CardUsuario>)
     }
 
 

@@ -1,3 +1,4 @@
+import { BsArrowLeft } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
 
 function Filme(props) {
@@ -50,6 +51,7 @@ function Filme(props) {
     return (
         <>
             <p className="categoria">Filme</p>
+            <Link className="link voltar categoria text-dark " to={"/filmes"}><BsArrowLeft /> Voltar</Link>
             <div className="grid-filme">
                 <h1 className="titulo">{filme.titulo}</h1>
                 <div className="combo">

@@ -1,0 +1,13 @@
+.cadastros{
+    margin-bottom: 40px;
+}
+
+.cadastros input{
+    width: 100%;
+}
+
+.cadastros form{
+    border-right: 1px solid black;
+    padding-right: 10px;
+    padding-left: 10px;
+}

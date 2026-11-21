@@ -68,14 +68,14 @@ router.post("/", verificarAdministrador, upload.single("arquivo"), async (req, r
 
             const arquivo = await requisicao2.json();
 
-            requisicao1 = await db.query("INSERT INTO ator(nome, nacionalidade, data_nascimento, biografia, qtde_premios, fotografia) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [nome, nacionalidade, data_nascimento, biografia, qtde_premios, arquivo.id])
+            requisicao1 = await db.query("INSERT INTO ator(nome, nacionalidade, data_nascimento, biografia, qtde_premios, fotografia) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [nome, nacionalidade, data_nascimento, biografia, qtde_premios, arquivo.arquivo.id])
         }
 
         if (!requisicao1.rowCount) {
             return res.status(500).json({msg: "Erro ao cadastrar ator."});
         }
 
-        return res.json({ator: r2.rows[0]})
+        return res.json({ator: requisicao1.rows[0]})
     } catch (erro) {
         return res.status(500).json({msg: erro.message})
     }

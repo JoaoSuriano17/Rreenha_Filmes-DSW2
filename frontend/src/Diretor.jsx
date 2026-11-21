@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { BsArrowLeft } from "react-icons/bs";
+import { useParams, Link } from "react-router-dom";
 
 function Diretor(props){
     const { id } = useParams()
@@ -7,6 +8,7 @@ function Diretor(props){
     return(
         <>
             <p className="categoria">Diretor(a)</p>
+            <Link className="link voltar categoria text-dark " to={"/diretores"}><BsArrowLeft /> Voltar</Link>
             <div className="grid-filme">
                 <h1 className="titulo">{props.diretores[id].nome}</h1>
                 <div className="combo">

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { BsArrowLeft } from "react-icons/bs";
 import { Link, useNavigate } from 'react-router-dom';
 
 function Cadastro(props) {
@@ -40,6 +41,7 @@ function Cadastro(props) {
 
                 <div className="hero-content-especial">
                     <div className="tudo">
+                        <Link className="link voltar text-dark" to={"/login"}><BsArrowLeft /> Voltar</Link>
                         <div className="tamanho">
                             <h2 className="text-center">Crie sua conta</h2>
                         </div>

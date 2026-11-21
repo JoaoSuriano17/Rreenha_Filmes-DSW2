@@ -181,8 +181,8 @@ router.put("/:id/critico", verificarAdministrador, async (req, res) => {
         if (!id) { return res.status(400).json({msg:"Id não informado!"});}
         const critico = req.body || {};
         if (!critico){return res.status(400).json({msg:"Não foi informado se o usuário é crítico!"});}
-        if (!(critico=="true"||critico=="True"||critico=="TRUE"||critico=="false"||critico=="False"||critico=="FALSE")){return res.status(400).json({msg:"O valor de crítico deve ser true ou false!"});}
-        const r = await db.query("UPDATE usuario SET critico=$1 RETURNING *", [critico]);
+        if (typeof critico !== "boolean") {return res.status(400).json({msg: "O valor de crítico deve ser true ou false!"})}
+        const r = await db.query("UPDATE usuario SET critico=$1 WHERE id=$2 RETURNING *", [critico, id]);
         return res.status(200).json({ msg: "Usuário alterado com sucesso!", usuario: r.rows[0] });
     } catch (erro) {
         return res.status(500).json({ msg: erro.message });
@@ -194,10 +194,11 @@ router.put("/:id/administrador", verificarAdministrador, async (req, res) => {
     try {
         const id = req.params.id || {};
         if (!id) { return res.status(400).json({ msg: "Id não informado!" }); }
-        const administrador = req.body || {};
+        const { administrador } = req.body || {};
         if (!administrador){return res.status(400).json({msg:"Não foi informado se o usuário é administrador!"});}
-        if (!(administrador=="true"||administrador=="True"||administrador=="TRUE"||administrador=="false"||administrador=="False"||administrador=="FALSE")){return res.status(400).json({msg:"O valor de administrador deve ser true ou false!"});}
-        const r = await db.query("UPDATE usuario SET administrador=$1 RETURNING *", [administrador]);
+
+        if (typeof administrador !== "boolean") {return res.status(400).json({msg: "O valor de administrador deve ser true ou false!"})}
+        const r = await db.query("UPDATE usuario SET administrador=$1 WHERE id=$2 RETURNING *", [administrador, id]);
         return res.status(200).json({msg:"Usuário alterado com sucesso!", usuario:r.rows[0]});
     } catch (erro) {
         return res.status(500).json({msg:erro.message});

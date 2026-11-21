@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { BsArrowLeft } from "react-icons/bs";
 import { Link } from 'react-router-dom';
 
 function Login(props) {
@@ -28,6 +29,7 @@ function Login(props) {
 
                 <div className="hero-content-especial">
                     <div className="tudo">
+                        <Link className="link voltar text-dark" to={"/"}><BsArrowLeft /> Voltar</Link>
                         <div className="tamanho">
                             <h2 className="text-center">Faça login</h2>
                         </div>

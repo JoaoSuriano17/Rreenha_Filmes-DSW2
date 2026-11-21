@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import CatalogoCardsDiretores from "./CatalogoCardsDiretores";
+import { BsArrowLeft } from "react-icons/bs";
 
 function ListaCardsDiretores(props){
     const [search, setSearch]=useState("")
@@ -17,6 +18,7 @@ function ListaCardsDiretores(props){
     return(
         <>
             <h1 className='procurados'>Catálogo de Diretores</h1>
+            <Link className="link voltar categoria text-dark " to={"/"}><BsArrowLeft /> Voltar</Link>
 
             <div className="grid-filme">
                 <form className="pegar_filme" role="search" onSubmit={enviar}>

@@ -78,6 +78,7 @@
 /* Home - parte principal */
 .cardhome{
   width: 15rem;
+  flex-wrap: wrap;
 }
 
 .filmes_classicos{
@@ -145,6 +146,7 @@ footer{
   display: flex ;
   justify-content: center ;
   gap: 15px;
+  flex-wrap: wrap;
 }
 
 .redes-icones a{
@@ -267,6 +269,10 @@ footer{
   color: rgb(146, 146, 146);
 }
 
+.deslogar{
+  margin-left: 5px;
+}
+
 .deslogar:hover{
   color: blue;
 }
@@ -335,13 +341,11 @@ footer{
   background-color: gray;
 }
 
-/* Botão de voltar - só está em séries (implementar) */
+/* Botão de voltar*/
 .voltar{
-  color: white;
   margin-left: 3%;
   margin-top: 5px;
-}
-
+} 
 .categoria{
   margin-left: 15%;
   margin-top: 15px;
@@ -471,9 +475,12 @@ footer{
     text-decoration: underline;
 }
 
-/* Account do nome */
-.usuario-nav{
-  color: white;
+/* Imagem do usuário na navbar */
+.usuario-nav img{
+  width: 50px;
+  height: 50px;
+  border-radius: 100px;
+  margin-right: 5px;
 }
 
 /* Hero */
@@ -488,5 +495,17 @@ footer{
   .hero-content-especial {
     width: 90%;
     height: 100%;
+  }
+}
+
+@media (max-height: 700px){
+  .grid-filme-menor{
+    margin-top: 15%;
+  }
+}
+
+@media (max-height: 500px){
+  .grid-filme-menor{
+    margin-top: 25%;
   }
 }

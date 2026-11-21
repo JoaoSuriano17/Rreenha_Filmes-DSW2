@@ -1,4 +1,4 @@
-import {Link, Route, Routes, useNavigate} from "react-router-dom"
+import {Link, replace, Route, Routes, useNavigate} from "react-router-dom"
 import "./App.css"
 
 import Arquivo from "./Arquivo";
@@ -12,7 +12,7 @@ import Serie from "./Serie";
 import Cadastro from "./Cadastro";
 import Login from "./Login";
 import { useState, useEffect } from "react";
-import { BsSearch, BsTiktok, BsInstagram, BsYoutube, BsTwitterX, BsDoorOpen } from "react-icons/bs";
+import { BsSearch, BsTiktok, BsInstagram, BsYoutube, BsTwitterX, BsDoorClosed } from "react-icons/bs";
 import ListaCardsFilmes from "./ListaCardsFilmes";
 import ListaCardsDiretores from "./ListaCardsDiretores";
 import ListaCardsSeries from "./ListaCardsSeries";
@@ -26,7 +26,7 @@ function App() {
     const valorSalvo = localStorage.getItem('id');
     return valorSalvo ? JSON.parse(valorSalvo) : '';
   });
-  const [conta, setConta]=useState(null)
+  const [conta, setConta]=useState({});
 
   //Diversos elementos!
   const [filmes, setFilmes] = useState([])
@@ -49,6 +49,7 @@ function App() {
     SelecionarDiretores();
     SelecionarEpisodios();
     SelecionarUsuarios();
+    CriarConta();
   }, [])
 
   useEffect(() => {
@@ -192,16 +193,20 @@ function App() {
   }
 
   async function SelecionarAtoresSerie() {
+    try{
       let atores_series = []
       for (let a of series){
-          const r=await fetch(`http://localhost:3000/serie/${a.id}/atores`)
-          if(!r.ok){
-            continue;
-          }
-          const r2=await r.json()
-          atores_series.push({id_serie: a.id, atores: r2.atores})
+        const r=await fetch(`http://localhost:3000/serie/${a.id}/atores`)
+        if(!r.ok){
+          continue;
+        }
+        const r2=await r.json()
+        atores_series.push({id_serie: a.id, atores: r2.atores})
       }
       setAtoresSeries(atores_series)
+    }catch(erro){
+      console.log("Erro: "+erro)
+    }
   }
   
   async function SelecionarResenhasFilme() {
@@ -237,6 +242,20 @@ function App() {
 
 
 
+  async function CriarConta() {
+    const r2 = await fetch(`http://localhost:3000/usuario/${localStorage.getItem("id")}`)
+
+    if (!r2.ok){
+      const json2=await r2.json()
+      alert(`${json2.msg}`)
+    }
+
+    const json2=await r2.json()
+    console.log(json2)
+    setConta(json2.usuario)
+    console.log(conta)
+  }
+
   async function Logar(email, senha){
     try{
       const r = await fetch(`http://localhost:3000/usuario/login`, { 
@@ -255,6 +274,8 @@ function App() {
 
       const json = await r.json();
       setLogin(json.id)
+      localStorage.setItem("id", json.id)
+      setConta(CriarConta())
 
       localStorage.setItem("token", json.token)
       let info = {id: json.id, email: email, administrador: json.administrador}
@@ -366,9 +387,78 @@ function App() {
   }
 
 
+  async function AltararUsuarioParaAdm(id, adm) {
+    try{
+      const r = await fetch(`http://localhost:3000/usuario/${id}/administrador`, { 
+        method: "PUT", 
+        headers:{"Content-Type": "application/json", "Authorization":`Bearer ${localStorage.getItem("token")}`}, 
+        body:JSON.stringify({
+          administrador:adm
+        }) 
+      });
+      
+      if (!r.ok){
+        const json=await r.json()
+        alert(`${json.msg}`)
+        return false;
+      }
 
+      alert("O usuário agora á administrador")
 
+    }catch(erro){
+      console.log("Erro: "+erro)
+    }
+  }
 
+  async function CadastrarFilme(form){
+      let res = await fetch(`http://localhost:3000/filme`, { method: "POST", headers:{"Authorization":`Bearer ${localStorage.getItem("token")}`}, body: form });
+      if (!res.ok) {
+        const json = await res.json();
+        alert(`Erro: ${json.msg}`);
+        return;
+      }
+      alert("Filme adicionado com sucesso!!!")
+  }
+
+  async function CadastrarSerie(form){
+      let res = await fetch(`http://localhost:3000/serie`, { method: "POST", headers:{"Authorization":`Bearer ${localStorage.getItem("token")}`}, body: form });
+      if (!res.ok) {
+        const json = await res.json();
+        alert(`Erro: ${json.msg}`);
+        return;
+      }
+      alert("Série adicionada com sucesso!!!")
+  }
+
+  async function CadastrarAtor(form){
+      let res = await fetch(`http://localhost:3000/ator`, { method: "POST", headers:{"Authorization":`Bearer ${localStorage.getItem("token")}`}, body: form });
+      if (!res.ok) {
+        const json = await res.json();
+        alert(`Erro: ${json.msg}`);
+        return;
+      }
+      alert("Ator adicionado com sucesso!!!")
+  }
+
+  async function CadastrarDiretor(form){
+      let res = await fetch(`http://localhost:3000/diretor`, { method: "POST", headers:{"Authorization":`Bearer ${localStorage.getItem("token")}`}, body: form });
+      if (!res.ok) {
+        const json = await res.json();
+        alert(`Erro: ${json.msg}`);
+        return;
+      }
+      alert("Diretor adicionado com sucesso!!!")
+  }
+
+  async function CadastrarEpisodios(titulo, sinopse, duracao, temporada, serie_id){
+      let res = await fetch(`http://localhost:3000/episodio`, { method: "POST", headers:{"Content-Type": "application/json", "Authorization":`Bearer ${localStorage.getItem("token")}`}, body: JSON.stringify({ titulo:titulo, sinopse:sinopse, duracao:duracao, temporada:temporada, serie_id:serie_id })});
+      if (!res.ok) {
+        const json = await res.json();
+        alert(`Erro: ${json.msg}`);
+        return;
+      }
+      alert("Episódio adicionado com sucesso!!!")
+  }
 
 
 
@@ -439,10 +529,10 @@ function App() {
           <div className="container-fluid">
           <Link to={"/"} className="link Rreenha">Rreenha Filmes</Link>
           {conta?(
-            <div className="usuario-nav">
+            <div className="text-white">
               <img src={conta.fotografia != null ? `http://localhost:3000/arquivo/${conta.fotografia}`: 'a'} onError={(e) => {e.currentTarget.style.display = 'none';}}></img>
               <span>{conta.nome}</span>
-              <BsDoorOpen onClick={() => {const r = window.confirm("Você tem certeza que deseja deslogar?"); if (r) { setConta(null); setLogin(""); localStorage.removeItem("token"); localStorage.removeItem("id"); nav("/")}}} className="deslogar"/>            
+              <BsDoorClosed onClick={() => {const r = window.confirm("Você tem certeza que deseja deslogar?"); if (r) { setConta(null); setLogin(""); localStorage.removeItem("token"); localStorage.removeItem("id"); nav("/")}}} className="deslogar"/>            
             </div>
           ):(
             <>
@@ -475,7 +565,7 @@ function App() {
         {/*  👌  */} <Route path="/serie/:id/episodios" element={<ListaEpisodios series={series} episodios={episodios}></ListaEpisodios>}></Route>
         {/*  👌  */} <Route path="/cadastro" element={<Cadastro cadastro={Cadastrar}></Cadastro>}></Route> 
         {/*  👌  */} <Route path="/login" element={<Login login={Logar}></Login>}></Route> 
-        <Route path="/adm" element={<HomeAdm usuarios={usuarios}></HomeAdm>}></Route>
+        <Route path="/adm" element={<HomeAdm usuarios={usuarios} adm={AltararUsuarioParaAdm} addFilme={CadastrarFilme} addSerie={CadastrarSerie} addAtor={CadastrarAtor} addDiretor={CadastrarDiretor} addEpisodio={CadastrarEpisodios}></HomeAdm>}></Route>
         <Route path="/user" element={<Usuario usuarios={usuarios} edit={AlterarUsuario} filmes_resenha={resenhasFilmes} series_resenha={resenhasSeries}></Usuario>}></Route>
 
         <Route path="/:sla" element={<Erro></Erro>}></Route>

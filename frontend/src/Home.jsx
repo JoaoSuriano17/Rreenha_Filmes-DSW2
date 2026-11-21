@@ -1,6 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 function Home(props) {
@@ -57,7 +56,7 @@ function Home(props) {
             <h1 className='procurados'>Veja os filmes mais procurados no nosso site</h1>
             <div className="filmes_classicos">
                 {props.filmes?.filter(filme => filme.id < 5).map((filme, index) => (
-                    <Link to={"/filme/" + filme.id} key={filme.id ?? index}>
+                    <Link to={"/filme/" + filme.id} key={filme.id ?? index} className='link'>
                         <div className="card cardhome">
                             <img src={`http://localhost:3000/arquivo/${filme.cartaz}`} alt="Image" className='imagem_classicos' />
                             <div className="card-body">
@@ -76,8 +75,8 @@ function Home(props) {
             <h1 className='procurados'>Veja os filmes mais premiados</h1>
             <div className="filmes_classicos">
                 {props.filmes_premiados?.slice(0, 4).map((filme, index) => (
-                    <Link to={"/filme/" + filme.id} key={filme.id ?? index}>
-                        <div className="card">
+                    <Link to={"/filme/" + filme.id} key={filme.id ?? index} className='link'>
+                        <div className="card cardhome">
                             <img src={`http://localhost:3000/arquivo/${filme.cartaz}`} alt="Image" className='imagem_classicos' />
                             <div className="card-body">
                                 <h5 className="card-title">{filme.titulo}</h5>
@@ -95,8 +94,8 @@ function Home(props) {
             <h1 className='procurados'>Veja os atores mais procurados no nosso site</h1>
             <div className="filmes_classicos">
                 {props.atores?.filter(ator => ator.id < 5).map((ator, index) => (
-                    <Link to={"/ator/" + ator.id} key={ator.id ?? index}>
-                        <div className="card">
+                    <Link to={"/ator/" + ator.id} key={ator.id ?? index} className='link'>
+                        <div className="card cardhome">
                             <img src={`http://localhost:3000/arquivo/${ator.fotografia}`} alt="Image" className='ator' />
                             <div className="card-body">
                                 <h5 className="card-title">{ator.nome}</h5>
@@ -114,7 +113,7 @@ function Home(props) {
             <h1 className='procurados'>Veja as séries mais procuradas no nosso site</h1>
             <div className="filmes_classicos">
                 {props.series?.filter(serie => serie.id < 5).map((serie, index) => (
-                    <Link to={"/serie/" + serie.id} key={serie.id ?? index}>
+                    <Link to={"/serie/" + serie.id} key={serie.id ?? index} className='link'>
                         <div className="card cardhome">
                             <img src={`http://localhost:3000/arquivo/${serie.cartaz}`} alt="Image" className='imagem_classicos' />
                             <div className="card-body">

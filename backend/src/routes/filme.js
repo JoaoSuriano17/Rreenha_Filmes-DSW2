@@ -106,7 +106,7 @@ router.post("/", verificarAdministrador, upload.single("arquivo"), async (req, r
                 return res.status(500).json({ msg: "Erro ao salvar a imagem." });
             }
             const arquivo = await r.json();
-            r2 = await db.query("INSERT INTO filme(titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios, cartaz) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *", [titulo, diretor, sinopse, faixa_etaria, duracao, premios, arquivo.arquivo.id]);
+            r2 = await db.query("INSERT INTO filme(titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios, cartaz) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *", [titulo, diretor, sinopse, faixa_etaria, duracao, qtde_premios, arquivo.arquivo.id]);
         }
         if (!r2.rowCount) {
             return res.status(500).json({ msg: "Erro ao cadastrar o filme" });

@@ -51,7 +51,7 @@ router.get("/:id/atores", tipo, async (req, res) => {
     try {
         const requisicao1 = await db.query("SELECT ator.* FROM serie_ator JOIN ator ON serie_ator.id_ator = ator.id WHERE id_serie=$1", [req.params.id]);
         if (!requisicao1.rowCount) {
-            return res.status(400).json({msg:"Não há atores neste filme."});
+            return res.status(400).json({msg:"Não há atores nesta série."});
         }
         return res.status(200).json({atores: requisicao1.rows});
     } catch (erro) {
@@ -98,7 +98,7 @@ router.post("/", verificarAdministrador, upload.single("arquivo"), async (req, r
 
             const arquivo = await r.json();
 
-            r2 = await db.query("INSERT INTO serie(titulo, diretor, sinopse, faixa_etaria, qtde_premios, cartaz) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [titulo, diretor, sinopse, faixa_etaria, qtde_premios, arquivo.id]);
+            r2 = await db.query("INSERT INTO serie(titulo, diretor, sinopse, faixa_etaria, qtde_premios, cartaz) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [titulo, diretor, sinopse, faixa_etaria, qtde_premios, arquivo.arquivo.id]);
         }
         if (!r2.rowCount) {
             return res.status(500).json({ msg: "Erro ao cadastrar a série." });

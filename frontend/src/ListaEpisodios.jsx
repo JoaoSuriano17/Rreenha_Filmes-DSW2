@@ -29,7 +29,7 @@ function ListaEpisodios(props){
         <>
             <div className="grid-episodios">
                 <div className="cabecalhoeps">
-                    <Link className="link voltar" to={"/serie/"+ id}><BsArrowLeft /> Voltar</Link>
+                    <Link className="link voltar text-white" to={"/serie/"+ id}><BsArrowLeft /> Voltar</Link>
                     <div className="d-flex">
                         <img src={serie.cartaz != null ? `http://localhost:3000/arquivo/${serie.cartaz}`: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDlpiGLqA9GhqWx1nWZgjwmfm8IcuDv6gNcvdamF50Hg&s=10"} onError={(e) => {e.currentTarget.style.display = 'none';}} alt="Image" className='imagem_catalogo_pessoa' />
                         <div>

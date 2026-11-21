@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { BsArrowLeft } from "react-icons/bs";
+import { Link, useParams } from "react-router-dom";
 
 function Ator(props){
     const { id } = useParams()
@@ -11,6 +12,7 @@ function Ator(props){
     return(
         <>
             <p className="categoria">Ator(a)</p>
+            <Link className="link voltar categoria text-dark " to={"/atores"}><BsArrowLeft /> Voltar</Link>
             <div className="grid-filme">
                 <h1 className="titulo">{ator.nome}</h1>
                 <div className="combo">

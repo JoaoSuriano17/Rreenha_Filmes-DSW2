@@ -10,7 +10,7 @@ function CardUsuario(props) {
                 <hr />
                 <p>{props.usuario.nome}</p>
                 <hr />
-                <button onClick={(e) => {e.preventDefault(); const r = window.confirm("Você tem certeza que deseja promover esse usuário?"); if (r) {alert("Função promover")}}}>Promover</button>
+                <button onClick={(e) => {e.preventDefault(); const r = window.confirm("Você tem certeza que deseja promover esse usuário?"); if (r) {props.adm(props.usuario.id, true)}}}>Promover</button>
             </div>
         </>
     )
