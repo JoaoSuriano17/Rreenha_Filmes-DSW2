@@ -6,19 +6,17 @@ import Home from "./Home";
 import Filme from "./Filme";
 import Ator from "./Ator";
 import Diretor from "./Diretor";
-import CatalogoFilmes from "./CatalogoCardFilmes";
 import ListaCardsAtores from "./ListaCardsAtores"
-import CatalogoDiretores from "./CatalogoCardsDiretores";
 import Erro from "./Erro";
 import Serie from "./Serie";
-import Episodios from "./Episodios";
-import CatalogoSeries from "./CatalogoSeries";
 import Cadastro from "./Cadastro";
 import Login from "./Login";
 import { useState, useEffect } from "react";
 import { BsSearch, BsTiktok, BsInstagram, BsYoutube, BsTwitterX, BsDoorOpen } from "react-icons/bs";
 import ListaCardsFilmes from "./ListaCardsFilmes";
 import ListaCardsDiretores from "./ListaCardsDiretores";
+import ListaCardsSeries from "./ListaCardsSeries";
+import ListaEpisodios from "./ListaEpisodios";
 
 function App() {
   const nav = useNavigate()
@@ -36,6 +34,7 @@ function App() {
   const [atores, setAtores] = useState([])
   const [series, setSeries] = useState([])
   const [diretores, setDiretores] = useState([])
+  const [episodios, setEpisodios] = useState([])
 
   /*useEffect(() => {
     localStorage.setItem('id', JSON.stringify(login));
@@ -68,6 +67,7 @@ function App() {
     SelecionarAtores();
     SelecionarSeries();
     SelecionarDiretores();
+    SelecionarEpisodios();
   }, [])
 
   //Funções que possuem relação com usuário:
@@ -329,7 +329,23 @@ function App() {
     }
   }
 
-  async function episodios(id) {
+  async function SelecionarEpisodios(id) {
+    try{
+      const r=await fetch("http://localhost:3000/episodio")
+      
+      if(!r.ok){
+        return null;
+      }
+      
+      const r2=await r.json()
+      setEpisodios(r2.episodios)
+
+    }catch(erro){
+      console.log("Erro: "+erro)
+    }
+  }
+
+  async function episodios1(id) {
     try{
       const r=await fetch("http://localhost:3000/episodio/serie/"+id)
       
@@ -345,9 +361,9 @@ function App() {
     }
   }
 
-  async function Series() {
+  /*sync function episodios(id) {
     try{
-      const r=await fetch("http://localhost:3000/serie")
+      const r=await fetch("http://localhost:3000/episodio/serie/"+id)
       
       if(!r.ok){
         return null;
@@ -359,7 +375,7 @@ function App() {
     }catch(erro){
       console.log("Erro: "+erro)
     }
-  }
+  }*/
 
   //Função arquivo
   async function arquivos() {
@@ -442,17 +458,17 @@ function App() {
       {/* Se logado, algumas rotas não deveriam ser adentradas👌*/}
 
       <Routes>
-        <Route path="/" element={<Home filmes={filmes} logado={login} arquivos={arquivos} filmes_premiados={filmesPremiados} atores={atores} series={series}></Home>}></Route>
+        {/*  👌  */} <Route path="/" element={<Home filmes={filmes} logado={login} arquivos={arquivos} filmes_premiados={filmesPremiados} atores={atores} series={series}></Home>}></Route>
         <Route path="/arquivo" element={<Arquivo></Arquivo>}></Route>
         {/*  👌  */} <Route path="/filme/:id" element={<Filme filmes={filmes} diretores={diretores}></Filme>}></Route> 
         {/*  👌  */} <Route path="/ator/:id" element={<Ator atores={atores}></Ator>}></Route>
-        <Route path="/diretor/:id" element={<Diretor diretor={diretor}></Diretor>}></Route>
+        {/*  👌  */} <Route path="/diretor/:id" element={<Diretor diretores={diretores}></Diretor>}></Route>
         {/*  👌  */} <Route path="/filmes" element={<ListaCardsFilmes filmes={filmes} pesquisar={filme_titulo}></ListaCardsFilmes>}></Route>
         {/*  👌  */} <Route path="/atores" element={<ListaCardsAtores atores={atores} pesquisar={ator_nome}></ListaCardsAtores>}></Route>
         {/*  👌  */} <Route path="/diretores" element={<ListaCardsDiretores diretores={diretores} pesquisar={diretor_nome}></ListaCardsDiretores>}></Route>
-        <Route path="/serie/:id" element={<Serie serie={serie} diretor={diretor}></Serie>}></Route>
-        <Route path="/serie/:id/episodios" element={<Episodios episodios={episodios} serie={serie}></Episodios>}></Route>
-        <Route path="/series" element={<CatalogoSeries catalogo={series}></CatalogoSeries>}></Route>
+        {/*  👌  */} <Route path="/series" element={<ListaCardsSeries series={series}></ListaCardsSeries>}></Route>
+        {/*  👌  */} <Route path="/serie/:id" element={<Serie series={series} diretores={diretores}></Serie>}></Route>
+        <Route path="/serie/:id/episodios" element={<ListaEpisodios series={series} episodios={episodios}></ListaEpisodios>}></Route>
         {/*  👌  */} <Route path="/cadastro" element={<Cadastro cadastro={Cadastrar}></Cadastro>}></Route> 
         {/*  👌  */} <Route path="/login" element={<Login login={Logar}></Login>}></Route> 
 
