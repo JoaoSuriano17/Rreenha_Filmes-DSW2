@@ -25,8 +25,6 @@ function App() {
     const valorSalvo = localStorage.getItem('id');
     return valorSalvo ? JSON.parse(valorSalvo) : '';
   });
-  
-  //let token = localStorage.setItem("token", null);
   const [conta, setConta]=useState(null)
 
   //Diversos elementos!
@@ -37,6 +35,7 @@ function App() {
   const [diretores, setDiretores] = useState([])
   const [episodios, setEpisodios] = useState([])
   const [usuarios, setUsuarios] = useState([])
+  const [atoresFilmes, setAtoresFilmes] = useState([])
   const [atoresSeries, setAtoresSeries] = useState([])
 
   useEffect(() => {
@@ -47,10 +46,164 @@ function App() {
     SelecionarDiretores();
     SelecionarEpisodios();
     SelecionarUsuarios();
-    SelecionarAtoresFilme();
   }, [])
 
-  //Funções que possuem relação com usuário:
+  useEffect(() => {
+    if (filmes.length > 0) {
+        SelecionarAtoresFilme();
+    }
+  }, [filmes])
+
+  useEffect(() => {
+    if (filmes.length > 0) {
+        SelecionarAtoresSerie();
+    }
+  }, [filmes])
+
+
+  async function SelecionarFilmes () {
+    try{
+      const r=await fetch("http://localhost:3000/filme")
+      
+      if(!r.ok){
+        return null;
+      }
+      
+      const r2=await r.json()
+      setFilmes(r2.filmes)
+      
+    }catch(erro){
+      console.log("Erro: "+erro)
+    }
+  }
+
+  async function SelecionarUsuarios () {
+    try{
+      const r=await fetch("http://localhost:3000/usuario")
+      
+      if(!r.ok){
+        return null;
+      }
+      
+      const r2=await r.json()
+      setUsuarios(r2.usuarios)
+      
+    }catch(erro){
+      console.log("Erro: "+erro)
+    }
+  }
+
+  async function SelecionarFilmesPremiados() {
+    try{
+      const r=await fetch("http://localhost:3000/filme/premiado")
+      
+      if(!r.ok){
+        return null;
+      }
+      
+      const r2=await r.json()
+      setFilmesPremiados(r2.filmes)
+      
+    }catch(erro){
+      console.log("Erro: "+erro)
+    }
+  }
+
+  async function SelecionarAtores() {
+    try{
+      const r=await fetch("http://localhost:3000/ator")
+      
+      if(!r.ok){
+        return null;
+      }
+      
+      const r2=await r.json()
+      setAtores(r2.atores)
+
+    }catch(erro){
+      console.log("Erro: "+erro)
+    }
+  }
+
+  async function SelecionarDiretores() {
+    try{
+      const r=await fetch("http://localhost:3000/diretor")
+      
+      if(!r.ok){
+        return null;
+      }
+      
+      const r2=await r.json()
+      setDiretores(r2.diretores)
+      
+    }catch(erro){
+      console.log("Erro: "+erro)
+    }
+  }
+
+  async function SelecionarSeries() {
+    try{
+      const r=await fetch("http://localhost:3000/serie")
+      
+      if(!r.ok){
+        return null;
+      }
+      
+      const r2=await r.json()
+      setSeries(r2.series)
+      
+    }catch(erro){
+      console.log("Erro: "+erro)
+    }
+  }
+
+  async function SelecionarEpisodios() {
+    try{
+      const r=await fetch("http://localhost:3000/episodio")
+      
+      if(!r.ok){
+        return null;
+      }
+      
+      const r2=await r.json()
+      setEpisodios(r2.episodios)
+
+    }catch(erro){
+      console.log("Erro: "+erro)
+    }
+  }
+
+  async function SelecionarAtoresFilme() {
+      let atores_filmes = []
+      for (let a of filmes){
+          const r=await fetch(`http://localhost:3000/filme/${a.id}/atores`)
+          if(!r.ok){
+            continue;
+          }
+          const r2=await r.json()
+          atores_filmes.push({id_filme: a.id, atores: r2.atores})
+      }
+      setAtoresFilmes(atores_filmes)
+  }
+
+  async function SelecionarAtoresSerie() {
+      let atores_series = []
+      for (let a of series){
+          const r=await fetch(`http://localhost:3000/serie/${a.id}/atores`)
+          if(!r.ok){
+            continue;
+          }
+          const r2=await r.json()
+          atores_series.push({id_serie: a.id, atores: r2.atores})
+      }
+      setAtoresSeries(atores_series)
+  }
+  
+
+
+
+
+
   async function Logar(email, senha){
     try{
       const r = await fetch(`http://localhost:3000/usuario/login`, { 
@@ -101,55 +254,8 @@ function App() {
     }
   }
 
-  //Funções relacionadas a filmes:
-  async function SelecionarFilmes () {
-    try{
-      const r=await fetch("http://localhost:3000/filme")
-      
-      if(!r.ok){
-        return null;
-      }
-      
-      const r2=await r.json()
-      setFilmes(r2.filmes)
-      
-    }catch(erro){
-      console.log("Erro: "+erro)
-    }
-  }
-
-  async function SelecionarUsuarios () {
-    try{
-      const r=await fetch("http://localhost:3000/usuario")
-      
-      if(!r.ok){
-        return null;
-      }
-      
-      const r2=await r.json()
-      setUsuarios(r2.usuarios)
-      
-    }catch(erro){
-      console.log("Erro: "+erro)
-    }
-  }
-
-  async function SelecionarFilmesPremiados() {
-    try{
-      const r=await fetch("http://localhost:3000/filme/premiado")
-      
-      if(!r.ok){
-        return null;
-      }
-      
-      const r2=await r.json()
-      setFilmesPremiados(r2.filmes)
-      
-    }catch(erro){
-      console.log("Erro: "+erro)
-    }
-  }
-
+  
+  //Busca: 
   async function filme_titulo(titulo){
     try{
       const r=await fetch("http://localhost:3000/filme/titulo/"+titulo)
@@ -165,24 +271,7 @@ function App() {
       console.log("Erro: "+erro)
     }
   }
-
-  //Funções relacionadas a atores:
-  async function SelecionarAtores() {
-    try{
-      const r=await fetch("http://localhost:3000/ator")
-      
-      if(!r.ok){
-        return null;
-      }
-      
-      const r2=await r.json()
-      setAtores(r2.atores)
-
-    }catch(erro){
-      console.log("Erro: "+erro)
-    }
-  }
-
+  
   async function ator_nome(nome){
     try{
       const r=await fetch("http://localhost:3000/ator/nome/"+nome)
@@ -198,24 +287,7 @@ function App() {
       console.log("Erro: "+erro)
     }
   }
-
-  //Funções relacionadas a diretores: 
-  async function SelecionarDiretores() {
-    try{
-      const r=await fetch("http://localhost:3000/diretor")
-      
-      if(!r.ok){
-        return null;
-      }
-      
-      const r2=await r.json()
-      setDiretores(r2.diretores)
-      
-    }catch(erro){
-      console.log("Erro: "+erro)
-    }
-  }
-
+  
   async function diretor_nome(nome){
     try{
       const r=await fetch("http://localhost:3000/diretor/nome/"+nome)
@@ -227,23 +299,6 @@ function App() {
       const r2=await r.json()
 
       return r2.diretor.id
-    }catch(erro){
-      console.log("Erro: "+erro)
-    }
-  }
-
-  //Funções relacionadas a séries: 
-  async function SelecionarSeries() {
-    try{
-      const r=await fetch("http://localhost:3000/serie")
-      
-      if(!r.ok){
-        return null;
-      }
-      
-      const r2=await r.json()
-      setSeries(r2.series)
-      
     }catch(erro){
       console.log("Erro: "+erro)
     }
@@ -265,23 +320,13 @@ function App() {
     }
   }
 
-  async function SelecionarEpisodios(id) {
-    try{
-      const r=await fetch("http://localhost:3000/episodio")
-      
-      if(!r.ok){
-        return null;
-      }
-      
-      const r2=await r.json()
-      setEpisodios(r2.episodios)
 
-    }catch(erro){
-      console.log("Erro: "+erro)
-    }
-  }
 
-  //Função arquivo
+
+
+
+
+
   async function arquivos() {
     try{
       const r=await fetch("http://localhost:3000/arquivo")
@@ -298,18 +343,7 @@ function App() {
     }
   }
 
-  async function SelecionarAtoresFilme() {
-      let atores_filmes = []
-      for (let a of filmes){
-          const r=await fetch(`http://localhost:3000/filme/${a.id}/atores`)
-          if(!r.ok){
-            continue;
-          }
-          const r2=await r.json()
-          atores_filmes.push({id_filme: a.id, atores: r2.atores})
-      }
-      setAtoresSeries(atores_filmes)
-  }
+  
   
 
   const [search, setSearch]=useState("")
@@ -349,6 +383,9 @@ function App() {
   }
   
 
+
+
+
   return(
     <>
       <nav className="navbar bg-black fg-2">
@@ -372,19 +409,22 @@ function App() {
           </div>
       </nav>
 
+
+
+
       {/* Se logado, algumas rotas não deveriam ser adentradas👌*/}
 
       <Routes>
         {/*  👌  */} <Route path="/" element={<Home filmes={filmes} logado={login} arquivos={arquivos} filmes_premiados={filmesPremiados} atores={atores} series={series}></Home>}></Route>
         {/*  👌  */} <Route path="/arquivo" element={<Arquivo></Arquivo>}></Route>
-        {/*  👌  */} <Route path="/filme/:id" element={<Filme filmes={filmes} diretores={diretores} atores={atores} filmes_atores={atoresSeries}></Filme>}></Route> 
+        {/*  👌  */} <Route path="/filme/:id" element={<Filme filmes={filmes} diretores={diretores} atores={atores} filmes_atores={atoresFilmes}></Filme>}></Route> 
+        {/*  👌  */} <Route path="/serie/:id" element={<Serie series={series} diretores={diretores} atores={atores} series_atores={atoresSeries}></Serie>}></Route>
         {/*  👌  */} <Route path="/ator/:id" element={<Ator atores={atores}></Ator>}></Route>
         {/*  👌  */} <Route path="/diretor/:id" element={<Diretor diretores={diretores}></Diretor>}></Route>
         {/*  👌  */} <Route path="/filmes" element={<ListaCardsFilmes filmes={filmes} pesquisar={filme_titulo}></ListaCardsFilmes>}></Route>
         {/*  👌  */} <Route path="/atores" element={<ListaCardsAtores atores={atores} pesquisar={ator_nome}></ListaCardsAtores>}></Route>
         {/*  👌  */} <Route path="/diretores" element={<ListaCardsDiretores diretores={diretores} pesquisar={diretor_nome}></ListaCardsDiretores>}></Route>
         {/*  👌  */} <Route path="/series" element={<ListaCardsSeries series={series}></ListaCardsSeries>}></Route>
-        {/*  👌  */} <Route path="/serie/:id" element={<Serie series={series} diretores={diretores}></Serie>}></Route>
         {/*  👌  */} <Route path="/serie/:id/episodios" element={<ListaEpisodios series={series} episodios={episodios}></ListaEpisodios>}></Route>
         {/*  👌  */} <Route path="/cadastro" element={<Cadastro cadastro={Cadastrar}></Cadastro>}></Route> 
         {/*  👌  */} <Route path="/login" element={<Login login={Logar}></Login>}></Route> 
@@ -393,6 +433,9 @@ function App() {
         <Route path="/:sla" element={<Erro></Erro>}></Route>
       </Routes>
       
+
+
+
       <footer>
           <div className='redes-footer'>
               <span>Nos siga nas nossas redes sociais</span>

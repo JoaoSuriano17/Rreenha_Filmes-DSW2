@@ -1,37 +1,62 @@
 import { Link, useParams } from "react-router-dom";
 
-function Filme(props){
-    const { id } = useParams()
-    
-    const diretor = props.diretores.find(d => d.id == props.filmes[id].diretor)
+function Filme(props) {
+    const { id } = useParams();
 
-    //Pesquisar o filme e colocar no dicionário
+    const filme = props.filmes.find(f => f.id == id);
+    if (!filme) {
+        return <h1>Carregando filme...</h1>;
+    }
 
-    
-    return(
+    const diretor = props.diretores.find(d => d.id == filme.diretor);
+    const atoresFilme = props.filmes_atores.find(a => a.id_filme == id);
+
+    let cardAtores = [];
+    if (atoresFilme) {
+        for (let a of atoresFilme.atores) {
+            cardAtores.push(
+                <Link to={"/ator/" + a.id} className="link" key={a.id}>
+                    <div className="card cardcatalogo">
+                        <img src={a.fotografia != null ? `http://localhost:3000/arquivo/${a.fotografia}` : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDlpiGLqA9GhqWx1nWZgjwmfm8IcuDv6gNcvdamF50Hg&s=10"} onError={(e) => { e.currentTarget.style.display = 'none'; }} alt="Image" className='imagem_catalogo_pessoa'/>
+                        <div className="card-body">
+                            <h5 className="card-title">{a.nome}</h5>
+                        </div>
+                    </div>
+                </Link>
+            )
+        }}
+
+    return (
         <>
             <p className="categoria">Filme</p>
             <div className="grid-filme">
-                <h1 className="titulo">{props.filmes[id].titulo}</h1>
+                <h1 className="titulo">{filme.titulo}</h1>
                 <div className="combo">
-                    <img src={`http://localhost:3000/arquivo/${props.filmes[id].cartaz}`} alt="Image" className="cartaz" />
-                    <h5>Sinopse: <br/> <span className="sinopse">{props.filmes[id].sinopse}</span></h5>
+                    <img src={`http://localhost:3000/arquivo/${filme.cartaz}`} alt="Image" className="cartaz" />
+                    <h5>
+                        Sinopse: <br />
+                        <span className="sinopse">{filme.sinopse}</span>
+                    </h5>
                 </div>
-                <div className="">
+
+                <div>
                     <hr></hr>
-                    <p><b>Duração:</b> {props.filmes[id].duracao} minutos</p>
+                    <p><b>Duração:</b> {filme.duracao} minutos</p>
                     <hr></hr>
-                    <p><b>Faixa etária:</b> {props.filmes[id].faixa_etaria} anos</p>
+                    <p><b>Faixa etária:</b> {filme.faixa_etaria} anos</p>
                     <hr></hr>
-                    <p><b>Quantidade de prêmios:</b> {props.filmes[id].qtde_premios}</p>
+                    <p><b>Quantidade de prêmios:</b> {filme.qtde_premios}</p>
                     <hr></hr>
-                    <p><b>Diretor:</b> <Link className="link" to={`/diretor/${diretor.id}`}> {props.diretores[props.filmes[id].diretor].nome}</Link></p>
+                    <p>
+                        <b>Diretor:</b>{" "}
+                        {diretor && (<Link className="link" to={`/diretor/${diretor.id}`}> {diretor.nome} </Link> )}
+                    </p>
                 </div>
             </div>
 
             <div className="grid-atores">
                 <h2><span className="blue">|</span> Elenco Principal</h2>
-
+                {cardAtores}
             </div>
         </>
     )

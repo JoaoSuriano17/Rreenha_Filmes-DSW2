@@ -47,6 +47,18 @@ router.get("/:id", tipo, async (req, res) => {
     }
 });
 
+router.get("/:id/atores", tipo, async (req, res) => {
+    try {
+        const requisicao1 = await db.query("SELECT ator.* FROM serie_ator JOIN ator ON serie_ator.id_ator = ator.id WHERE id_serie=$1", [req.params.id]);
+        if (!requisicao1.rowCount) {
+            return res.status(400).json({msg:"Não há atores neste filme."});
+        }
+        return res.status(200).json({atores: requisicao1.rows});
+    } catch (erro) {
+        return res.status(500).json({msg: erro.message});
+    }
+})
+
 //Terminar o serie.js
 router.post("/", verificarAdministrador, upload.single("arquivo"), async (req, res) => {
     try {
