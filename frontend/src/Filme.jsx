@@ -4,6 +4,10 @@ function Filme(props){
     const { id } = useParams()
     
     const diretor = props.diretores.find(d => d.id == props.filmes[id].diretor)
+
+    //Pesquisar o filme e colocar no dicionário
+
+    
     return(
         <>
             <p className="categoria">Filme</p>

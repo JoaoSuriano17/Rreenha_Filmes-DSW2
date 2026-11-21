@@ -31,7 +31,9 @@ function ListaEpisodios(props){
                         </div>
                     </div>
                 </div>
-                {cardEpisodios}
+                <div className="episodios">
+                    {cardEpisodios}
+                </div>
                 {/*<div className="temporadas">
                     {[...new Set(episodios?.map(ep => ep.temporada))].map(numero => (
                         <button key={numero} className={temporada === numero ? "ativo" : ""} onClick={() => setTemporada(numero)}>{numero}</button>
