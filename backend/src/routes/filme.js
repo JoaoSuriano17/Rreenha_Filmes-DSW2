@@ -118,6 +118,36 @@ router.post("/", verificarAdministrador, upload.single("arquivo"), async (req, r
     }
 });
 
+router.post("/:id/atores", verificarAdministrador, async (req, res) => {
+    try {
+        const { id_ator} = req.body;
+        const id_filme = req.params.id
+        if (!id_filme || !id_ator) {
+            return res.status(400).json({ msg: "O id_filme e o id_ator não podem ser nulos" });
+        }
+        if (id_filme < 0 || id_ator<0) {
+            return res.status(400).json({ msg: "Os ids devem ser maiores que 0" })
+        }
+
+        const r = await db.query("SELECT id_ator FROM filme_ator WHERE id_filme=$1", [id_filme])
+
+        for (let c of r.rows){
+            if (c.id_ator==id_ator){
+                return res.status(400).json({msg: "Esse ator ou atriz já está nessa série"})
+            }
+        }
+
+        const r2 = await db.query("INSERT INTO filme_ator(id_filme, id_ator) VALUES ($1, $2)", [id_filme, id_ator]);
+        
+        if (!r2.rowCount) {
+            return res.status(500).json({ msg: "Erro ao cadastrar a associação entre filme e ator." });
+        }
+
+        return res.json({msg:"Associação feita com sucesso!!!"});
+    } catch (erro) {
+        return res.status(500).json({ msg: erro.message });
+    }
+});
 
 //PUT
 router.put("/:id", tipo, verificarAdministrador, async (req, res) => {

@@ -22,16 +22,18 @@ function FormAddEpisodios(props){
         <>
             <form onSubmit={add}>
                 <h3>Adicionar episódios</h3>
+
+                {/* Caixa de seleção */}
+                <label>Escolha uma série:</label><br/>
+                <select id="serie_id" name="serie_id" value={serie_id} onChange={(e) => setSerie_id(e.target.value)}>
+                    {optionsSelect}
+                </select><br/>
+
                 <label>Título:</label> <input type="text" placeholder="Título" value={titulo} onChange={(e)=>{setTitulo(e.target.value)}}/><br/>
                 <label>Sinopse:</label> <input type="text"  placeholder="Sinopse" value={sinopse} onChange={(e)=>{setSinopse(e.target.value)}}/><br/>
                 <label>Duração:</label> <input type="number" placeholder="Duração" value={duracao} onChange={(e)=>{setDuracao(e.target.value)}}/><br/>
                 <label>Temporada:</label> <input type="number" placeholder="Temporada" value={temporada} onChange={(e)=>{setTemporada(e.target.value)}}/><br/>
-                {/* Caixa de seleção */}
-                <label>Escolha uma série:</label>
-                <select id="serie_id" name="serie_id" value={serie_id} onChange={(e) => setSerie_id(e.target.value)}>
-                    {optionsSelect}
-                </select>
-
+        
               <button type="submit">Enviar</button>
             </form>
         </>

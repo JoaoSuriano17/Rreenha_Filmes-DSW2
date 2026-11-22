@@ -41,10 +41,10 @@ function FormAddSerie(props){
                 <h3>Adicionar série</h3>
                 <label>Título:</label> <input type="text" placeholder="Título" value={titulo} onChange={(e)=>{setTitulo(e.target.value)}}/><br/>
                 {/* Caixa de seleção */}
-                <label>Escolha um diretor:</label>
+                <label>Escolha um diretor:</label><br/>
                 <select id="diretor" name="diretor" value={diretor} onChange={(e) => setDiretor(e.target.value)}>
                     {optionsSelect}
-                </select>
+                </select><br/>
                 <label>Sinopse:</label> <input type="text"  placeholder="Sinopse" value={sinopse} onChange={(e)=>{setSinopse(e.target.value)}}/><br/>
                 <label>Faixa Etária:</label> <input type="number" placeholder="Faixa Etária" value={faixa_etaria} onChange={(e)=>{setFaixa_etaria(e.target.value)}}/><br/>
                 <label>Quantidade de prêmios:</label> <input type="number" placeholder="Quantidade de Prêmios" value={qtde_premios} onChange={(e)=>{setQtde_premios(e.target.value)}}/><br/>

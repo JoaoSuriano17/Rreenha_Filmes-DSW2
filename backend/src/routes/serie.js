@@ -70,7 +70,7 @@ router.post("/", verificarAdministrador, upload.single("arquivo"), async (req, r
         if (faixa_etaria <= 0 || faixa_etaria>18) {
             return res.status(400).json({ msg: "A faixa etária deve ser um número inteiro igual ou maior que 0." })
         }
-        if (qtde_premios < 0) {
+        if (qtde_premios <= 0) {
             return res.status(400).json({ msg: "A quantidade de prêmios deve ser um número inteiro igual ou maior que 0." })
         }
 
@@ -110,6 +110,37 @@ router.post("/", verificarAdministrador, upload.single("arquivo"), async (req, r
     }
 });
 
+router.post("/:id/atores", verificarAdministrador, async (req, res) => {
+    try {
+        const { id_ator} = req.body;
+        const { id_serie } = req.params.id
+        if (!id_serie || !id_ator) {
+            return res.status(400).json({ msg: "O id_serie e o id_ator não podem ser nulos" });
+        }
+        if (id_serie < 0 || id_ator<0) {
+            return res.status(400).json({ msg: "Os ids devem ser maiores que 0" })
+        }
+
+        const r = await db.query("SELECT id_ator FROM serie_ator WHERE id_serie=$1", [id_serie])
+
+        for (let c of r.rows){
+            if (c.id_ator==id_ator){
+                return res.status(400).json({msg: "Esse ator ou atriz já está nessa série"})
+            }
+        }
+
+        const r2 = await db.query("INSERT INTO serie_ator(id_serie, id_ator) VALUES ($1, $2)", [id_serie, id_ator]);
+        
+        if (!r2.rowCount) {
+            return res.status(500).json({ msg: "Erro ao cadastrar a associação entre série e ator." });
+        }
+
+        return res.json({msg:"Associação feita com sucesso!!!"});
+    } catch (erro) {
+        return res.status(500).json({ msg: erro.message });
+    }
+});
+
 //Terminar o serie.js
 router.put("/:id", tipo, verificarAdministrador, upload.single("arquivo"), async (req, res) => {
     try {
@@ -120,11 +151,11 @@ router.put("/:id", tipo, verificarAdministrador, upload.single("arquivo"), async
             return res.status(404).json({ msg: "Série inexistente." });
         }
 
-        if (!isNaN(faixa_etaria) || faixa_etaria < 1) {
-            return res.status(400).json({ msg: "A faixa etária deve ser um número inteiro igual ou maior que 1." })
+        if (faixa_etaria <= 0 || faixa_etaria>18) {
+            return res.status(400).json({ msg: "A faixa etária deve ser um número inteiro igual ou maior que 0." })
         }
-        if (!isNaN(qtde_premios) || qtde_premios < 1) {
-            return res.status(400).json({ msg: "A quantidade de prêmios deve ser um número inteiro igual ou maior que 1." })
+        if (qtde_premios <= 0) {
+            return res.status(400).json({ msg: "A quantidade de prêmios deve ser um número inteiro igual ou maior que 0." })
         }
 
         if (req.file) {
@@ -147,7 +178,7 @@ router.put("/:id", tipo, verificarAdministrador, upload.single("arquivo"), async
             await db.query("UPDATE filme SET cartaz = $1 WHERE id = $2", [arquivo.arquivo.id, id]);
         }
 
-        const resultado = await db.query("UPDATE serie SET titulo=$1, diretor=$2, sinopse=$3, faixa_etaria=$4, qtde_premios=$5 WHERE id =$6", [titulo!=undefined?titulo:atual.rows[0].titulo, diretor!=undefined?diretor:atual.rows[0].diretor, sinopse!=undefined?sinopse:atual.rows[0].sinopse, faixa_etaria!=undefined?titulo:atual.rows[0].faixa_etaria, qtde_premios!=undefined?qtde_premios:atual.rows[0].qtde_premios, req.params.id]);
+        const resultado = await db.query("UPDATE serie SET titulo=$1, diretor=$2, sinopse=$3, faixa_etaria=$4, qtde_premios=$5 WHERE id =$6", [titulo!=undefined?titulo:atual.rows[0].titulo, diretor!=undefined?diretor:atual.rows[0].diretor, sinopse!=undefined?sinopse:atual.rows[0].sinopse, faixa_etaria!=undefined?faixa_etaria:atual.rows[0].faixa_etaria, qtde_premios!=undefined?qtde_premios:atual.rows[0].qtde_premios, req.params.id]);
         return res.json({ serie: resultado.rows[0] });
     } catch (erro) {
         return res.status(500).json({ msg: erro.message });

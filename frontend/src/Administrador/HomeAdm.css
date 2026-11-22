@@ -6,6 +6,10 @@
     width: 100%;
 }
 
+.cadastros select{
+    width: 100%;
+}
+
 .cadastros form{
     border-right: 1px solid black;
     padding-right: 10px;

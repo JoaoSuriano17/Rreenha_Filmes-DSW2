@@ -251,9 +251,7 @@ function App() {
     }
 
     const json2=await r2.json()
-    console.log(json2)
     setConta(json2.usuario)
-    console.log(conta)
   }
 
   async function Logar(email, senha){
@@ -460,6 +458,46 @@ function App() {
       alert("Episódio adicionado com sucesso!!!")
   }
 
+  async function CadastrarAtorSerie(id_serie, id_ator){
+      let res = await fetch(`http://localhost:3000/serie/${id_serie}/atores`, { method: "POST", headers:{"Content-Type": "application/json", "Authorization":`Bearer ${localStorage.getItem("token")}`}, body: JSON.stringify({ id_ator:id_ator })});
+      if (!res.ok) {
+        const json = await res.json();
+        alert(`Erro: ${json.msg}`);
+        return;
+      }
+      alert("Associação entre série e ator adicionada com sucesso!!!")
+  }
+
+  async function CadastrarAtorFilme(id_filme, id_ator){
+      let res = await fetch(`http://localhost:3000/filme/${id_filme}/atores`, { method: "POST", headers:{"Content-Type": "application/json", "Authorization":`Bearer ${localStorage.getItem("token")}`}, body: JSON.stringify({ id_ator:id_ator })});
+      if (!res.ok) {
+        const json = await res.json();
+        alert(`Erro: ${json.msg}`);
+        return;
+      }
+      alert("Associação entre série e ator adicionada com sucesso!!!")
+  }
+
+  async function AlterarSerie(form, id){
+      let res = await fetch(`http://localhost:3000/serie/${id}`, { method: "PUT", headers:{"Authorization":`Bearer ${localStorage.getItem("token")}`}, body: form });
+      if (!res.ok) {
+        const json = await res.json();
+        alert(`Erro: ${json.msg}`);
+        return;
+      }
+      alert("Série alterada com sucesso!!!")
+  }
+
+  async function AlterarEpisodio(titulo, sinopse, duracao, temporada, id){
+      let res = await fetch(`http://localhost:3000/episodio/${id}`, { method: "PUT", headers:{"Content-Type": "application/json", "Authorization":`Bearer ${localStorage.getItem("token")}`}, body: JSON.stringify({ titulo:titulo, sinopse:sinopse, duracao:duracao, temporada:temporada })});
+      if (!res.ok) {
+        const json = await res.json();
+        alert(`Erro: ${json.msg}`);
+        return;
+      }
+      alert("Série alterada com sucesso!!!")
+  }
+
 
 
 
@@ -529,9 +567,9 @@ function App() {
           <div className="container-fluid">
           <Link to={"/"} className="link Rreenha">Rreenha Filmes</Link>
           {conta?(
-            <div className="text-white">
+            <div className="text-white usuario-nav">
               <img src={conta.fotografia != null ? `http://localhost:3000/arquivo/${conta.fotografia}`: 'a'} onError={(e) => {e.currentTarget.style.display = 'none';}}></img>
-              <span><Link to={"/user"} className="link">{conta.nome}</Link></span>
+              <span><Link to={"/user"} className="link text-white">{conta.nome}</Link></span>
               <BsDoorClosed onClick={() => {const r = window.confirm("Você tem certeza que deseja deslogar?"); if (r) { setConta(null); setLogin(""); localStorage.removeItem("token"); localStorage.removeItem("id"); nav("/")}}} className="deslogar"/>            
             </div>
           ):(
@@ -565,7 +603,7 @@ function App() {
         {/*  👌  */} <Route path="/serie/:id/episodios" element={<ListaEpisodios series={series} episodios={episodios}></ListaEpisodios>}></Route>
         {/*  👌  */} <Route path="/cadastro" element={<Cadastro cadastro={Cadastrar}></Cadastro>}></Route> 
         {/*  👌  */} <Route path="/login" element={<Login login={Logar}></Login>}></Route> 
-        <Route path="/adm" element={<HomeAdm usuarios={usuarios} series={series} diretores={diretores} episodios={episodios} filmes={filmes} adm={AltararUsuarioParaAdm} addFilme={CadastrarFilme} addSerie={CadastrarSerie} addAtor={CadastrarAtor} addDiretor={CadastrarDiretor} addEpisodio={CadastrarEpisodios}></HomeAdm>}></Route>
+        <Route path="/adm" element={<HomeAdm usuarios={usuarios} series={series} diretores={diretores} episodios={episodios} filmes={filmes} atores={atores} adm={AltararUsuarioParaAdm} addFilme={CadastrarFilme} addSerie={CadastrarSerie} addAtor={CadastrarAtor} addDiretor={CadastrarDiretor} addEpisodio={CadastrarEpisodios} addAtorSerie={CadastrarAtorSerie} addAtorFilme={CadastrarAtorFilme} altSerie={AlterarSerie} altEpisodio={AlterarEpisodio}></HomeAdm>}></Route>
         <Route path="/user" element={<Usuario usuarios={usuarios} edit={AlterarUsuario} filmes_resenha={resenhasFilmes} series_resenha={resenhasSeries}></Usuario>}></Route>
 
         <Route path="/:sla" element={<Erro></Erro>}></Route>
