@@ -5,7 +5,7 @@ function FormAddFilme(props){
     const [arquivo, setArquivo] = useState(null);
     const [nome, setNome] = useState("")
     const [nacionalidade, setNacionalidade] = useState("")
-    const [data_nasc, setData_nasc] = useState(Date)
+    const [data_nasc, setData_nasc] = useState("")
     const [biografia, setBiografia] = useState("")
     const [qtde_premios, setQtde_premios] = useState(0)
 
@@ -25,7 +25,11 @@ function FormAddFilme(props){
         formData.append("data_nascimento", data_nasc);
         formData.append("biografia", biografia);
         formData.append("qtde_premios", qtde_premios);
-        formData.append("arquivo", arquivo);
+        
+        if (arquivo != null) {
+            formData.append("arquivo", arquivo);
+        }
+
 
         props.add(formData)
     }

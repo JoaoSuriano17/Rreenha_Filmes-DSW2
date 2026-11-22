@@ -531,7 +531,7 @@ function App() {
           {conta?(
             <div className="text-white">
               <img src={conta.fotografia != null ? `http://localhost:3000/arquivo/${conta.fotografia}`: 'a'} onError={(e) => {e.currentTarget.style.display = 'none';}}></img>
-              <span>{conta.nome}</span>
+              <span><Link to={"/user"} className="link">{conta.nome}</Link></span>
               <BsDoorClosed onClick={() => {const r = window.confirm("Você tem certeza que deseja deslogar?"); if (r) { setConta(null); setLogin(""); localStorage.removeItem("token"); localStorage.removeItem("id"); nav("/")}}} className="deslogar"/>            
             </div>
           ):(
@@ -565,7 +565,7 @@ function App() {
         {/*  👌  */} <Route path="/serie/:id/episodios" element={<ListaEpisodios series={series} episodios={episodios}></ListaEpisodios>}></Route>
         {/*  👌  */} <Route path="/cadastro" element={<Cadastro cadastro={Cadastrar}></Cadastro>}></Route> 
         {/*  👌  */} <Route path="/login" element={<Login login={Logar}></Login>}></Route> 
-        <Route path="/adm" element={<HomeAdm usuarios={usuarios} adm={AltararUsuarioParaAdm} addFilme={CadastrarFilme} addSerie={CadastrarSerie} addAtor={CadastrarAtor} addDiretor={CadastrarDiretor} addEpisodio={CadastrarEpisodios}></HomeAdm>}></Route>
+        <Route path="/adm" element={<HomeAdm usuarios={usuarios} series={series} diretores={diretores} episodios={episodios} filmes={filmes} adm={AltararUsuarioParaAdm} addFilme={CadastrarFilme} addSerie={CadastrarSerie} addAtor={CadastrarAtor} addDiretor={CadastrarDiretor} addEpisodio={CadastrarEpisodios}></HomeAdm>}></Route>
         <Route path="/user" element={<Usuario usuarios={usuarios} edit={AlterarUsuario} filmes_resenha={resenhasFilmes} series_resenha={resenhasSeries}></Usuario>}></Route>
 
         <Route path="/:sla" element={<Erro></Erro>}></Route>

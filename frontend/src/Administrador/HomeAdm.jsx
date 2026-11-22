@@ -20,11 +20,11 @@ function HomeAdm(props) {
         a = <h1>Home do adm - aqui ficarão todas as funções</h1>;
         c = <ListaUsuarios usuarios={props.usuarios} adm={props.adm}></ListaUsuarios>
         div = <div className='d-flex cadastros'>
-            <FormAddFilme add={props.addFilme}></FormAddFilme>
-            <FormAddSerie add={props.addSerie}></FormAddSerie>
+            <FormAddFilme add={props.addFilme} diretores={props.diretores}></FormAddFilme>
+            <FormAddSerie add={props.addSerie} diretores={props.diretores}></FormAddSerie>
             <FormAddAtor add={props.addAtor}></FormAddAtor>
             <FormAddDiretor add={props.addDiretor}></FormAddDiretor>
-            <FormAddEpisodios add={props.addEpisodio}></FormAddEpisodios>
+            <FormAddEpisodios add={props.addEpisodio} series={props.series}></FormAddEpisodios>
         </div>
     }else{
         a=<h1>Página exclusiva para administradores, coisa que você não é</h1>

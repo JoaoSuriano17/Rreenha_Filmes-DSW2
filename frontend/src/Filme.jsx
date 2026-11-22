@@ -10,7 +10,7 @@ function Filme(props) {
     }
 
     const diretor = props.diretores.find(d => d.id == filme.diretor);
-    const atoresFilme = props.filmes_atores.find(a => a.id_filme == id);
+    const atoresFilme = props.filmes_atores.find(a => a.id_filme == id || null);
     const resenhasFilme = props.filmes_resenha.find(rf => rf.id_filme == id);
     if (!diretor || !atoresFilme || !resenhasFilme){
         return <h1>Carregando ...</h1>

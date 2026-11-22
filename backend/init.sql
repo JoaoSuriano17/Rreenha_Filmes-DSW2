@@ -151,7 +151,7 @@ INSERT INTO diretor (nome, nacionalidade, data_nascimento, biografia, qtde_premi
 INSERT INTO ator (nome, nacionalidade, data_nascimento, biografia, qtde_premios) VALUES ('Wagner Moura', 'Brasileiro', '1976-07-14T00:00:00Z', 'Grande sujeito, baiano.', 2);
 INSERT INTO ator (nome, nacionalidade, data_nascimento, biografia, qtde_premios) VALUES ('Klaus Kinski', 'Alemão', '1926-07-14T00:00:00Z', 'Grande desregulado.', 0);
 
-INSERT INTO usuario (nome, email, critico, administrador, senha) VALUES ('João Silva', 'joao@gmail.com', TRUE, TRUE, '$2b$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy');
+INSERT INTO usuario (nome, email, critico, administrador, senha) VALUES ('João Silva', 'joao@gmail.com', TRUE, TRUE, '$2a$12$1GFIHLkHKnysFYtOFOn2m.qf23U1f7jG/eZtfC5zmJAcQQl3kNPyy');
 INSERT INTO usuario (nome, email, critico, administrador, senha) VALUES ('Maria Oliveira', 'maria@gmail.com', TRUE, FALSE, '$2b$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy');
 INSERT INTO usuario (nome, email, critico, administrador, senha) VALUES ('Pedro Santos', 'pedro@gmail.com', FALSE, FALSE, '$2b$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy');
 

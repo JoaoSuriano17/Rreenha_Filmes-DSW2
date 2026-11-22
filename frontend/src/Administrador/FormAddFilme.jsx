@@ -32,13 +32,23 @@ function FormAddFilme(props){
         props.add(formData)
     }
     
+    let optionsSelect = [<option value={0} key={-1}></option>]
+    for (let a of props.diretores){
+        optionsSelect.push(<option value={a.id} key={a.id}>{a.nome}</option>)
+    }
+
     
     return(
         <>
             <form onSubmit={add}>
                 <h3>Adicionar filme</h3>
                 <label>Título:</label> <input type="text" placeholder="Título" value={titulo} onChange={(e)=>{setTitulo(e.target.value)}}/><br/>
-                <label>Id do Diretor:</label> <input type="number" placeholder="Id do Diretor" value={diretor} onChange={(e)=>{setDiretor(e.target.value)}}/><br/>
+                {/*Caixa de seleção do diretor */}
+                <label>Escolha um diretor:</label>
+                <select id="diretor" name="diretor" value={diretor} onChange={(e) => setDiretor(e.target.value)}>
+                    {optionsSelect}
+                </select>
+                {/*<label>Id do Diretor:</label> <input type="number" placeholder="Id do Diretor" value={diretor} onChange={(e)=>{setDiretor(e.target.value)}}/><br/>*/}
                 <label>Sinopse:</label> <input type="text"  placeholder="Sinopse" value={sinopse} onChange={(e)=>{setSinopse(e.target.value)}}/><br/>
                 <label>Faixa Etária:</label> <input type="number" placeholder="Faixa Etária" value={faixa_etaria} onChange={(e)=>{setFaixa_etaria(e.target.value)}}/><br/>
                 <label>Duração:</label> <input type="number" placeholder="Duração" value={duracao} onChange={(e)=>{setDuracao(e.target.value)}}/><br/>
