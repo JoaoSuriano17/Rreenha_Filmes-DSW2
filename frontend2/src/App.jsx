@@ -41,6 +41,25 @@ function App() {
     console.log(token.getItem("token"))
   }
 
+  async function EditarUsuario(user){
+    try{
+      //fotografia A FAZER
+      let edicao = await fetch("http://localhost:3000/usuario/", {
+        method: "PUT",
+        headers:{
+          "Authorization":`Bearer ${token.getItem("token")}`,
+          //"Content-type" : "application/json"
+        },
+        //body: JSON.stringify(user)
+        body: user
+      });
+      console.log(edicao);
+      //LoginUsuario({email: user.get("email"), senha: user.get("senha")})
+    }catch(erro){
+      console.log(erro);//window.alert?
+    }
+  }
+
   async function SelecionaFilmes(params) {
     
   }
@@ -68,7 +87,7 @@ function App() {
         <Route path="/" element={<Home/>}></Route>
         <Route path="/cadastro" element={<Cadastro cadastro={CadastroUsuario}/>}></Route>
         <Route path="/login" element={<Login login={LoginUsuario}/>}></Route>
-        <Route path="/usuario" element={<Usuario />}></Route>
+        <Route path="/usuario" element={<Usuario editar={EditarUsuario}/>}></Route>
       </Routes>
     </>
   )
