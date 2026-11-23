@@ -306,7 +306,24 @@ function App() {
     }
   }
 
-  
+  async function AdicionarResenhaFilme(id_filme, resenha, avalicao){
+    const r=await fetch("http://localhost:3000/resenha/filme", {
+      method: "POST",
+      headers:{"Authorization":`Bearer ${localStorage.getItem("token")}`},
+      body:{
+        filme_id:id_filme,
+        resenha:resenha,
+        avaliacao:avalicao
+      }
+    });
+    if(!r.ok){
+      console.log(r);
+      const p=await r.json();
+      window.alert(`Erro: ${p}`);
+      return;
+    }
+    window.alert("Resenha adicionada com sucesso!");
+  }
   //Busca: 
   async function filme_titulo(titulo){
     try{
@@ -510,7 +527,59 @@ function App() {
       alert("Série alterada com sucesso!!!")
   }
 
-
+  async function deletarFilme(id){
+    let res=await fetch(`http://localhost:3000/filme/${id}`, {
+      method: "DELETE",
+      headers:{
+        "Content-Type": "application/json",
+        "Authorization":`Bearer ${localStorage.getItem("token")}`
+      }
+    });
+    if(!res.ok){
+        window.alert("Não é permitido deletar filmes com resenhas.");
+        //Imagino que seja esse o único erro plausível
+        /*
+        const json = await res.json();
+        alert(`Erro: ${json.msg}`);
+        */
+        return;
+    }
+    alert("Filme deletado com sucesso!");
+  }
+  async function deletarSerie(id){
+    let res=await fetch(`http://localhost:3000/serie/${id}`, {
+      method: "DELETE",
+      headers:{
+        "Content-Type": "application/json",
+        "Authorization":`Bearer ${localStorage.getItem("token")}`
+      }
+    });
+    if(!res.ok){
+        window.alert("Não é permitido deletar séries com resenhas.");
+        //Imagino que seja esse o único erro plausível
+        /*
+        const json = await res.json();
+        alert(`Erro: ${json.msg}`);
+        */
+        return;
+    }
+    alert("Série deletada com sucesso!");
+  }
+  async function deletarEpisodio(id){
+    let res=await fetch(`http://localhost:3000/episodio/${id}`, {
+      method: "DELETE",
+      headers:{
+        "Content-Type": "application/json",
+        "Authorization":`Bearer ${localStorage.getItem("token")}`
+      }
+    });
+    if(!res.ok){
+        const json = await res.json();
+        alert(`Erro: ${json.msg}`);
+        return;
+    }
+    alert("Série deletada com sucesso!");
+  }
 
 
 
@@ -604,15 +673,15 @@ function App() {
       <Routes>
         {/*  👌  */} <Route path="/" element={<Home filmes={filmes} logado={login} arquivos={arquivos} filmes_premiados={filmesPremiados} atores={atores} series={series}></Home>}></Route>
         {/*  👌  */} <Route path="/arquivo" element={<Arquivo></Arquivo>}></Route>
-        {/*  👌  */} <Route path="/filme/:id" element={<Filme filmes={filmes} diretores={diretores} atores={atores} filmes_atores={atoresFilmes} filmes_resenha={resenhasFilmes}></Filme>}></Route> 
-        {/*  👌  */} <Route path="/serie/:id" element={<Serie series={series} diretores={diretores} atores={atores} series_atores={atoresSeries} series_resenha={resenhasSeries}></Serie>}></Route>
+        {/*  👌  */} <Route path="/filme/:id" element={<Filme filmes={filmes} diretores={diretores} atores={atores} filmes_atores={atoresFilmes} filmes_resenha={resenhasFilmes} deletar={deletarFilme} adicionarResenha={AdicionarResenhaFilme}></Filme>}></Route> 
+        {/*  👌  */} <Route path="/serie/:id" element={<Serie series={series} diretores={diretores} atores={atores} series_atores={atoresSeries} series_resenha={resenhasSeries} deletar={deletarSerie}></Serie>}></Route>
         {/*  👌  */} <Route path="/ator/:id" element={<Ator atores={atores}></Ator>}></Route>
         {/*  👌  */} <Route path="/diretor/:id" element={<Diretor diretores={diretores}></Diretor>}></Route>
         {/*  👌  */} <Route path="/filmes" element={<ListaCardsFilmes filmes={filmes} pesquisar={filme_titulo}></ListaCardsFilmes>}></Route>
         {/*  👌  */} <Route path="/atores" element={<ListaCardsAtores atores={atores} pesquisar={ator_nome}></ListaCardsAtores>}></Route>
         {/*  👌  */} <Route path="/diretores" element={<ListaCardsDiretores diretores={diretores} pesquisar={diretor_nome}></ListaCardsDiretores>}></Route>
         {/*  👌  */} <Route path="/series" element={<ListaCardsSeries series={series}></ListaCardsSeries>}></Route>
-        {/*  👌  */} <Route path="/serie/:id/episodios" element={<ListaEpisodios series={series} episodios={episodios}></ListaEpisodios>}></Route>
+        {/*  👌  */} <Route path="/serie/:id/episodios" element={<ListaEpisodios series={series} episodios={episodios} deletar={deletarEpisodio}></ListaEpisodios>}></Route>
         {/*  👌  */} <Route path="/cadastro" element={<Cadastro cadastro={Cadastrar}></Cadastro>}></Route> 
         {/*  👌  */} <Route path="/login" element={<Login login={Logar}></Login>}></Route> 
         <Route path="/adm" element={<HomeAdm usuarios={usuarios} series={series} diretores={diretores} episodios={episodios} filmes={filmes} atores={atores} adm={AltararUsuarioParaAdm} addFilme={CadastrarFilme} addSerie={CadastrarSerie} addAtor={CadastrarAtor} addDiretor={CadastrarDiretor} addEpisodio={CadastrarEpisodios} addAtorSerie={CadastrarAtorSerie} addAtorFilme={CadastrarAtorFilme} altSerie={AlterarSerie} altEpisodio={AlterarEpisodio}></HomeAdm>}></Route>

@@ -21,7 +21,7 @@ function ListaEpisodios(props){
     let cardEpisodios = []
     if (episodiosSerie.length > 0){
         for (let a of episodiosSerie){
-            cardEpisodios.push(<Episodio episodio={a} key={a.id}></Episodio>)
+            cardEpisodios.push(<Episodio episodio={a} key={a.id} deletar={props.deletar}></Episodio>)
         }
     }
 

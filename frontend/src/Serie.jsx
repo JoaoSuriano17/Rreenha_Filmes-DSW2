@@ -49,13 +49,17 @@ function Serie(props) {
             )
             y++
         }}
-
+    let botaoDelete;
+    if(JSON.parse(localStorage.getItem("usuario")).administrador){
+        botaoDelete=<button onClick={(e)=>{e.preventDefault(); props.deletar(id)}}>Deletar série</button>
+    }
     return (
         <>
             <p className="categoria">Série</p>
             <Link className="link voltar categoria text-dark " to={"/series"}><BsArrowLeft /> Voltar</Link>
             <div className="grid-filme">
                 <h1 className="titulo">{serie.titulo}</h1>
+                {botaoDelete}
                 <div className="combo">
                     <img src={serie.fotografia != null ? `http://localhost:3000/arquivo/${serie.fotografia}` : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDlpiGLqA9GhqWx1nWZgjwmfm8IcuDv6gNcvdamF50Hg&s=10"} onError={(e) => { e.currentTarget.style.display = 'none'; }} alt="Image" className='imagem_catalogo_pessoa' />
                     <h5>

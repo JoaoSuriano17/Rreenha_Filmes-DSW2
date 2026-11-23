@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { BsArrowLeft } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
+import FormResenha from "./FormResenha";
 
 function Filme(props) {
     const { id } = useParams();
-
+    const [escreverResenha, setEscreverResenha]=useState(false);
     const filme = props.filmes.find(f => f.id == id);
     if (!filme) {
         return <h1>Carregando ...</h1>;
@@ -47,13 +49,21 @@ function Filme(props) {
                 </div>
             )
         }}
-
+    let botaoDelete;
+    if(JSON.parse(localStorage.getItem("usuario")).administrador){
+        botaoDelete=<button onClick={(e)=>{e.preventDefault(); props.deletar(id)}}>Deletar filme</button>
+    }
+    let formResenha;
+    if(escreverResenha){
+        formResenha=<FormResenha id={id} adicionarResenha={props.adicionarResenha}/>
+    }
     return (
         <>
             <p className="categoria">Filme</p>
             <Link className="link voltar categoria text-dark " to={"/filmes"}><BsArrowLeft /> Voltar</Link>
             <div className="grid-filme">
                 <h1 className="titulo">{filme.titulo}</h1>
+                {botaoDelete}
                 <div className="combo">
                     <img src={`http://localhost:3000/arquivo/${filme.cartaz}`} alt="Image" className="cartaz" />
                     <h5>
@@ -83,6 +93,8 @@ function Filme(props) {
             </div>
 
             <div>
+                <button onClick={(e)=>{e.preventDefault(); setEscreverResenha(!escreverResenha)}}>Adicionar resenha</button>
+                {formResenha}
                 {cardResenhas}
             </div>
         </>
