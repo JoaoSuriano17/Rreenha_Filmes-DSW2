@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
+import FormEditarUsuario from "./FormEditarUsuario";
 
 function Usuario(props) {
     const userInfo = JSON.parse(localStorage.getItem("usuario"));
     const [nome, setNome] = useState("")
     const [senha, setSenha] = useState("")
+    const [editar, setEditar] = useState(false)
 
     if (!userInfo) {
         return (
@@ -24,6 +26,10 @@ function Usuario(props) {
     }
 
     let form;
+    if(editar){
+        form=<FormEditarUsuario edit={props.edit}/>
+    }
+    /*
     function criarForm() {
         form = 
         <form onSubmit={(e)=> {e.preventDefault(); alert("AAAA CONSEGUI"); form = <></>}}>
@@ -34,6 +40,7 @@ function Usuario(props) {
             <input id="password" type="password" name="password" value={senha} onChange={(e) => setSenha(e.target.value)} autoComplete="new-password" className="input_usuario" />
         </form>
     }
+    */
 
 
     return (
@@ -44,7 +51,7 @@ function Usuario(props) {
             <h5>Administrador: {user.administrador}</h5>
             <h5>Crítico: {user.critico}</h5>
             {/*Formulário para alterar - fazer algumas alterações*/}
-            <button onClick={(e)=>{e.preventDefault(); alert("Agora deve aparecer o formulário")}}>Editar</button>
+            <button onClick={(e)=>{e.preventDefault(); setEditar(!editar)}}>Editar</button>
             {form}
         </>
     )

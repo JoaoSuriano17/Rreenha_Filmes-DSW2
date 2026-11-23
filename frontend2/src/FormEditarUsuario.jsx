@@ -14,7 +14,7 @@ function FormEditarUsuario(props){
     setUserEdicao(novo);
   }
   return(
-    <form onSubmit={(e)=>{e.preventDefault();console.log(userEdicao);props.editar(userEdicao)}}>
+    <form onSubmit={(e)=>{e.preventDefault();props.editar(userEdicao)}}>{/*;console.log(userEdicao)*/}
       <p>Nome:</p>
       <input type="text" name="nome" value={userEdicao.nome} onChange={atualizar}/><br />
       <p>Senha:</p>

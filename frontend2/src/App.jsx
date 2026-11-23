@@ -47,13 +47,17 @@ function App() {
       let edicao = await fetch("http://localhost:3000/usuario/", {
         method: "PUT",
         headers:{
-          "Authorization":`Bearer ${token.getItem("token")}`,
+          "Authorization":`Bearer ${token.getItem("token")}`
           //"Content-type" : "application/json"
         },
         //body: JSON.stringify(user)
         body: user
       });
-      console.log(edicao);
+      if(edicao.ok){
+        console.log(edicao);
+      }else{
+        console.log("BIXOU...");
+      }
       //LoginUsuario({email: user.get("email"), senha: user.get("senha")})
     }catch(erro){
       console.log(erro);//window.alert?

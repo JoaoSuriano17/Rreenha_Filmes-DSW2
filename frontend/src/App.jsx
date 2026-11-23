@@ -375,12 +375,24 @@ function App() {
 
 
 
-  async function AlterarUsuario(novoUser){
+  async function AlterarUsuario(user){
     try{
-      console.log("Alterando...")
-      console.log(novoUser)
+      //fotografia A FAZER
+      let edicao = await fetch("http://localhost:3000/usuario/", {
+        method: "PUT",
+        headers:{
+          "Authorization":`Bearer ${localStorage.getItem("token")}`
+          //"Content-type" : "application/json"
+        },
+        //body: JSON.stringify(user)
+        body: user
+      });
+      if(!edicao.ok){
+        console.log(edicao+ " Não ok.");
+      }
+      //LoginUsuario({email: user.get("email"), senha: user.get("senha")})
     }catch(erro){
-      console.log("Erro: "+erro)
+      console.log("Erro:"+erro);//window.alert?
     }
   }
 
