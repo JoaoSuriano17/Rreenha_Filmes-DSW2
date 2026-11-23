@@ -48,7 +48,7 @@ function FormAddSerie(props){
                 <label>Sinopse:</label> <input type="text"  placeholder="Sinopse" value={sinopse} onChange={(e)=>{setSinopse(e.target.value)}}/><br/>
                 <label>Faixa Etária:</label> <input type="number" placeholder="Faixa Etária" value={faixa_etaria} onChange={(e)=>{setFaixa_etaria(e.target.value)}}/><br/>
                 <label>Quantidade de prêmios:</label> <input type="number" placeholder="Quantidade de Prêmios" value={qtde_premios} onChange={(e)=>{setQtde_premios(e.target.value)}}/><br/>
-                <label>Cartaz:</label> <input className="file-input" type="file" name="foto" accept="image/*" onChange={changeFile}/>
+                <label>Cartaz:</label> <input className="file-input" type="file" name="foto" accept="image/*" onChange={changeFile}/><br />
 
               <button type="submit">Enviar</button>
             </form>

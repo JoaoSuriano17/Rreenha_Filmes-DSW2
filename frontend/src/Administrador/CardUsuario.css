@@ -1,6 +1,55 @@
+
 .usuarioPromover {
-    border: solid 1px black;
-    margin: 10px;
-    padding: 15px;
-    border-radius: 8px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    background-color: #f8faff;
+    border: 1px solid #dce6f2;
+    border-radius: 9px;
+    transition: 0.2s;
+}
+
+.usuarioPromover:hover {
+    border-color: #a9c5e5;
+    box-shadow: 0 3px 10px rgba(30, 64, 110, 0.06);
+}
+
+.usuarioPromover h3 {
+    margin: 0;
+    color: #24558c;
+    font-size: 16px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.usuarioPromover p {
+    margin: 12px 0;
+    color: #52657c;
+    font-size: 14px;
+}
+
+.usuarioPromover hr {
+    margin: 12px 0;
+    border: 0;
+    border-top: 1px solid #dce6f2;
+    opacity: 1;
+}
+
+.usuarioPromover button {
+    padding: 8px 16px;
+    color: #fff;
+    background-color: #2868b2;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.usuarioPromover button:hover {
+    background-color: #1d528f;
+}
+
+.usuarioPromover button:active {
+    transform: scale(0.98);
 }

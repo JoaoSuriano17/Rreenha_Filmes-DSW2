@@ -44,7 +44,7 @@ function FormAddFilme(props){
                 <label>Data de Nascimento:</label> <input type="date" placeholder="Data de Nascimento" value={data_nasc} onChange={(e)=>{setData_nasc(e.target.value)}}/>
                 <label>Biografia:</label> <input type="text" placeholder="Biografia" value={biografia} onChange={(e)=>{setBiografia(e.target.value)}}/>
                 <label>Quantidade de prêmios:</label> <input type="number" placeholder="Quantidade de Prêmios" value={qtde_premios} onChange={(e)=>{setQtde_premios(e.target.value)}}/>
-                <label>Fotografia:</label> <input className="file-input" type="file" name="foto" accept="image/*" onChange={changeFile}/>
+                <label>Fotografia:</label> <input className="file-input" type="file" name="foto" accept="image/*" onChange={changeFile}/><br />
 
               <button type="submit">Enviar</button>
             </form>
