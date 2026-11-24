@@ -1,32 +1,32 @@
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import CatalogoCardFilmes from "./CatalogoCardFilmes";
 import { BsArrowLeft } from "react-icons/bs";
+import CardDiretores from "../Catalogo/CardDiretores";
 
-function ListaCardsFilmes(props){
+function ListaCardsDiretores(props){
     const [search, setSearch]=useState("")
     const nav = useNavigate();
 
     function enviar() {
         console.log("Função enviar não está funcionando")
     }
-
-    let cardsFilmes = []
-    for (let a of props.filmes){
-        cardsFilmes.push(<CatalogoCardFilmes filme={a} key={a.id}></CatalogoCardFilmes>)
+    console.log(props.diretores)
+    let cardsDiretores = []
+    for (let a of props.diretores || []){
+        cardsDiretores.push(<CardDiretores diretor={a} key={a.id} />)
     }
     return(
         <>
-            <h1 className='procurados'>Catálogo de filmes</h1>
+            <h1 className='procurados'>Catálogo de Diretores</h1>
             <Link className="link voltar categoria text-dark " to={"/"}><BsArrowLeft /> Voltar</Link>
 
             <div className="grid-filme">
                 <form className="pegar_filme" role="search" onSubmit={enviar}>
-                    <span>Quantidade de filmes: {props.filmes.lenght}</span>
+                    <span>Quantidade de Diretores: {props.diretores.length}</span>
                     <input className="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search" value={search} onChange={(e)=>{setSearch(e.target.value)}}/>
                 </form>
                 <div className="catalogo">
-                    {cardsFilmes}
+                    {cardsDiretores}
                 </div>
             </div>
 
@@ -34,4 +34,4 @@ function ListaCardsFilmes(props){
     )
 }
 
-export default ListaCardsFilmes;
+export default ListaCardsDiretores;

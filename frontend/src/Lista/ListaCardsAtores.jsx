@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import CatalogoCardsSeries from "./CatalogoCardsSeries";
-import { BsArrowLeft } from "react-icons/bs";
+import CardAtores from "../Catalogo/CardAtores";
 
-function ListaCardsSeries(props){
+function ListaCardsAtores(props){
     const [search, setSearch]=useState("")
     const nav = useNavigate();
 
@@ -11,28 +10,23 @@ function ListaCardsSeries(props){
         console.log("Função enviar não está funcionando")
     }
 
-    let cardSeries = []
-    for (let a of props.series){
-        cardSeries.push(<CatalogoCardsSeries serie={a} key={a.id}></CatalogoCardsSeries>)
+    let cardsAtores = []
+    for (let a of props.atores){
+        cardsAtores.push(<CardAtores ator={a} key={a.id} />)
     }
-
     return(
         <>
-            <h1 className='procurados'>Catálogo de Séries</h1>
-            <Link className="link voltar categoria text-dark " to={"/"}><BsArrowLeft /> Voltar</Link>
-
+            {/*Acho que vc nao terminou esse daqui, so pra avisar que eu coloquei botoes de voltar em todos. <Link className="link voltar categoria text-dark " to={"/"}><BsArrowLeft /> Voltar</Link>*/}
             <div className="grid-filme">
                 <form className="pegar_filme" role="search" onSubmit={enviar}>
-                    <span>Quantidade de filmes: {props.series.length}</span>
                     <input className="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search" value={search} onChange={(e)=>{setSearch(e.target.value)}}/>
                 </form>
                 <div className="catalogo">
-                    {cardSeries}
+                    {cardsAtores}
                 </div>
             </div>
-
         </>
     )
 }
 
-export default ListaCardsSeries;
+export default ListaCardsAtores;

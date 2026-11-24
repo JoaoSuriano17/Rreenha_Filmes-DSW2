@@ -14,7 +14,7 @@ function Home(props) {
                 <div id="carouselExampleInterval" className="carousel slide" data-bs-ride="carousel" data-bs-interval="3000" data-bs-pause="false">
                     <div className="carousel-inner">
                         <div className="carousel-item active">
-                            <img src="Imagens/naruto-hero.jpg" className="w-50" alt="Banner do Naruto" />
+                            <img src="Imagens\shawshank-redemption-20th-anniversary-01.webp" className="w-50" alt="Banner do Naruto" />
                         </div>
                         <div className="carousel-item">
                             <img src="Imagens/Minecraft-hero.webp" className="w-50" alt="Banner do filme do Minecraft" />

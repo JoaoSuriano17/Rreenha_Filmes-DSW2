@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 
-function CatalogoCardFilmes(props) {
+function CardFilmes(props) {
     return (
         <>
             <Link to={"/filme/" + props.filme.id} className="link">
@@ -15,4 +15,4 @@ function CatalogoCardFilmes(props) {
         </>
     )}
 
-export default CatalogoCardFilmes
+export default CardFilmes

@@ -1,3 +1,410 @@
+
+/* FOOTER */
+
+.footer-rreenha {
+    width: 100%;
+    background-color: #090d14;
+    border-top: 1px solid #1d2939;
+    margin-top: 65px;
+    padding: 40px 0 0;
+    color: #aeb9c8;
+}
+
+.footer-rreenha .container {
+    max-width: 1200px;
+}
+
+.footer-conteudo {
+    padding-bottom: 30px;
+    align-items: center;
+}
+
+/* Marca */
+
+.footer-marca {
+    display: inline-block;
+    color: #f1f5f9;
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.7px;
+    text-decoration: none;
+}
+
+.footer-marca span {
+    color: #4388dc;
+}
+
+.footer-marca:hover {
+    color: #ffffff;
+}
+
+/* Redes sociais */
+
+.footer-rreenha h5 {
+    color: #e2e8f0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.footer-descricao {
+    color: #8290a3;
+    font-size: 0.87rem;
+    margin-bottom: 14px;
+}
+
+.redes-icones {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 11px;
+}
+
+.redes-icones a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    color: #aeb9c8;
+    background-color: #141c28;
+    border: 1px solid #263449;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: 0.2s ease;
+}
+
+.redes-icones a:hover {
+    color: #ffffff;
+    background-color: #2868b2;
+    border-color: #2868b2;
+}
+
+/* Parte inferior */
+
+.footer-final {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    border-top: 1px solid #1d2939;
+    padding: 17px 0;
+    color: #68778b;
+    font-size: 0.78rem;
+}
+
+/* Tablets */
+
+@media (max-width: 991px) {
+    .footer-conteudo {
+        row-gap: 25px;
+    }
+}
+
+/* Celulares */
+
+@media (max-width: 767px) {
+    .footer-rreenha {
+        margin-top: 45px;
+        padding-top: 30px;
+    }
+
+    .footer-conteudo {
+        padding-bottom: 25px;
+    }
+
+    .footer-final {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+}
+
+/* Celulares pequenos */
+
+@media (max-width: 400px) {
+    .footer-rreenha {
+        padding-top: 25px;
+    }
+
+    .footer-marca {
+        font-size: 1.25rem;
+    }
+
+    .footer-final {
+        font-size: 0.72rem;
+    }
+
+    .redes-icones {
+        gap: 8px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+/* NAVBAR */
+
+.navbar-rreenha {
+    background-color: #0b111b;
+    border-bottom: 1px solid #1c293a;
+    padding: 12px 0;
+}
+
+.navbar-rreenha .container-fluid {
+    gap: 20px;
+}
+
+/* Marca */
+
+.marca-rreenha {
+    color: #f1f5f9 !important;
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.6px;
+    white-space: nowrap;
+}
+
+.marca-rreenha span {
+    color: #4388dc;
+}
+
+.marca-rreenha:hover {
+    color: #ffffff !important;
+}
+
+/* Botão mobile */
+
+.navbar-rreenha .navbar-toggler {
+    border: 1px solid #29384b;
+    padding: 6px 9px;
+    box-shadow: none;
+}
+
+.navbar-rreenha .navbar-toggler:focus {
+    box-shadow: none;
+}
+
+/* Conteúdo */
+
+.navbar-rreenha .navbar-collapse {
+    justify-content: flex-end;
+}
+
+.area-usuario {
+    margin-left: auto;
+}
+
+/* Pesquisa */
+
+.pesquisa-rreenha {
+    display: flex;
+    align-items: center;
+    width: 260px;
+    height: 38px;
+    background-color: #111a27;
+    border: 1px solid #26364b;
+    border-radius: 6px;
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+}
+
+.pesquisa-rreenha:focus-within {
+    border-color: #4388dc;
+}
+
+.pesquisa-rreenha input {
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    padding: 0 12px;
+    color: #e2e8f0;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 0.88rem;
+}
+
+.pesquisa-rreenha input::placeholder {
+    color: #77869a;
+}
+
+.pesquisa-rreenha input::-webkit-search-cancel-button {
+    cursor: pointer;
+}
+
+.pesquisa-rreenha button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 0 12px;
+    color: #91a4bc;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.pesquisa-rreenha button:hover {
+    color: #ffffff;
+}
+
+/* Usuário */
+
+.usuario-nav {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.perfil-rreenha {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+}
+
+.perfil-rreenha:hover {
+    color: #ffffff;
+}
+
+.perfil-rreenha img {
+    width: 34px;
+    height: 34px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 1px solid #34465d;
+}
+
+.perfil-rreenha span {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Logout */
+
+.deslogar {
+    color: #8493a8;
+    font-size: 1.15rem;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.deslogar:hover {
+    color: #e05252;
+}
+
+/* Login */
+
+.botao-login {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    color: #eaf2fc;
+    background-color: #2868b2;
+    border: 1px solid #2868b2;
+    border-radius: 6px;
+    font-size: 0.88rem;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.botao-login:hover {
+    color: #ffffff;
+    background-color: #347bc7;
+}
+
+/* Tablets e telas menores */
+
+@media (max-width: 991px) {
+    .navbar-rreenha .navbar-collapse {
+        padding-top: 18px;
+    }
+
+    .area-usuario {
+        align-items: flex-start !important;
+        margin-left: 0;
+        padding-bottom: 8px;
+    }
+
+    .pesquisa-rreenha {
+        width: 100%;
+        max-width: 400px;
+    }
+}
+
+/* Celulares */
+
+@media (max-width: 575px) {
+    .navbar-rreenha {
+        padding: 10px 0;
+    }
+
+    .navbar-rreenha .container-fluid {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+        gap: 12px;
+    }
+
+    .marca-rreenha {
+        font-size: 1.2rem;
+    }
+
+    .area-usuario {
+        gap: 14px !important;
+        width: 100%;
+    }
+
+    .pesquisa-rreenha {
+        max-width: none;
+    }
+
+    .perfil-rreenha span {
+        max-width: 180px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* Texto hero - "RREENHA ..." */
 .hero-content {
   position: absolute;
@@ -55,7 +462,7 @@
 }
 
 .texto2{
-  color: rgb(250, 167, 43);
+  color: #2868b2;
 }
 
 .hero-content span{

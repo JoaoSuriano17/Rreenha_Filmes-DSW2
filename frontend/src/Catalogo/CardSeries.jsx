@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
-function CatalogoCardsSeries(props) {
+function CardSeries(props) {
     return (
         <>
             <Link to={"/serie/" + props.serie.id} className="link">
@@ -16,4 +16,4 @@ function CatalogoCardsSeries(props) {
     )
 }
 
-export default CatalogoCardsSeries
+export default CardSeries;

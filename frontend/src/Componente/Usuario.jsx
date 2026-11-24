@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import FormEditarUsuario from "./FormEditarUsuario";
+import FormEditarUsuario from "../Forms/FormEditarUsuario";
 
 function Usuario(props) {
     const userInfo = JSON.parse(localStorage.getItem("usuario"));

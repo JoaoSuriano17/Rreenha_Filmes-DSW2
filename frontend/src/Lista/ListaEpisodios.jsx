@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { BsArrowLeft } from "react-icons/bs"
 import { Link, useParams } from "react-router-dom"
-import Episodio from "./Episodio"
+import Episodio from "../Componente/Episodio"
 
 function ListaEpisodios(props){
     const {id}=useParams()

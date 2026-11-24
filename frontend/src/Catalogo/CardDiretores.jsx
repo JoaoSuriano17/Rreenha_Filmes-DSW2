@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
-function CatalogoCardsDiretores(props) {
+function CardDiretores(props) {
     return (
         <>
             <Link to={"/diretor/" + props.diretor.id} className="link">
@@ -16,4 +16,4 @@ function CatalogoCardsDiretores(props) {
     )
 }
 
-export default CatalogoCardsDiretores
+export default CardDiretores;

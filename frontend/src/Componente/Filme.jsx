@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { BsArrowLeft } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
-import FormResenha from "./FormResenha";
+import FormResenha from "../Forms/FormResenha";
 
 function Filme(props) {
     const { id } = useParams();
@@ -49,6 +49,7 @@ function Filme(props) {
                 </div>
             )
         }}
+        
     let botaoDelete;
     if(JSON.parse(localStorage.getItem("usuario")).administrador){
         botaoDelete=<button onClick={(e)=>{e.preventDefault(); props.deletar(id)}}>Deletar filme</button>

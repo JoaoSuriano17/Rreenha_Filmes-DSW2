@@ -16,12 +16,12 @@ import { useState } from 'react';
 function HomeAdm(props) {
     const [escolha1, setEscolha1] = useState("")
 
-    const bzin = localStorage.getItem("usuario");
-    const b = JSON.parse(bzin)
-    let form = null
-    let listaUsuarios = null
+   const bzin = localStorage.getItem("usuario");
+    const b = bzin ? JSON.parse(bzin) : null;
+    let form = null;
+    let listaUsuarios = null;
 
-    if (b.administrador == true) {
+    if (b?.administrador === true) {
 
         if (escolha1 === "ator") {
             form = <FormAddAtor add={props.addAtor}/>
