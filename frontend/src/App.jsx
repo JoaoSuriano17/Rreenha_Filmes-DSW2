@@ -648,10 +648,86 @@ function App() {
       const json = await res.json();
       alert(`Erro: ${json.msg}`);
       
+      alert("Filme atualizado com sucesso!");
       await SelecionarFilmes();
     }
-    alert("Filme atualizado com sucesso!");
   }
+
+    
+  async function editarAtor(ator, id) {
+      try {
+        const res = await fetch(`http://localhost:3000/ator/${id}`, {method: "PUT",
+            headers: {
+              "Authorization": `Bearer ${localStorage.getItem("token")}`
+            },
+            body: ator});
+        const json = await res.json();
+        if (!res.ok) {
+            alert(`Erro: ${json.msg}`);
+            return;
+        }
+
+        alert("Ator atualizado com sucesso!");
+        await SelecionarAtores();
+      } catch (erro) {
+          console.log("Erro: " + erro);
+      }
+  }
+
+  async function editarDiretor(diretor, id) {
+      try {
+        const res = await fetch(`http://localhost:3000/diretor/${id}`, {method: "PUT",
+            headers: {
+              "Authorization": `Bearer ${localStorage.getItem("token")}`
+            },
+            body: diretor});
+
+        const json = await res.json();
+        if (!res.ok) {
+            alert(`Erro: ${json.msg}`);
+            return;
+        }
+
+        alert("Diretor atualizado com sucesso!");
+        await SelecionarDiretores();
+      } catch (erro) {
+          console.log("Erro: " + erro);
+      }
+  }
+
+  async function deletarResenhaFilme(id) {
+    let res = await fetch(`http://localhost:3000/resenha/filme/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+    if (!res.ok) {
+      const json = await res.json();
+      alert(`Erro: ${json.msg}`);
+      
+      await SelecionarResenhasFilme();
+    }
+    alert("Resenha deletada com sucesso!");
+  }
+
+  async function deletarResenhaSerie(id) {
+    let res = await fetch(`http://localhost:3000/resenha/serie/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+    if (!res.ok) {
+      const json = await res.json();
+      alert(`Erro: ${json.msg}`);
+      
+      await SelecionarResenhasSerie();
+    }
+    alert("Resenha deletada com sucesso!");
+  }
+
+
 
 
 
@@ -843,19 +919,22 @@ function App() {
 
         <Route path="/filme/:id" element={
           <Filme filmes={filmes} diretores={diretores} atores={atores} filmes_atores={atoresFilmes} filmes_resenha={resenhasFilmes} 
-          deletar={deletarFilme} adicionarResenha={AdicionarResenhaFilme} editarFilme={editarFilme}></Filme>
+          deletar={deletarFilme} adicionarResenha={AdicionarResenhaFilme} editarFilme={editarFilme} deletarResenha={deletarResenhaFilme}></Filme>
         }></Route>
 
         <Route path="/serie/:id" element={
-          <Serie series={series} diretores={diretores} atores={atores} series_atores={atoresSeries} series_resenha={resenhasSeries} deletar={deletarSerie} adicionarResenha={AdicionarResenhaFilme}></Serie>
+          <Serie series={series} diretores={diretores} atores={atores} series_atores={atoresSeries} series_resenha={resenhasSeries} 
+          deletar={deletarSerie} adicionarResenha={AdicionarResenhaFilme} deletarResenha={deletarResenhaSerie}></Serie>
         }></Route>
 
         <Route path="/ator/:id" element={
-          <Ator atores={atores}></Ator>
+          <Ator atores={atores} 
+          editarAtor={editarAtor}></Ator>
         }></Route>
 
         <Route path="/diretor/:id" element={
-          <Diretor diretores={diretores}></Diretor>
+          <Diretor diretores={diretores}
+          editarDiretor={editarDiretor}></Diretor>
         }></Route>
 
         <Route path="/filmes" element={

@@ -1,12 +1,25 @@
 import { useEffect, useState } from "react";
 import { BsArrowLeft } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
+import FormEditarAtor from "../Forms/FormEditarAtor";
 
 function Ator(props){
     const { id } = useParams()
+    const [editarAtor, setEditarAtor] = useState(null)
+
     const ator = props.atores.find(a => a.id == id);
     if (!ator) {
         return <h1>Carregando ...</h1>;
+    }
+
+    let formEditAtor
+    let botaoDelete;
+    if (JSON.parse(localStorage.getItem("usuario")).administrador) {
+        botaoDelete = <button className="btn-azul" onClick={(e) => { e.preventDefault(); props.deletar(id) }}>Deletar filme</button>
+        if (editarAtor){
+            formEditAtor = <FormEditarAtor id={id} edit={props.editarAtor} ator={ator}/>
+        }
+
     }
 
     return(
@@ -15,6 +28,14 @@ function Ator(props){
             <Link className="link voltar categoria text-dark " to={"/atores"}><BsArrowLeft /> Voltar</Link>
             <div className="grid-filme">
                 <h1 className="titulo">{ator.nome}</h1>
+                {botaoDelete}
+
+                <button className="btn-azul" onClick={() => setEditarAtor(!editarAtor)}>
+                    {editarAtor ? "Cancelar edição" : "Editar filme"}
+                </button>
+
+                {editarAtor ? formEditAtor : <></>}
+
                 <div className="combo">
                     <img src={ator.fotografia != null ? `http://localhost:3000/arquivo/${ator.fotografia}`: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDlpiGLqA9GhqWx1nWZgjwmfm8IcuDv6gNcvdamF50Hg&s=10"} onError={(e) => {e.currentTarget.style.display = 'none';}} alt="Image" className='imagem_catalogo_pessoa' />
                     <h5>Biografia: <br/> <span className="sinopse">{ator.biografia}</span></h5>

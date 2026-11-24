@@ -44,13 +44,13 @@ function Filme(props) {
         if (a.id_filme == id) {
             for (let r of a.resenhas) {
                 cardResenhas.push(
-                    <Resenha resenha={r} key={y} />
+                    <Resenha resenha={r} id={id} key={y} deletar={props.deletarResenha}/>
                 );
                 y++
             }
         }
     }
-    console.log(filme)
+
     let formEditFilme
     let botaoDelete;
     if (JSON.parse(localStorage.getItem("usuario")).administrador) {

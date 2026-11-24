@@ -1,7 +1,14 @@
 import './Resenha.css';
+import { useState } from 'react';
 
 function Resenha(props) {
-    console.log(props.resenha)
+    let botaoDelete
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+    if (usuario && usuario.email == props.resenha.email) {
+        botaoDelete = (
+            <button className="btn-azul" onClick={() => props.deletar(props.id)}> Deletar resenha</button>
+        );
+    }
     return (
         <div className="resenha">
             <div className="resenha-cabecalho">
@@ -20,6 +27,7 @@ function Resenha(props) {
             <p className="resenha-texto">
                 {props.resenha.resenha}
             </p>
+            {botaoDelete}
         </div>
     );
 }

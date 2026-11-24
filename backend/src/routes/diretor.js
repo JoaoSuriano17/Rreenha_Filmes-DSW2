@@ -131,11 +131,11 @@ router.put("/:id", tipo, verificarAdministrador, upload.single("arquivo"), async
         const { biografia, qtde_premios } = req.body
         const id = req.params.id
 
-        if (!biografia || !qtde_premios || !req.file) {
+        if (!biografia && !qtde_premios && !req.file) {
             return res.status(400).json({ msg: "O diretor deve ter pelo menos um atributo para ser alterado!" })
         }
 
-        if (!isNaN(qtde_premios) && qtde_premios >= 0) {
+        if (!isNaN(qtde_premios) && qtde_premios < 0) {
             return res.status(400).json({ msg: "O quantidade de prêmios deve ser um número inteiro." })
         }
 

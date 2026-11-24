@@ -43,7 +43,7 @@ function Serie(props) {
         if (a.id_serie == id) {
             for (let r of a.resenhas) {
                 cardResenhas.push(
-                    <Resenha resenha={r} key={y} />
+                    <Resenha resenha={r} id={id} key={y} deletar={props.deletarResenha} />
                 );
                 y++;
             }
