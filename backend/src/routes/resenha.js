@@ -206,7 +206,7 @@ router.post("/serie", tokenArmazenar, async (req, res) => {
     } catch (erro) {
         return res.status(500).json({msg: erro.message});
     }
-})
+});
 
 //PUT - filme e série
 //O usuário e objeto da resenha não podem ser alterados.
@@ -264,7 +264,7 @@ router.put("/filme/:id", tipo, tokenArmazenar, async (req, res) => {
 
 router.put("/serie/:id", tipo, tokenArmazenar, async (req, res) => {
     try {
-        let ra = await db.query("SELECT resenha, avaliacao FROM resenha_serie WHERE serie_id=$1 AND usuario_id=$2", [req.body.serie_id, req.usuario_id]);
+        const ra = await db.query("SELECT resenha, avaliacao FROM resenha_serie WHERE serie_id=$1 AND usuario_id=$2", [req.params.id, req.usuario_id]);
         if (!ra.rowCount) { return res.status(400).json({ msg: "Usuário não tem resenha nessa série!" }); }
         
         const { resenha, avaliacao } = req.body || {};
@@ -279,7 +279,7 @@ router.put("/serie/:id", tipo, tokenArmazenar, async (req, res) => {
             return res.status(400).json({ msg: "Avaliação deve ser um número entre 0 e 100."})
         }
 
-        const r = await db.query("UPDATE resenha_serie SET resenha=$1, avaliacao=$2 WHERE id=$3 RETURNING *", [resenha, avaliacao, req.params.id]);
+        const r = await db.query("UPDATE resenha_serie SET resenha=$1, avaliacao=$2 WHERE serie_id=$3 AND usuario_id = $4 RETURNING *", [resenha, avaliacao, req.params.id, req.usuario_id]);
         return res.status(200).json({ msg: "Resenha atualizada com sucesso!", resenha: r.rows[0] });
     } catch (erro) {
         return res.status(500).json({ msg: erro.message });

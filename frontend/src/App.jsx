@@ -381,6 +381,37 @@ function App() {
     window.alert("Resenha adicionada com sucesso!");
     await SelecionarResenhasFilme();
 }
+async function AdicionarResenhaSerie(id_serie, resenha, avaliacao) {
+  console.log("AAA")
+  const token = localStorage.getItem("token");
+  const r = await fetch("http://localhost:3000/resenha/serie", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      serie_id: id_serie,
+      resenha: resenha,
+      avaliacao: Number(avaliacao)
+    })
+  });
+
+  if (!r.ok) {
+    console.error("Resposta de erro:", r);
+    const raw = await r.text();
+    let msg = raw;
+    try {
+      const data = JSON.parse(raw);
+      msg = data.msg || raw;
+    } catch (_) {}
+    window.alert(`Erro: ${msg}`);
+    return;
+  }
+
+  window.alert("Resenha adicionada com sucesso!");
+  await SelecionarResenhasSerie();
+  }
 
   //Busca: 
   async function filme_titulo(titulo) {
@@ -567,7 +598,7 @@ function App() {
     alert("Associação entre série e ator adicionada com sucesso!!!")
   }
 
-  async function AlterarSerie(form, id) {
+  async function editarSerie(form, id) {
     let res = await fetch(`http://localhost:3000/serie/${id}`, { method: "PUT", headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }, body: form });
     if (!res.ok) {
       const json = await res.json();
@@ -575,9 +606,10 @@ function App() {
       return;
     }
     alert("Série alterada com sucesso!!!")
+    await SelecionarSeries();
   }
 
-  async function AlterarEpisodio(titulo, sinopse, duracao, temporada, id) {
+  async function editarEpisodio(titulo, sinopse, duracao, temporada, id) {
     let res = await fetch(`http://localhost:3000/episodio/${id}`, { method: "PUT", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${localStorage.getItem("token")}` }, body: JSON.stringify({ titulo: titulo, sinopse: sinopse, duracao: duracao, temporada: temporada }) });
     if (!res.ok) {
       const json = await res.json();
@@ -711,7 +743,7 @@ function App() {
       alert(`Erro: ${json.msg}`);
       return;
     }
-    alert("Resenha alterada com sucesso com sucesso!");
+    alert("Resenha alterada com sucesso!");
     await SelecionarResenhasSerie();
   }
 
@@ -986,7 +1018,7 @@ function App() {
 
         <Route path="/serie/:id" element={
           <Serie series={series} diretores={diretores} atores={atores} series_atores={atoresSeries} series_resenha={resenhasSeries} 
-          deletar={deletarSerie} adicionarResenha={AdicionarResenhaFilme} deletarResenha={deletarResenhaSerie} alterarResenha={editarResenhaSerie}></Serie>
+          deletar={deletarSerie} adicionarResenha={AdicionarResenhaSerie} deletarResenha={deletarResenhaSerie} alterarResenha={editarResenhaSerie} editarSerie={editarSerie}></Serie>
         }></Route>
 
         <Route path="/ator/:id" element={
@@ -1031,7 +1063,7 @@ function App() {
           <HomeAdm usuarios={usuarios} series={series} diretores={diretores} episodios={episodios} filmes={filmes} atores={atores}
             adm={AltararUsuarioParaAdm}
             addFilme={CadastrarFilme} addSerie={CadastrarSerie} addAtor={CadastrarAtor} addDiretor={CadastrarDiretor} addEpisodio={CadastrarEpisodios} addAtorSerie={CadastrarAtorSerie} addAtorFilme={CadastrarAtorFilme}
-            altSerie={AlterarSerie} altEpisodio={AlterarEpisodio}></HomeAdm>
+          ></HomeAdm>
         }></Route>
 
         <Route path="/user" element={

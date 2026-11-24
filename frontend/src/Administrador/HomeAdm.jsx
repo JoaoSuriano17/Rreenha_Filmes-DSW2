@@ -9,8 +9,6 @@ import FormAddDiretor from './Forms/FormAddDiretor';
 import FormAddEpisodios from './Forms/FormAddEpisodio';
 import FormAddAtorEmSerie from './Forms/FormAddAtorEmSerie';
 import FormAddAtorEmFilme from './Forms/FormAddAtorEmFilme';
-import FormAltSerie from './Forms/FormAltSerie';
-import FormAltEpisodios from './Forms/FormAltEpisodio';
 import { useState } from 'react';
 
 function HomeAdm(props) {

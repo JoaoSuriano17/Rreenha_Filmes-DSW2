@@ -3,11 +3,13 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import Resenha from "./Resenha";
 import FormResenha from "../Forms/FormResenha";
+import FormEditarSerie from "../Forms/FormEditarSerie";
 
 function Serie(props) {
     const { id } = useParams();
     const navigate = useNavigate()
     const [escreverResenha, setEscreverResenha] = useState(false);
+    const [editarSerie, setEditarSerie] = useState(false);
 
     const serie = props.series.find(f => f.id == id);
     if (!serie) {
@@ -36,12 +38,12 @@ function Serie(props) {
         }
     }
 
-    console.log(props.series_resenha)
     let cardResenhas = [];
     let y = 0;
     for (let a of props.series_resenha) {
         if (a.id_serie == id) {
             for (let r of a.resenhas) {
+                console.log(r)
                 cardResenhas.push(
                     <Resenha resenha={r} id={id} key={y} deletar={props.deletarResenha} edit={props.alterarResenha}/>
                 );
@@ -49,6 +51,7 @@ function Serie(props) {
             }
         }
     }   
+
 
     let botaoDelete;
     if(JSON.parse(localStorage.getItem("usuario")).administrador){
@@ -59,6 +62,11 @@ function Serie(props) {
         formResenha = <FormResenha id={id} adicionarResenha={props.adicionarResenha} />
     }
 
+    let formEditarSerie;
+    if (editarSerie) {
+        formEditarSerie = <FormEditarSerie id={id} edit={props.editarSerie} diretores={props.diretores} serie={serie}/>
+    }
+
     return (
         <>
             <p className="categoria">Série</p>
@@ -66,6 +74,9 @@ function Serie(props) {
             <div className="grid-filme">
                 <h1 className="titulo">{serie.titulo}</h1>
                 {botaoDelete}
+
+                <button className="btn-azul" onClick={() => setEditarSerie(!editarSerie)}>{editarSerie ? "Cancelar" : "Alterar série"}</button> <br />
+                {formEditarSerie}
                 <div className="combo">
                     <img src={serie.fotografia != null ? `http://localhost:3000/arquivo/${serie.fotografia}` : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDlpiGLqA9GhqWx1nWZgjwmfm8IcuDv6gNcvdamF50Hg&s=10"} onError={(e) => { e.currentTarget.style.display = 'none'; }} alt="Image" className='imagem_catalogo_pessoa' />
                     <h5>

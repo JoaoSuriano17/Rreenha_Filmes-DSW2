@@ -5,9 +5,7 @@ import { useState } from 'react';
 
 function Resenha(props) {
     const [alterarResenha, setAlterarResenha] = useState(false);
-
     const usuario = JSON.parse(localStorage.getItem("usuario"));
-
     const podeAlterar = usuario && usuario.email === props.resenha.email;
 
     return (
@@ -34,17 +32,9 @@ function Resenha(props) {
 
             {podeAlterar && (
                 <>
-                    <button
-                        className="btn-azul"
-                        onClick={() => props.deletar(props.id)}
-                    >
-                        Deletar resenha
-                    </button>
+                    <button className="btn-azul" onClick={() => props.deletar(props.id)}> Deletar resenha </button>
 
-                    <button
-                        className="btn-azul"
-                        onClick={() => setAlterarResenha(!alterarResenha)}
-                    >
+                    <button className="btn-azul" onClick={() => setAlterarResenha(!alterarResenha)}>
                         {alterarResenha ? "Cancelar" : "Alterar resenha"}
                     </button>
 

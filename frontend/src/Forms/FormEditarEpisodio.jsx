@@ -1,13 +1,11 @@
 import { useState } from "react";
 
-function FormAltEpisodios(props){
+function FormEditarEpisodio(props){
 
     const [titulo, setTitulo] = useState("")
     const [sinopse, setSinopse] = useState("")
     const [duracao, setDuracao] = useState(0)
     const [temporada, setTemporada] = useState(0)
-
-    const [id_episodio, setIdSEpisodio] = useState(0)
 
     function alt(e){
         e.preventDefault()
@@ -39,4 +37,4 @@ function FormAltEpisodios(props){
     )
 }
 
-export default FormAltEpisodios;
+export default FormEditarEpisodio;

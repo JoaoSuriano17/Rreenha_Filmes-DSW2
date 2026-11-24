@@ -1,15 +1,13 @@
 import { useState } from "react";
 
-function FormAltSerie(props){
+function FormEditarSerie(props){
 
     const [arquivo, setArquivo] = useState(null);
-    const [titulo, setTitulo]=useState("")
-    const [diretor, setDiretor] = useState(0)
-    const [sinopse, setSinopse] = useState("")
-    const [faixa_etaria, setFaixa_etaria] = useState(0)
-    const [qtde_premios, setQtde_premios] = useState(0)
-
-    const [id_serie, setIdSerie] = useState(0)
+    const [titulo, setTitulo]=useState(props.serie.titulo)
+    const [diretor, setDiretor] = useState(props.serie.diretor)
+    const [sinopse, setSinopse] = useState(props.serie.sinopse)
+    const [faixa_etaria, setFaixa_etaria] = useState(props.serie.faixa_etaria)
+    const [qtde_premios, setQtde_premios] = useState(props.serie.qtde_premios)
 
     function changeFile(e) {
         if (e.target.files.length > 0) {
@@ -27,9 +25,11 @@ function FormAltSerie(props){
         formData.append("sinopse", sinopse);
         formData.append("faixa_etaria", faixa_etaria);
         formData.append("qtde_premios", qtde_premios);
-        formData.append("arquivo", arquivo);
+        if (arquivo){
+            formData.append("arquivo", arquivo);
+        }
 
-        props.alt(formData, id_serie)
+        props.edit(formData, props.id)
     }
      
     let optionsSelect = [<option value={0} key={-1}></option>]
@@ -37,19 +37,10 @@ function FormAltSerie(props){
         optionsSelect.push(<option value={a.id} key={a.id}>{a.nome}</option>)
     }
 
-    let optionsSelect2 = [<option value={0} key={-1}></option>]
-    for (let a of props.series){
-        optionsSelect2.push(<option value={a.id} key={a.id}>{a.titulo}</option>)
-    }
-    
     return(
         <>
             <form onSubmit={alt}>
                 <h3>Alterar série</h3>
-                <label>Escolha uma série:</label><br/>
-                <select id="serie_id" name="serie_id" value={id_serie} onChange={(e) => setIdSerie(e.target.value)}>
-                    {optionsSelect2}
-                </select><br/>
                 <label>Título:</label> <input type="text" placeholder="Título" value={titulo} onChange={(e)=>{setTitulo(e.target.value)}}/><br/>
                 {/* Caixa de seleção */}
                 <label>Escolha um diretor:</label><br></br>
@@ -67,4 +58,4 @@ function FormAltSerie(props){
     )
 }
 
-export default FormAltSerie;
+export default FormEditarSerie;
