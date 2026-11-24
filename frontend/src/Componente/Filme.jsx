@@ -44,7 +44,7 @@ function Filme(props) {
         if (a.id_filme == id) {
             for (let r of a.resenhas) {
                 cardResenhas.push(
-                    <Resenha resenha={r} id={id} key={y} deletar={props.deletarResenha}/>
+                    <Resenha resenha={r} id={id} key={y} deletar={props.deletarResenha} edit={props.alterarResenha}/>
                 );
                 y++
             }

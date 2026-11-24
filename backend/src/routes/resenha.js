@@ -42,7 +42,7 @@ router.get("/", tipo, tokenArmazenar, async (req, res) => {
 
 router.get("/filme/:id", tipo, async (req, res) => {
     try {
-        const requisicao1 = await db.query("SELECT usuario.nome, usuario.email, resenha_filme.resenha, resenha_filme.avaliacao FROM resenha_filme JOIN filme ON resenha_filme.filme_id = filme.id JOIN usuario ON usuario.id = resenha_filme.usuario_id WHERE filme.id = $1", [req.params.id])
+        const requisicao1 = await db.query("SELECT resenha_filme.filme_id, usuario.nome, usuario.email, resenha_filme.resenha, resenha_filme.avaliacao FROM resenha_filme JOIN filme ON resenha_filme.filme_id = filme.id JOIN usuario ON usuario.id = resenha_filme.usuario_id WHERE filme.id = $1", [req.params.id])
         return res.status(200).json({id_filme: req.params.id, resenhas: requisicao1.rows});
     } catch (erro) {
         return res.status(500).json({msg: erro.message});
@@ -51,7 +51,7 @@ router.get("/filme/:id", tipo, async (req, res) => {
 
 router.get("/serie/:id", tipo, async (req, res) => {
     try {
-        const requisicao1 = await db.query("SELECT usuario.nome, usuario.email, resenha_serie.resenha, resenha_serie.avaliacao FROM resenha_serie JOIN serie ON resenha_serie.serie_id = serie.id JOIN usuario ON usuario.id = resenha_serie.usuario_id WHERE serie.id = $1", [req.params.id])
+        const requisicao1 = await db.query("SELECT resenha_serie.serie_id, usuario.nome, usuario.email, resenha_serie.resenha, resenha_serie.avaliacao FROM resenha_serie JOIN serie ON resenha_serie.serie_id = serie.id JOIN usuario ON usuario.id = resenha_serie.usuario_id WHERE serie.id = $1", [req.params.id])
         return res.status(200).json({id_serie: req.params.id, resenhas: requisicao1.rows});
     } catch (erro) {
         return res.status(500).json({msg: erro.message});
@@ -210,9 +210,9 @@ router.post("/serie", tokenArmazenar, async (req, res) => {
 
 //PUT - filme e série
 //O usuário e objeto da resenha não podem ser alterados.
-router.put("/filme/:id", tipo, tokenArmazenar, async (req, res) => {
+/*router.put("/filme/:id", tipo, tokenArmazenar, async (req, res) => {
     try {
-        let ra = await db.query("SELECT resenha, avaliacao FROM resenha_filme WHERE filme_id=$1 AND usuario_id=$2", [req.body.filme_id, req.usuario_id]);
+        let ra = await db.query("SELECT resenha, avaliacao FROM resenha_filme WHERE filme_id=$1 AND usuario_id=$2", [req.params.id, req.usuario_id]);
         if (!ra.rowCount) { return res.status(400).json({ msg: "Usuário não tem resenha neste filme!" }); }
         
         const { resenha, avaliacao } = req.body || {};
@@ -232,7 +232,35 @@ router.put("/filme/:id", tipo, tokenArmazenar, async (req, res) => {
     } catch (erro) {
         return res.status(500).json({ msg: erro.message });
     }
-})
+})*/
+
+
+router.put("/filme/:id", tipo, tokenArmazenar, async (req, res) => {
+    try {
+        const { resenha, avaliacao } = req.body || {};
+
+        if (!resenha) {
+            return res.status(400).json({msg: "Resenha é obrigatória." });
+        }
+
+        if (avaliacao === undefined || isNaN(avaliacao) || avaliacao < 0 || avaliacao > 100) {
+            return res.status(400).json({ msg: "Avaliação deve ser um número entre 0 e 100." });
+        }
+
+        const ra = await db.query("SELECT * FROM resenha_filme WHERE filme_id=$1 AND usuario_id=$2", [req.params.id, req.usuario_id] );
+
+        if (!ra.rowCount) {
+            return res.status(404).json({ msg: "Resenha não encontrada ou você não é o autor." });
+        }
+
+        const r = await db.query( `UPDATE resenha_filme SET resenha=$1, avaliacao=$2 WHERE filme_id=$3 RETURNING *`, [resenha, avaliacao, req.params.id] );
+        return res.status(200).json({ msg: "Resenha atualizada com sucesso!", resenha: r.rows[0]});
+
+    } catch (erro) {
+        return res.status(500).json({ msg: erro.message});
+    }
+});
+
 
 router.put("/serie/:id", tipo, tokenArmazenar, async (req, res) => {
     try {
@@ -266,7 +294,8 @@ router.delete("/filme/:id", tipo, tokenArmazenar, async (req, res) => {
     }
     return res.status(200).json({ msg: "Resenha apagada com sucesso!"});
 })
-router.delete("/serie/:id", async (req, res) => {
+
+router.delete("/serie/:id", tipo, tokenArmazenar, async (req, res) => {
     const r = await db.query("DELETE FROM resenha_serie WHERE usuario_id=$1 AND serie_id=$2 RETURNING *", [req.usuario_id, req.params.id]);
     if (!r.rowCount){
         return res.status(400).json({msg: "Erro ao deletar resenha de série."})

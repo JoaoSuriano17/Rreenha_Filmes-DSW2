@@ -1,14 +1,15 @@
+
+import FormEditarResenhaFilme from '../Forms/FormEditarResenhaFIlme';
 import './Resenha.css';
 import { useState } from 'react';
 
 function Resenha(props) {
-    let botaoDelete
+    const [alterarResenha, setAlterarResenha] = useState(false);
+
     const usuario = JSON.parse(localStorage.getItem("usuario"));
-    if (usuario && usuario.email == props.resenha.email) {
-        botaoDelete = (
-            <button className="btn-azul" onClick={() => props.deletar(props.id)}> Deletar resenha</button>
-        );
-    }
+
+    const podeAlterar = usuario && usuario.email === props.resenha.email;
+
     return (
         <div className="resenha">
             <div className="resenha-cabecalho">
@@ -16,18 +17,42 @@ function Resenha(props) {
                     <h5 className="resenha-usuario">
                         {props.resenha.nome}
                     </h5>
+
                     <p className="resenha-email">
                         {props.resenha.email}
                     </p>
                 </div>
+
                 <span className="resenha-avaliacao">
                     {props.resenha.avaliacao}/100
                 </span>
             </div>
+
             <p className="resenha-texto">
                 {props.resenha.resenha}
             </p>
-            {botaoDelete}
+
+            {podeAlterar && (
+                <>
+                    <button
+                        className="btn-azul"
+                        onClick={() => props.deletar(props.id)}
+                    >
+                        Deletar resenha
+                    </button>
+
+                    <button
+                        className="btn-azul"
+                        onClick={() => setAlterarResenha(!alterarResenha)}
+                    >
+                        {alterarResenha ? "Cancelar" : "Alterar resenha"}
+                    </button>
+
+                    {alterarResenha && (
+                        <FormEditarResenhaFilme id={props.id} edit={props.edit} resenha={props.resenha}/>
+                    )}
+                </>
+            )}
         </div>
     );
 }

@@ -4,9 +4,8 @@ import FormEditarUsuario from "../Forms/FormEditarUsuario";
 
 function Usuario(props) {
     const userInfo = JSON.parse(localStorage.getItem("usuario"));
-    const [nome, setNome] = useState("")
-    const [senha, setSenha] = useState("")
     const [editar, setEditar] = useState(false)
+    const [editarUsuario, setEditarUsuario] = useState(false)
 
     if (!userInfo) {
         return (
@@ -25,10 +24,12 @@ function Usuario(props) {
         return (<h5>Carregando ...</h5>)
     }
 
-    let form;
-    if(editar){
-        form=<FormEditarUsuario edit={props.edit}/>
+    let form = null;
+    if(editarUsuario){
+        form=<FormEditarUsuario edit={props.edit} nome={user.nome}/>
     }
+
+    
     /*
     function criarForm() {
         form = 
@@ -48,10 +49,9 @@ function Usuario(props) {
             <h1>{user.email}</h1>
             <img src={user.fotografia != null ? `http://localhost:3000/arquivo/${user.fotografia}` : "https://png.pngtree.com/png-vector/20250227/ourlarge/pngtree-user-profile-avatar-with-horns-vector-png-image_15605623.png"} onError={(e) => { e.currentTarget.style.display = 'none'; }} alt="Image" className='imagem_catalogo_pessoa' />
             <h5>Nome: {user.nome}</h5>
-            <h5>Administrador: {user.administrador}</h5>
-            <h5>Crítico: {user.critico}</h5>
-            {/*Formulário para alterar - fazer algumas alterações*/}
-            <button onClick={(e)=>{e.preventDefault(); setEditar(!editar)}}>Editar</button>
+            <button className="btn-azul" onClick={(e)=>{e.preventDefault(); props.deletar()}}>Delete</button>
+
+            <button className="btn-azul" onClick={() => setEditarUsuario(!editarUsuario)}>{editarUsuario ? "Cancelar" : "Alterar usuário"}</button> <br />
             {form}
         </>
     )

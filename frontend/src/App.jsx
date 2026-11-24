@@ -351,6 +351,7 @@ function App() {
   }
 
   async function AdicionarResenhaFilme(id_filme, resenha, avaliacao) {
+    console.log("AAA")
     const token = localStorage.getItem("token");
     const r = await fetch("http://localhost:3000/resenha/filme", {
       method: "POST",
@@ -451,6 +452,7 @@ function App() {
 
   async function AlterarUsuario(user) {
     try {
+      console.log("AAA")
       //fotografia A FAZER
       let edicao = await fetch("http://localhost:3000/usuario/", {
         method: "PUT",
@@ -461,6 +463,7 @@ function App() {
         //body: JSON.stringify(user)
         body: user
       });
+
       if (!edicao.ok) {
         console.log(edicao + " Não ok.");
       }
@@ -622,6 +625,29 @@ function App() {
     }
     alert("Série deletada com sucesso!");
   }
+
+  async function deletarUsuario() {
+    let res = await fetch(`http://localhost:3000/usuario`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+
+    if (!res.ok) {
+      window.alert("Erro ao deletar usuário.");
+      //Imagino que seja esse o único erro plausível
+      /*
+      const json = await res.json();
+      alert(`Erro: ${json.msg}`);
+      */
+      return;
+    }
+    alert("Usuário deletado com sucesso!");
+  }
+
+
   async function deletarEpisodio(id) {
     let res = await fetch(`http://localhost:3000/episodio/${id}`, {
       method: "DELETE",
@@ -651,6 +677,42 @@ function App() {
       alert("Filme atualizado com sucesso!");
       await SelecionarFilmes();
     }
+  }
+
+  async function editarResenhaFilme(resenha, id) {
+    let res = await fetch(`http://localhost:3000/resenha/filme/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      },
+      body: JSON.stringify(resenha)
+    });
+    if (!res.ok) {
+      const json = await res.json();
+      alert(`Erro: ${json.msg}`);
+      return;
+    }
+    alert("Resenha alterada com sucesso com sucesso!");
+    await SelecionarResenhasFilme();
+  }
+
+  async function editarResenhaSerie(resenha, id) {
+    let res = await fetch(`http://localhost:3000/resenha/serie/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      },
+      body: JSON.stringify(resenha)
+    });
+    if (!res.ok) {
+      const json = await res.json();
+      alert(`Erro: ${json.msg}`);
+      return;
+    }
+    alert("Resenha alterada com sucesso com sucesso!");
+    await SelecionarResenhasSerie();
   }
 
     
@@ -919,12 +981,12 @@ function App() {
 
         <Route path="/filme/:id" element={
           <Filme filmes={filmes} diretores={diretores} atores={atores} filmes_atores={atoresFilmes} filmes_resenha={resenhasFilmes} 
-          deletar={deletarFilme} adicionarResenha={AdicionarResenhaFilme} editarFilme={editarFilme} deletarResenha={deletarResenhaFilme}></Filme>
+          deletar={deletarFilme} adicionarResenha={AdicionarResenhaFilme} editarFilme={editarFilme} deletarResenha={deletarResenhaFilme} alterarResenha={editarResenhaFilme}></Filme>
         }></Route>
 
         <Route path="/serie/:id" element={
           <Serie series={series} diretores={diretores} atores={atores} series_atores={atoresSeries} series_resenha={resenhasSeries} 
-          deletar={deletarSerie} adicionarResenha={AdicionarResenhaFilme} deletarResenha={deletarResenhaSerie}></Serie>
+          deletar={deletarSerie} adicionarResenha={AdicionarResenhaFilme} deletarResenha={deletarResenhaSerie} alterarResenha={editarResenhaSerie}></Serie>
         }></Route>
 
         <Route path="/ator/:id" element={
@@ -974,7 +1036,7 @@ function App() {
 
         <Route path="/user" element={
           <Usuario usuarios={usuarios} filmes_resenha={resenhasFilmes} series_resenha={resenhasSeries}
-            edit={AlterarUsuario}></Usuario>
+            edit={AlterarUsuario} deletar={deletarUsuario}></Usuario>
         }></Route>
 
         <Route path="/:sla" element={<Erro></Erro>}></Route>
