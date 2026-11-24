@@ -1,20 +1,40 @@
-import {Route, Routes, useNavigate} from "react-router-dom"
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import "./FormResenha.css";
 
-function FormResenha(props){
-  const [resenha, setResenha]=useState("");
-  const [avaliacao, setAvaliacao]=useState(0);
-  
-    return(
-        <form onSubmit={(e)=>{e.preventDefault();console.log(props.id+" "+resenha+" "+avaliacao);props.adicionarResenha(props.id, resenha, avaliacao)}}>
-            <p>Resenha: </p>
-            <input type="text" required value={resenha} onChange={(e)=>{setResenha(e.target.value)}}/><br />
-            <p>Avaliação: </p>
-            <input type="number" required value={avaliacao} onChange={(e)=>{setAvaliacao(e.target.value)}}/><br />
+function FormResenha(props) {
+    const [resenha, setResenha] = useState("");
+    const [avaliacao, setAvaliacao] = useState("");
 
-            <button>Enviar</button>
+    function enviarResenha(e) {
+        e.preventDefault();
+
+        props.adicionarResenha(
+            props.id,
+            resenha,
+            avaliacao
+        );
+
+        setResenha("");
+        setAvaliacao("");
+    }
+
+    return (
+        <form className="form-resenha" onSubmit={enviarResenha}>
+            <div className="campo-resenha">
+                <label>Sua resenha</label>
+                <input id="texto-resenha" required value={resenha} onChange={(e) => setResenha(e.target.value)} placeholder="Compartilhe sua opinião sobre o filme..." />
+            </div>
+
+            <div className="campo-resenha">
+                <label>Avaliação (0 a 10)</label>
+                <input id="avaliacao-resenha" type="number" min="0" max="10" step="0.5" required value={avaliacao} onChange={(e) => setAvaliacao(e.target.value)} placeholder="Ex.: 9" />
+            </div>
+
+            <div className="acoes-formulario">
+                <button type="submit" className="btn-azul"> Enviar resenha</button>
+            </div>
         </form>
-    )
+    );
 }
 
 export default FormResenha;

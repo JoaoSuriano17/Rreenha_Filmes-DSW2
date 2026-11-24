@@ -210,34 +210,78 @@ function App() {
   }
 
   async function SelecionarResenhasFilme() {
-    let resenhas_filmes = []
+    let resenhas_filmes = [];
+
     for (let a of filmes) {
-      const r = await fetch(`http://localhost:3000/resenha/filme/${a.id}`)
-      if (!r.ok || r.msg == "Este filme não possui resenhas.") {
-        continue;
-      }
-      const r2 = await r.json()
-      if (!r2.msg) {
-        resenhas_filmes.push({ id_filme: a.id, resenhas: [r2.resenhas] })
-      }
+        try {
+            const r = await fetch(`http://localhost:3000/resenha/filme/${a.id}`);
+            if (!r.ok) {
+                resenhas_filmes.push({
+                    id_filme: a.id,
+                    resenhas: []
+                });
+                continue;
+            }
+
+            const r2 = await r.json();
+            let resenhas = [];
+            if (Array.isArray(r2.resenhas)) {
+                resenhas = r2.resenhas;
+            } else if (r2.resenhas) {
+                resenhas = [r2.resenhas];
+            }
+            resenhas_filmes.push({
+                id_filme: a.id,
+                resenhas: resenhas
+            });
+        } catch (erro) {
+            console.log(`Erro ao buscar resenhas do filme ${a.id}:`, erro);
+            resenhas_filmes.push({
+                id_filme: a.id,
+                resenhas: []
+            });
+        }
     }
-    setResenhasFilmes(resenhas_filmes)
+
+    setResenhasFilmes(resenhas_filmes);
   }
 
   async function SelecionarResenhasSerie() {
-    let resenhas_series = []
+    let resenhas_series = [];
     for (let a of series) {
-      const r = await fetch(`http://localhost:3000/resenha/serie/${a.id}`)
-      if (!r.ok || r.msg == "Este filme não possui resenhas.") {
-        continue;
-      }
-      const r2 = await r.json()
-      if (!r2.msg) {
-        resenhas_series.push({ id_serie: a.id, resenhas: [r2.resenhas] })
-      }
+        try {
+            const r = await fetch(`http://localhost:3000/resenha/serie/${a.id}`);
+            if (!r.ok) {
+              resenhas_series.push({
+                  id_serie: a.id,
+                  resenhas: []
+              });
+              continue;
+            }
+
+            const r2 = await r.json();
+            let resenhas = [];
+            if (Array.isArray(r2.resenhas)) {
+                resenhas = r2.resenhas;
+            } else if (r2.resenhas) {
+                resenhas = [r2.resenhas];
+            }
+            resenhas_series.push({
+                id_serie: a.id,
+                resenhas: resenhas
+            });
+
+        } catch (erro) {
+            console.log(`Erro ao buscar resenhas do filme ${a.id}:`, erro);
+            resenhas_series.push({
+                id_serie: a.id,
+                resenhas: []
+            });
+        }
     }
-    setResenhasSeries(resenhas_series)
-  }
+
+    setResenhasSeries(resenhas_series);
+}
 
 
 
@@ -594,6 +638,21 @@ function App() {
     alert("Série deletada com sucesso!");
   }
 
+  async function editarFilme(user, id) {
+    let res = await fetch(`http://localhost:3000/filme/${id}`, {method: "PUT", 
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      }, 
+      body: user});
+    if (!res.ok) {
+      const json = await res.json();
+      alert(`Erro: ${json.msg}`);
+      
+      await SelecionarFilmes();
+    }
+    alert("Filme atualizado com sucesso!");
+  }
+
 
 
   async function arquivos() {
@@ -783,11 +842,12 @@ function App() {
         ></Route>
 
         <Route path="/filme/:id" element={
-          <Filme filmes={filmes} diretores={diretores} atores={atores} filmes_atores={atoresFilmes} filmes_resenha={resenhasFilmes} deletar={deletarFilme} adicionarResenha={AdicionarResenhaFilme}></Filme>
+          <Filme filmes={filmes} diretores={diretores} atores={atores} filmes_atores={atoresFilmes} filmes_resenha={resenhasFilmes} 
+          deletar={deletarFilme} adicionarResenha={AdicionarResenhaFilme} editarFilme={editarFilme}></Filme>
         }></Route>
 
         <Route path="/serie/:id" element={
-          <Serie series={series} diretores={diretores} atores={atores} series_atores={atoresSeries} series_resenha={resenhasSeries} deletar={deletarSerie}></Serie>
+          <Serie series={series} diretores={diretores} atores={atores} series_atores={atoresSeries} series_resenha={resenhasSeries} deletar={deletarSerie} adicionarResenha={AdicionarResenhaFilme}></Serie>
         }></Route>
 
         <Route path="/ator/:id" element={

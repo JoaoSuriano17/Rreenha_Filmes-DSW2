@@ -150,32 +150,37 @@ router.post("/:id/atores", verificarAdministrador, async (req, res) => {
 });
 
 //PUT
-router.put("/:id", tipo, verificarAdministrador, async (req, res) => {
+router.put("/:id", tipo, verificarAdministrador, upload.single("arquivo"), async (req, res) => {
     try {
         const { titulo, sinopse, faixa_etaria, duracao, qtde_premios } = req.body;
+        const id = req.params.id;
+        const atual = await db.query("SELECT * FROM filme WHERE id=$1", [id]);
 
-        const atual = await db.query("SELECT * FROM episodio WHERE id=$1", [req.params.id]);
         if (!atual.rowCount) {
             return res.status(404).json({ msg: "Filme inexistente." });
         }
 
-        if (!titulo || !sinopse || !duracao || !faixa_etaria || !qtde_premios) {
-            return res.status(404).json({ msg: "Algum parâmetro deve ser passado." });
+        if (!titulo || !sinopse || !duracao || !faixa_etaria || qtde_premios === undefined) {
+            return res.status(400).json({ msg: "Algum parâmetro está faltando." });
         }
 
-        // Verificando os atributos: 
-        if (!isNaN(duracao) || duracao < 1) {
-            return res.status(400).json({ msg: "A duração deve ser um número inteiro maior que 0." })
-        }
-        if (!isNaN(faixa_etaria) || faixa_etaria < 1) {
-            return res.status(400).json({ msg: "A faixa etária deve ser um número inteiro igual ou maior que 1." })
-        }
-        if (!isNaN(qtde_premios) || qtde_premios < 1) {
-            return res.status(400).json({ msg: "A faixa etária deve ser um número inteiro igual ou maior que 1." })
+        if (isNaN(duracao) || duracao < 1) {
+            return res.status(400).json({ msg: "A duração deve ser um número maior que 0." });
         }
 
+        if (isNaN(faixa_etaria) || faixa_etaria < 1 || faixa_etaria > 18) {
+            return res.status(400).json({ msg: "A faixa etária deve ser um número entre 1 e 18." });
+        }
 
-        const r = await db.query("UPDATE filme SET titulo=$1, sinopse=$2, duracao=$3, faixa_etaria=$4, qtde_premios=$5 WHERE id=$6 RETURNING *", [titulo != undefined ? titulo : atual.rows[0].titulo, sinopse != undefined ? sinopse : atual.rows[0].sinopse, duracao != undefined ? duracao : atual.rows[0].sinopse, qtde_premios != undefined ? qtde_premios : atual.rows[0].qtde_premios, req.params.id]);
+        if (isNaN(qtde_premios) || qtde_premios < 0) {
+            return res.status(400).json({ msg: "A quantidade de prêmios deve ser um número maior ou igual a 0." });
+        }
+
+        const r = await db.query(
+            "UPDATE filme SET titulo=$1, sinopse=$2, duracao=$3, faixa_etaria=$4, qtde_premios=$5 WHERE id=$6 RETURNING *",
+            [titulo, sinopse, duracao, faixa_etaria, qtde_premios, id]
+        );
+
         if (!r.rowCount) {
             return res.status(500).json({ msg: "Erro ao alterar filme." });
         }
@@ -188,19 +193,16 @@ router.put("/:id", tipo, verificarAdministrador, async (req, res) => {
                 req.file.originalname
             );
 
-            const r = await fetch("http://localhost:3000/arquivo", {
-                method: "POST",
-                body: formData
-            });
-
-            if (!r.ok) {
+            const resposta = await fetch("http://localhost:3000/arquivo", { method: "POST", body: formData});
+            if (!resposta.ok) {
                 return res.status(500).json({ msg: "Erro ao salvar o novo cartaz!" });
             }
-            const arquivo = await r.json();
-            await db.query("UPDATE filme SET cartaz = $1 WHERE id = $2", [arquivo.arquivo.id, id]);
+
+            const arquivo = await resposta.json();
+            await db.query("UPDATE filme SET cartaz=$1 WHERE id=$2", [arquivo.arquivo.id, id]);
         }
 
-        const resultado = await db.query("SELECT * FROM filme WHERE id = $1", [id]);
+        const resultado = await db.query("SELECT * FROM filme WHERE id=$1", [id]);
         return res.json({ filme: resultado.rows[0] });
     } catch (erro) {
         return res.status(500).json({ msg: erro.message });

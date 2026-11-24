@@ -1,9 +1,13 @@
 import { BsArrowLeft } from "react-icons/bs";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
+import Resenha from "./Resenha";
+import FormResenha from "../Forms/FormResenha";
 
 function Serie(props) {
     const { id } = useParams();
     const navigate = useNavigate()
+    const [escreverResenha, setEscreverResenha] = useState(false);
 
     const serie = props.series.find(f => f.id == id);
     if (!serie) {
@@ -12,8 +16,7 @@ function Serie(props) {
 
     const diretor = props.diretores.find(d => d.id == serie.diretor);
     const atoresSerie = props.series_atores.find(a => a.id_serie == id);
-    const resenhasSerie = props.series_resenha.find(rf => rf.id_serie == id);
-    if (!diretor || !atoresSerie || !resenhasSerie) {
+    if (!diretor) {
         return <h1>Carregando...</h1>;
     }
 
@@ -33,26 +36,29 @@ function Serie(props) {
         }
     }
 
+    console.log(props.series_resenha)
     let cardResenhas = [];
-    let y = 0
-    if (resenhasSerie.resenhas[0]) {        
-        for (let a of resenhasSerie.resenhas) {
-            cardResenhas.push(
-                <div className="card cardcatalogo" key={y}>
-                    <div className="card-body">
-                        <h5 className="card-title">{a.nome}</h5>
-                        <p>{a.email}</p>
-                        <p>{a.resenha}</p>
-                        <p>{a.avaliacao}</p>
-                    </div>
-                </div>
-            )
-            y++
-        }}
+    let y = 0;
+    for (let a of props.series_resenha) {
+        if (a.id_serie == id) {
+            for (let r of a.resenhas) {
+                cardResenhas.push(
+                    <Resenha resenha={r} key={y} />
+                );
+                y++;
+            }
+        }
+    }   
+
     let botaoDelete;
     if(JSON.parse(localStorage.getItem("usuario")).administrador){
         botaoDelete=<button onClick={(e)=>{e.preventDefault(); props.deletar(id)}}>Deletar série</button>
     }
+    let formResenha;
+    if (escreverResenha) {
+        formResenha = <FormResenha id={id} adicionarResenha={props.adicionarResenha} />
+    }
+
     return (
         <>
             <p className="categoria">Série</p>
@@ -83,8 +89,12 @@ function Serie(props) {
                 {cardAtores}
             </div>
 
-            <div>
-                {cardResenhas}
+            <div className="lista-resenhas">
+                <h2><span className="blue">|</span> Resenhas</h2>
+
+                <button className="btn-azul" onClick={() => setEscreverResenha(!escreverResenha)}>{escreverResenha ? "Cancelar" : "Adicionar resenha"}</button> <br />
+                {formResenha}
+                {cardResenhas.length > 0 ? cardResenhas : <p className="sem-resenhas">Este filme ainda não possui resenhas.</p>}
             </div>
         </>
     )
