@@ -14,8 +14,10 @@ function Ator(props){
 
     let formEditAtor
     let botaoDelete;
-    if (JSON.parse(localStorage.getItem("usuario")).administrador) {
-        botaoDelete = <button className="btn-azul" onClick={(e) => { e.preventDefault(); props.deletar(id) }}>Deletar filme</button>
+    let botaoEdit;
+    if (localStorage.getItem("usuario")&&JSON.parse(localStorage.getItem("usuario")).administrador) {
+        botaoDelete = <button className="btn-azul" onClick={(e) => { e.preventDefault(); props.deletar(id) }}>Deletar ator</button>
+        botaoEdit=<button className="btn-azul" onClick={() => setEditarAtor(!editarAtor)}>{editarAtor ? "Cancelar edição" : "Editar ator"}</button>
         if (editarAtor){
             formEditAtor = <FormEditarAtor id={id} edit={props.editarAtor} ator={ator}/>
         }
@@ -30,9 +32,7 @@ function Ator(props){
                 <h1 className="titulo">{ator.nome}</h1>
                 {botaoDelete}
 
-                <button className="btn-azul" onClick={() => setEditarAtor(!editarAtor)}>
-                    {editarAtor ? "Cancelar edição" : "Editar filme"}
-                </button>
+                {botaoEdit}
 
                 {editarAtor ? formEditAtor : <></>}
 

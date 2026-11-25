@@ -32,7 +32,7 @@ function Filme(props) {
                         <div className="card-body">
                             <h5 className="card-title">{a.nome}</h5>
                         </div>
-                        <button className="btn-azul" onClick={(e) => {e.preventDefault(); props.atorDel(a.id, id)}}>Desassociar</button>
+                        {localStorage.getItem("usuario")&&JSON.parse(localStorage.getItem("usuario")).administrador?<button className="btn-azul" onClick={(e) => {e.preventDefault(); props.atorDel(a.id, id)}}>Desassociar</button>:<></>}{/*Esta fora parece ineficiente, mas parece funcionar.*/}
                     </div>
                 </Link>
             )
@@ -54,8 +54,14 @@ function Filme(props) {
 
     let formEditFilme
     let botaoDelete;
-    if (JSON.parse(localStorage.getItem("usuario")).administrador) {
+    let botaoEdit;
+    let botaoResenha;
+    if(localStorage.getItem("usuario")){
+        botaoResenha=<button className="btn-azul" onClick={() => setEscreverResenha(!escreverResenha)}>{escreverResenha ? "Cancelar" : "Adicionar resenha"}</button>;
+    }
+    if(localStorage.getItem("usuario")&&JSON.parse(localStorage.getItem("usuario")).administrador) {
         botaoDelete = <button className="btn-azul" onClick={(e) => { e.preventDefault(); props.deletar(id) }}>Deletar filme</button>
+        botaoEdit=<button className="btn-azul" onClick={() => setEditarFilme(!editarFilme)}>{editarFilme ? "Cancelar edição" : "Editar filme"}</button>
         if (editarFilme){
             formEditFilme = <FormEditarFilme id={id} edit={props.editarFilme} filme={filme} diretores={props.diretores}/>
         }
@@ -73,9 +79,7 @@ function Filme(props) {
                 <h1 className="titulo">{filme.titulo}</h1>
                 {botaoDelete}
                 
-                <button className="btn-azul" onClick={() => setEditarFilme(!editarFilme)}>
-                    {editarFilme ? "Cancelar edição" : "Editar filme"}
-                </button>
+                {botaoEdit}
 
                 {editarFilme ? formEditFilme : <></>}
 
@@ -110,7 +114,7 @@ function Filme(props) {
             <div className="lista-resenhas">
                 <h2><span className="blue">|</span> Resenhas</h2>
 
-                <button className="btn-azul" onClick={() => setEscreverResenha(!escreverResenha)}>{escreverResenha ? "Cancelar" : "Adicionar resenha"}</button> <br />
+                {botaoResenha} <br />
                 {formResenha}
                 {cardResenhas.length > 0 ? cardResenhas : <p className="sem-resenhas">Este filme ainda não possui resenhas.</p>}
             </div>

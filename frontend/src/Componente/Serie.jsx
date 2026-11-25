@@ -32,7 +32,7 @@ function Serie(props) {
                         <div className="card-body">
                             <h5 className="card-title">{a.nome}</h5>
                         </div>
-                        <button className="btn-azul" onClick={(e) => {e.preventDefault(); props.atorDel(a.id, id)}}>Desassociar</button>
+                        {localStorage.getItem("usuario")&&JSON.parse(localStorage.getItem("usuario")).administrador?<button className="btn-azul" onClick={(e) => {e.preventDefault(); props.atorDel(a.id, id)}}>Desassociar</button>:<></>}
                     </div>
                 </Link>
             )
@@ -55,8 +55,14 @@ function Serie(props) {
 
 
     let botaoDelete;
-    if(JSON.parse(localStorage.getItem("usuario")).administrador){
+    let botaoEdit;
+    let botaoResenha;
+    if(localStorage.getItem("usuario")){
+        botaoResenha=<button className="btn-azul" onClick={() => setEscreverResenha(!escreverResenha)}>{escreverResenha ? "Cancelar" : "Adicionar resenha"}</button>;
+    }
+    if(localStorage.getItem("usuario")&&JSON.parse(localStorage.getItem("usuario")).administrador){
         botaoDelete=<button onClick={(e)=>{e.preventDefault(); props.deletar(id)}}>Deletar série</button>
+        botaoEdit=<button className="btn-azul" onClick={() => setEditarSerie(!editarSerie)}>{editarSerie ? "Cancelar" : "Alterar série"}</button>;
     }
     let formResenha;
     if (escreverResenha) {
@@ -76,7 +82,7 @@ function Serie(props) {
                 <h1 className="titulo">{serie.titulo}</h1>
                 {botaoDelete}
 
-                <button className="btn-azul" onClick={() => setEditarSerie(!editarSerie)}>{editarSerie ? "Cancelar" : "Alterar série"}</button> <br />
+                {botaoEdit} <br />
                 {formEditarSerie}
                 <div className="combo">
                     <img src={serie.fotografia != null ? `http://localhost:3000/arquivo/${serie.fotografia}` : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDlpiGLqA9GhqWx1nWZgjwmfm8IcuDv6gNcvdamF50Hg&s=10"} onError={(e) => { e.currentTarget.style.display = 'none'; }} alt="Image" className='imagem_catalogo_pessoa' />
@@ -104,7 +110,7 @@ function Serie(props) {
             <div className="lista-resenhas">
                 <h2><span className="blue">|</span> Resenhas</h2>
 
-                <button className="btn-azul" onClick={() => setEscreverResenha(!escreverResenha)}>{escreverResenha ? "Cancelar" : "Adicionar resenha"}</button> <br />
+                {botaoResenha} <br />
                 {formResenha}
                 {cardResenhas.length > 0 ? cardResenhas : <p className="sem-resenhas">Este filme ainda não possui resenhas.</p>}
             </div>

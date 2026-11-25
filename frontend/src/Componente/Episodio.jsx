@@ -6,8 +6,10 @@ function Episodio(props) {
    
     let form 
     let botaoDelete;
-    if(JSON.parse(localStorage.getItem("usuario")).administrador){
+    let botaoEdit;
+    if(localStorage.getItem("usuario")&&JSON.parse(localStorage.getItem("usuario")).administrador){
         botaoDelete=<button className="btn-azul"onClick={(e)=>{e.preventDefault(); props.deletar(props.episodio.id)}}>Deletar episódio</button>
+        botaoEdit=<button className="btn-azul" onClick={() => setEditarEp(!editarEp)}>{editarEp ? "Cancelar" : "Alterar episódio"}</button>
         if (editarEp){
             form = <FormEditarEpisodio episodio={props.episodio} edit={props.edit}/>
         }
@@ -22,7 +24,7 @@ function Episodio(props) {
                     <p className="card-text">{props.episodio.duracao} minutos</p>
                     <p className="card-text">{props.episodio.sinopse}</p>
                     {botaoDelete}
-                    <button className="btn-azul" onClick={() => setEditarEp(!editarEp)}>{editarEp ? "Cancelar" : "Alterar resenha"}</button> <br />
+                    {botaoEdit} <br />
                     {form}
                 </div>
                 <hr />
