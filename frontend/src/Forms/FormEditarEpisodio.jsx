@@ -1,31 +1,22 @@
 import { useState } from "react";
+import "./FormEditarEpisodio.css"
 
 function FormEditarEpisodio(props){
 
-    const [titulo, setTitulo] = useState("")
-    const [sinopse, setSinopse] = useState("")
-    const [duracao, setDuracao] = useState(0)
-    const [temporada, setTemporada] = useState(0)
+    const [titulo, setTitulo] = useState(props.episodio.titulo)
+    const [sinopse, setSinopse] = useState(props.episodio.sinopse)
+    const [duracao, setDuracao] = useState(props.episodio.duracao)
+    const [temporada, setTemporada] = useState(props.episodio.temporada)
 
     function alt(e){
         e.preventDefault()
-        props.alt(titulo, sinopse, duracao, temporada, id_episodio)
-    }
 
-    let optionsSelect2 = [<option value={0} key={-1}></option>]
-    for (let a of props.episodios){
-        optionsSelect2.push(<option value={a.id} key={a.id}>{a.titulo}</option>)
+        props.edit({titulo: titulo, sinopse: sinopse, duracao: duracao, temporada: temporada}, props.episodio.id)
     }
     
     return(
         <>
-            <form onSubmit={alt}>
-                <h3>Adicionar episódios</h3>
-                <label>Escolha um episodio:</label><br/>
-                <select id="episodio_id" name="episodio_id" value={id_episodio} onChange={(e) => setIdSEpisodio(e.target.value)}>
-                    {optionsSelect2}
-                </select><br/>
-
+            <form className="formEditarEpisodio" onSubmit={alt}>
                 <label>Título:</label> <input type="text" placeholder="Título" value={titulo} onChange={(e)=>{setTitulo(e.target.value)}}/><br/>
                 <label>Sinopse:</label> <input type="text"  placeholder="Sinopse" value={sinopse} onChange={(e)=>{setSinopse(e.target.value)}}/><br/>
                 <label>Duração:</label> <input type="number" placeholder="Duração" value={duracao} onChange={(e)=>{setDuracao(e.target.value)}}/><br/>

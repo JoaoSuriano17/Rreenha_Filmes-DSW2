@@ -189,7 +189,7 @@ router.delete("/:id/filme/:filme", tipo, verificarAdministrador,  async (req, re
             return res.status(400).json({ msg: "Ator inexistente." })
         }
 
-        if (isNaN(req.params.serie)){
+        if (isNaN(req.params.filme)){
             return res.json({msg:"O id deve ser um número inteiro!"})
         }
 
@@ -226,7 +226,7 @@ router.post("/:id/serie/:serie", tipo, verificarAdministrador,  async (req, res)
             return res.status(400).json({ msg: "Série inexistente" })
         }
 
-        const requisicao = await db.query("INSERT INTO filme_serie(id_serie, id_ator) VALUES ($1, $2)", [req.params.serie, req.params.id])
+        const requisicao = await db.query("INSERT INTO serie_ator(id_serie, id_ator) VALUES ($1, $2)", [req.params.serie, req.params.id])
         if (!requisicao.rowCount){
             return res.status(400).json({msg: "Erro ao associar ator a uma série."})
         }
@@ -237,7 +237,7 @@ router.post("/:id/serie/:serie", tipo, verificarAdministrador,  async (req, res)
     }
 })
 
-router.delete("/:id/serie/:filme", tipo, verificarAdministrador,  async (req, res) => {
+router.delete("/:id/serie/:serie", tipo, verificarAdministrador,  async (req, res) => {
     try {
         const r = await db.query("SELECT * FROM ator WHERE id=$1", [req.params.id])
         if (r.rowCount == 0) {
@@ -253,7 +253,7 @@ router.delete("/:id/serie/:filme", tipo, verificarAdministrador,  async (req, re
             return res.status(400).json({ msg: "Série inexistente" })
         }
 
-        const requisicao = await db.query("DELETE FROM filme_serie WHERE id_serie=$1 AND id_ator=$2", [req.params.serie, req.params.id])
+        const requisicao = await db.query("DELETE FROM serie_ator WHERE id_serie=$1 AND id_ator=$2", [req.params.serie, req.params.id])
         if (!requisicao.rowCount){
             return res.status(400).json({msg: "Erro ao desassociar ator a um filme."})
         }

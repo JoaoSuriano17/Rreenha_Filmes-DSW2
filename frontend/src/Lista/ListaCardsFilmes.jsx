@@ -21,10 +21,10 @@ function ListaCardsFilmes(props){
             <Link className="link voltar categoria text-dark " to={"/"}><BsArrowLeft /> Voltar</Link>
 
             <div className="grid-filme">
-                <form className="pegar_filme" role="search" onSubmit={enviar}>
+                {/*<form className="pegar_filme" role="search" onSubmit={enviar}>
                     <span>Quantidade de filmes: {props.filmes.lenght}</span>
                     <input className="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search" value={search} onChange={(e)=>{setSearch(e.target.value)}}/>
-                </form>
+                </form>*/}
                 <div className="catalogo">
                     {cardsFilmes}
                 </div>

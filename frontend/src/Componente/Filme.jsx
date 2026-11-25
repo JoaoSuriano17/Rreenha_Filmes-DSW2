@@ -32,6 +32,7 @@ function Filme(props) {
                         <div className="card-body">
                             <h5 className="card-title">{a.nome}</h5>
                         </div>
+                        <button className="btn-azul" onClick={(e) => {e.preventDefault(); props.atorDel(a.id, id)}}>Desassociar</button>
                     </div>
                 </Link>
             )

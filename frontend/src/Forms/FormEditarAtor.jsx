@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./FormEditarAtor.css"
 
 function FormEditarAtor(props){
 
@@ -31,7 +32,7 @@ function FormEditarAtor(props){
     
     return(
         <>
-            <form onSubmit={add}>
+            <form className="formEditarAtor"onSubmit={add}>
                 <h3>Alterar Ator ou Atriz</h3>
                 <label>Biografia:</label> <input type="text" placeholder="Biografia" value={biografia} onChange={(e)=>{setBiografia(e.target.value)}}/>
                 <label>Quantidade de prêmios:</label> <input type="number" placeholder="Quantidade de Prêmios" value={qtde_premios} onChange={(e)=>{setQtde_premios(e.target.value)}}/>

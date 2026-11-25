@@ -1,0 +1,85 @@
+
+.formEditarEpisodio {
+    width: 100%;
+    margin: 20px 0;
+    padding: 25px;
+    background-color: #fff;
+    border: 1px solid #e1e8f0;
+    border-radius: 10px;
+}
+
+/* Campos */
+.formEditarEpisodio label {
+    display: block;
+    margin: 18px 0 7px;
+    color: #334b68;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.formEditarEpisodio label:first-child {
+    margin-top: 0;
+}
+
+.formEditarEpisodio input {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    color: #263b55;
+    background-color: #f8faff;
+    border: 1px solid #cbd8e8;
+    border-radius: 7px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.formEditarEpisodio input:hover {
+    border-color: #7da5d8;
+}
+
+.formEditarEpisodio input:focus {
+    border-color: #3478c9;
+    box-shadow: 0 0 0 3px rgba(52, 120, 201, 0.12);
+}
+
+/* Botão */
+.formEditarEpisodio button {
+    margin-top: 22px;
+    padding: 10px 20px;
+    color: #fff;
+    background-color: #2868b2;
+    border: none;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.formEditarEpisodio button:hover {
+    background-color: #1d528f;
+}
+
+.formEditarEpisodio button:active {
+    background-color: #194779;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    .formEditarEpisodio {
+        padding: 18px;
+    }
+
+    .formEditarEpisodio label {
+        font-size: 13px;
+    }
+
+    .formEditarEpisodio input {
+        font-size: 14px;
+    }
+
+    .formEditarEpisodio button {
+        width: 100%;
+    }
+}

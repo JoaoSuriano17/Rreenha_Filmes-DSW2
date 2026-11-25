@@ -1,8 +1,19 @@
+import { useState } from "react";
+import FormEditarEpisodio from "../Forms/FormEditarEpisodio";
+
 function Episodio(props) {
+    const [editarEp, setEditarEp] = useState(false);
+   
+    let form 
     let botaoDelete;
     if(JSON.parse(localStorage.getItem("usuario")).administrador){
-        botaoDelete=<button onClick={(e)=>{e.preventDefault(); props.deletar(props.episodio.id)}}>Deletar episódio</button>
+        botaoDelete=<button className="btn-azul"onClick={(e)=>{e.preventDefault(); props.deletar(props.episodio.id)}}>Deletar episódio</button>
+        if (editarEp){
+            form = <FormEditarEpisodio episodio={props.episodio} edit={props.edit}/>
+        }
     }
+
+
     return (
         <>
             <div className="ep">
@@ -11,6 +22,8 @@ function Episodio(props) {
                     <p className="card-text">{props.episodio.duracao} minutos</p>
                     <p className="card-text">{props.episodio.sinopse}</p>
                     {botaoDelete}
+                    <button className="btn-azul" onClick={() => setEditarEp(!editarEp)}>{editarEp ? "Cancelar" : "Alterar resenha"}</button> <br />
+                    {form}
                 </div>
                 <hr />
             </div>

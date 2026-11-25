@@ -1,0 +1,109 @@
+
+.formEditarUsuario {
+    width: 100%;
+    margin: 20px 0;
+    padding: 25px;
+    background-color: #fff;
+    border: 1px solid #e1e8f0;
+    border-radius: 10px;
+}
+
+/* Campos */
+.formEditarUsuario label {
+    display: block;
+    margin: 18px 0 7px;
+    color: #334b68;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.formEditarUsuario label:first-child {
+    margin-top: 0;
+}
+
+.formEditarUsuario input:not([type="file"]) {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    color: #263b55;
+    background-color: #f8faff;
+    border: 1px solid #cbd8e8;
+    border-radius: 7px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.formEditarUsuario input:not([type="file"]):hover {
+    border-color: #7da5d8;
+}
+
+.formEditarUsuario input:not([type="file"]):focus {
+    border-color: #3478c9;
+    box-shadow: 0 0 0 3px rgba(52, 120, 201, 0.12);
+}
+
+/* Campo de fotografia */
+.formEditarUsuario .file-input {
+    display: block;
+    width: 100%;
+    padding: 9px;
+    color: #526780;
+    background-color: #f8faff;
+    border: 1px solid #cbd8e8;
+    border-radius: 7px;
+    font-size: 13px;
+}
+
+.formEditarUsuario .file-input::file-selector-button {
+    margin-right: 12px;
+    padding: 7px 12px;
+    color: #fff;
+    background-color: #2868b2;
+    border: none;
+    border-radius: 5px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.formEditarUsuario .file-input::file-selector-button:hover {
+    background-color: #1d528f;
+}
+
+/* Botão */
+.formEditarUsuario button {
+    margin-top: 22px;
+    padding: 10px 20px;
+    color: #fff;
+    background-color: #2868b2;
+    border: none;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.formEditarUsuario button:hover {
+    background-color: #1d528f;
+}
+
+.formEditarUsuario button:active {
+    background-color: #194779;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    .formEditarUsuario {
+        padding: 18px;
+    }
+
+    .formEditarUsuario label {
+        font-size: 13px;
+    }
+
+    .formEditarUsuario button {
+        width: 100%;
+    }
+}

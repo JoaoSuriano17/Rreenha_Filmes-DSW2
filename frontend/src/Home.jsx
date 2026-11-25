@@ -16,12 +16,6 @@ function Home(props) {
                         <div className="carousel-item active">
                             <img src="Imagens\shawshank-redemption-20th-anniversary-01.webp" className="w-50" alt="Banner do Naruto" />
                         </div>
-                        <div className="carousel-item">
-                            <img src="Imagens/Minecraft-hero.webp" className="w-50" alt="Banner do filme do Minecraft" />
-                        </div>
-                        <div className="carousel-item">
-                            <img src="Imagens/homem_aranha-hero.jpeg" className="w-50" alt="Banner do Homem Aranha Um Novo Dia" />
-                        </div>
                     </div>
 
                     <div className="hero-content">

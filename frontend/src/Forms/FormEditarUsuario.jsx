@@ -1,5 +1,6 @@
 import {Route, Routes, useNavigate} from "react-router-dom"
 import { useEffect, useState } from "react";
+import "./FormEditarUsuario.css"
 
 function FormEditarUsuario(props){
   const [arquivo, setArquivo] = useState(null)
@@ -24,7 +25,7 @@ function FormEditarUsuario(props){
 }
 
   return(
-    <form onSubmit={(e)=>{e.preventDefault(); edit()}}>{/*;console.log(userEdicao)*/}
+    <form className="formEditarUsuario" onSubmit={(e)=>{e.preventDefault(); edit()}}>{/*;console.log(userEdicao)*/}
       <label>Nome:</label> <br />
       <input type="text" name="nome" value={nome} onChange={(e) => {setNome(e.target.value)}}/><br />
       <label>Senha:</label> <br />

@@ -789,6 +789,28 @@ async function AdicionarResenhaSerie(id_serie, resenha, avaliacao) {
       }
   }
 
+  async function editarEpisodio(episodio, id) {
+      try {
+        const res = await fetch(`http://localhost:3000/episodio/${id}`, {method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: JSON.stringify(episodio)});
+
+        const json = await res.json();
+        if (!res.ok) {
+            alert(`Erro: ${json.msg}`);
+            return;
+        }
+
+        alert("Diretor atualizado com sucesso!");
+        await SelecionarDiretores();
+      } catch (erro) {
+          console.log("Erro: " + erro);
+      }
+  }
+
   async function deletarResenhaFilme(id) {
     let res = await fetch(`http://localhost:3000/resenha/filme/${id}`, {
       method: "DELETE",
@@ -819,6 +841,40 @@ async function AdicionarResenhaSerie(id_serie, resenha, avaliacao) {
       await SelecionarResenhasSerie();
     }
     alert("Resenha deletada com sucesso!");
+  }
+
+  async function deleteAssociacaoAtorFilme(id1, id2) {
+    let res = await fetch(`http://localhost:3000/ator/${id1}/filme/${id2}`, {
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+
+    if (!res.ok) {
+      const json = await res.json();
+      alert(`Erro: ${json.msg}`);
+      
+      await SelecionarAtoresFilme();
+    }
+    alert("Associação deletada com sucesso!");
+  }
+
+  async function deleteAssociacaoAtorSerie(id1, id2) {
+    let res = await fetch(`http://localhost:3000/ator/${id1}/serie/${id2}`, {
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+
+    if (!res.ok) {
+      const json = await res.json();
+      alert(`Erro: ${json.msg}`);
+      
+      await SelecionarAtoresSerie();
+    }
+    alert("Associação deletada com sucesso!");
   }
 
 
@@ -1013,12 +1069,14 @@ async function AdicionarResenhaSerie(id_serie, resenha, avaliacao) {
 
         <Route path="/filme/:id" element={
           <Filme filmes={filmes} diretores={diretores} atores={atores} filmes_atores={atoresFilmes} filmes_resenha={resenhasFilmes} 
-          deletar={deletarFilme} adicionarResenha={AdicionarResenhaFilme} editarFilme={editarFilme} deletarResenha={deletarResenhaFilme} alterarResenha={editarResenhaFilme}></Filme>
+          deletar={deletarFilme} adicionarResenha={AdicionarResenhaFilme} editarFilme={editarFilme} deletarResenha={deletarResenhaFilme} alterarResenha={editarResenhaFilme}
+          atorDel={deleteAssociacaoAtorFilme}></Filme>
         }></Route>
 
         <Route path="/serie/:id" element={
           <Serie series={series} diretores={diretores} atores={atores} series_atores={atoresSeries} series_resenha={resenhasSeries} 
-          deletar={deletarSerie} adicionarResenha={AdicionarResenhaSerie} deletarResenha={deletarResenhaSerie} alterarResenha={editarResenhaSerie} editarSerie={editarSerie}></Serie>
+          deletar={deletarSerie} adicionarResenha={AdicionarResenhaSerie} deletarResenha={deletarResenhaSerie} alterarResenha={editarResenhaSerie} editarSerie={editarSerie}
+          atorDel={deleteAssociacaoAtorSerie}></Serie>
         }></Route>
 
         <Route path="/ator/:id" element={
@@ -1048,7 +1106,7 @@ async function AdicionarResenhaSerie(id_serie, resenha, avaliacao) {
         }></Route>
 
         <Route path="/serie/:id/episodios" element={
-          <ListaEpisodios series={series} episodios={episodios} deletar={deletarEpisodio}></ListaEpisodios>
+          <ListaEpisodios series={series} episodios={episodios} deletar={deletarEpisodio} editarEpisodio={editarEpisodio}></ListaEpisodios>
         }></Route>
 
         <Route path="/cadastro" element={

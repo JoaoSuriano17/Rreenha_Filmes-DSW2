@@ -32,6 +32,7 @@ function Serie(props) {
                         <div className="card-body">
                             <h5 className="card-title">{a.nome}</h5>
                         </div>
+                        <button className="btn-azul" onClick={(e) => {e.preventDefault(); props.atorDel(a.id, id)}}>Desassociar</button>
                     </div>
                 </Link>
             )
@@ -85,7 +86,7 @@ function Serie(props) {
                     </h5>
                 </div>
                 <div className="">
-                    <Link to={`/serie/${id}/episodios`}><button className="listaeps">Ver a lista de episódios</button></Link>
+                    <Link to={`/serie/${id}/episodios`}><button className="btn-azul">Ver a lista de episódios</button></Link>
                     <hr></hr>
                     <p><b>Faixa etária:</b> {serie.faixa_etaria} anos</p>
                     <hr></hr>

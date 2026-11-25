@@ -696,7 +696,7 @@ footer{
 }
 
 .cabecalhoeps{
-  background-color: gray;
+  background-color: rgb(105, 158, 255);
   padding-bottom: 10px;
   padding-top: 5px;
 }
@@ -722,7 +722,7 @@ footer{
 .grid-episodios{
   margin-left: 15%;
   margin-right: 15%;
-  background-color: whitesmoke;
+  background-color: rgb(255, 255, 255);
 }
 
 .temporadas {
@@ -916,3 +916,4 @@ footer{
     margin-top: 25%;
   }
 }
+
