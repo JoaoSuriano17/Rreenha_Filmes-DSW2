@@ -46,13 +46,15 @@ function Usuario(props) {
 
     return (
         <>
-            <h1>{user.email}</h1>
-            <img src={user.fotografia != null ? `http://localhost:3000/arquivo/${user.fotografia}` : "https://png.pngtree.com/png-vector/20250227/ourlarge/pngtree-user-profile-avatar-with-horns-vector-png-image_15605623.png"} onError={(e) => { e.currentTarget.style.display = 'none'; }} alt="Image" className='imagem_catalogo_pessoa' />
-            <h5>Nome: {user.nome}</h5>
-            <button className="btn-azul" onClick={(e)=>{e.preventDefault(); props.deletar()}}>Deletar conta</button>
+            <div className="grid-filme">
+                <h1>{user.email}</h1>
+                <img src={user.fotografia != null ? `http://localhost:3000/arquivo/${user.fotografia}` : "https://png.pngtree.com/png-vector/20250227/ourlarge/pngtree-user-profile-avatar-with-horns-vector-png-image_15605623.png"} onError={(e) => { e.currentTarget.style.display = 'none'; }} alt="Image" className='imagem_catalogo_pessoa2' />
+                <h5>Nome: {user.nome}</h5>
+                <button className="btn-azul" onClick={(e)=>{e.preventDefault(); props.deletar()}}>Deletar conta</button>
 
-            <button className="btn-azul" onClick={() => setEditarUsuario(!editarUsuario)}>{editarUsuario ? "Cancelar" : "Alterar usuário"}</button> <br />
-            {form}
+                <button className="btn-azul" onClick={() => setEditarUsuario(!editarUsuario)}>{editarUsuario ? "Cancelar" : "Alterar usuário"}</button> <br />
+                {form}
+            </div>
         </>
     )
 }

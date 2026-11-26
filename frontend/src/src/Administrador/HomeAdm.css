@@ -1,0 +1,152 @@
+
+body {
+    margin: 0;
+    background-color: #f3f6fb;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.caixasEscolha {
+    width: 90%;
+    max-width: 1100px;
+    margin: 35px auto;
+    padding: 30px;
+    background-color: #fff;
+    border: 1px solid #e1e8f0;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(30, 64, 110, 0.06);
+}
+
+.caixasEscolha h1 {
+    color: #193b68;
+    font-size: 27px;
+    font-weight: 600;
+    margin-bottom: 25px;
+}
+
+.caixasEscolha label {
+    display: block;
+    margin-bottom: 9px;
+    color: #334b68;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.caixasEscolha select {
+    width: 100%;
+    max-width: 350px;
+    height: 43px;
+    padding: 0 12px;
+    color: #263b55;
+    background-color: #f8faff;
+    border: 1px solid #cbd8e8;
+    border-radius: 7px;
+    font-size: 15px;
+    cursor: pointer;
+    outline: none;
+    transition: 0.2s;
+}
+
+.caixasEscolha select:hover {
+    border-color: #7da5d8;
+}
+
+.caixasEscolha select:focus {
+    border-color: #3478c9;
+    box-shadow: 0 0 0 3px rgba(52, 120, 201, 0.13);
+}
+
+/* Formulários */
+.caixasEscolha form {
+    margin-top: 30px;
+}
+
+.caixasEscolha input,
+.caixasEscolha textarea {
+    border: 1px solid #cbd8e8;
+    border-radius: 7px;
+    padding: 10px 12px;
+    color: #263b55;
+    background-color: #fff;
+    transition: 0.2s;
+}
+
+.caixasEscolha input:focus,
+.caixasEscolha textarea:focus {
+    border-color: #3478c9;
+    box-shadow: 0 0 0 3px rgba(52, 120, 201, 0.12);
+    outline: none;
+}
+
+.caixasEscolha button {
+    padding: 10px 19px;
+    border: none;
+    border-radius: 7px;
+    background-color: #2868b2;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.caixasEscolha button:hover {
+    background-color: #1d528f;
+}
+
+.caixasEscolha button:active {
+    transform: scale(0.98);
+}
+
+/* Lista de usuários */
+.listaUsuarios {
+    width: 90%;
+    max-width: 1100px;
+    margin: 35px auto;
+    padding: 25px 30px;
+    background-color: #fff;
+    border: 1px solid #e1e8f0;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(30, 64, 110, 0.06);
+}
+
+.listaUsuarios h2 {
+    margin-bottom: 22px;
+    color: #193b68;
+    font-size: 23px;
+    font-weight: 600;
+}
+
+/* Mensagem de acesso negado */
+.acessoNegado {
+    width: 90%;
+    max-width: 600px;
+    margin: 100px auto;
+    padding: 30px;
+    text-align: center;
+    color: #193b68;
+    background-color: #fff;
+    border: 1px solid #e1e8f0;
+    border-radius: 12px;
+}
+
+/* Telas menores */
+@media (max-width: 600px) {
+    .caixasEscolha,
+    .listaUsuarios {
+        width: 94%;
+        margin: 20px auto;
+        padding: 20px;
+    }
+
+    .caixasEscolha select {
+        max-width: 100%;
+    }
+
+    .caixasEscolha h1 {
+        font-size: 23px;
+    }
+}

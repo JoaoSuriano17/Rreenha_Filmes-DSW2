@@ -45,7 +45,7 @@
     white-space: nowrap;
 }
 
-.resenha .resenha-texto {
+.resenha-texto {
     color: #424f5d;
     font-size: 0.95rem;
     line-height: 1.7;
@@ -97,7 +97,7 @@
         padding: 5px 8px;
     }
 
-    .resenha .resenha-texto {
+    .resenha-texto {
         font-size: 0.9rem;
     }
 

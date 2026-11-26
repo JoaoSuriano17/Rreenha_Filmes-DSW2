@@ -1,0 +1,125 @@
+import { useState } from "react";
+import { BsArrowLeft } from "react-icons/bs";
+import { Link, useParams } from "react-router-dom";
+import FormResenha from "../Forms/FormResenha";
+import FormEditarFilme from "../Forms/FormEditarFilme"
+import Resenha from "./Resenha";
+import "./Filme.css"
+
+function Filme(props) {
+    const { id } = useParams();
+    const [escreverResenha, setEscreverResenha] = useState(false);
+    const [editarFilme, setEditarFilme] = useState(false);
+
+    const filme = props.filmes.find(f => f.id == id);
+    if (!filme) {
+        return <h1>Carregando ...</h1>;
+    }
+
+    const diretor = props.diretores.find(d => d.id == filme.diretor);
+    const atoresFilme = props.filmes_atores.find(a => a.id_filme == id || null);
+    if (!diretor) {
+        return <h1>Carregando ...</h1>
+    }
+
+    let cardAtores = [];
+    if (atoresFilme) {
+        for (let a of atoresFilme.atores) {
+            cardAtores.push(
+                <Link to={"/ator/" + a.id} className="link" key={a.id}>
+                    <div className="card cardcatalogo">
+                        <img src={a.fotografia != null ? `http://localhost:3000/arquivo/${a.fotografia}` : "../Imagens/imagemAtor.jpg"} onError={(e) => { e.currentTarget.style.display = 'none'; }} alt="Image" className='imagem_catalogo_pessoa' />
+                        <div className="card-body">
+                            <h5 className="card-title">{a.nome}</h5>
+                        </div>
+                        {localStorage.getItem("usuario")&&JSON.parse(localStorage.getItem("usuario")).administrador?<button className="btn-azul" onClick={(e) => {e.preventDefault(); props.atorDel(a.id, id)}}>Desassociar</button>:<></>}{/*Esta fora parece ineficiente, mas parece funcionar.*/}
+                    </div>
+                </Link>
+            )
+        }
+    }
+
+    let cardResenhas = [];
+    let y = 0
+    for (let a of props.filmes_resenha) {
+        if (a.id_filme == id) {
+            for (let r of a.resenhas) {
+                cardResenhas.push(
+                    <Resenha resenha={r} id={id} key={y} deletar={props.deletarResenha} edit={props.alterarResenha}/>
+                );
+                y++
+            }
+        }
+    }
+
+    let formEditFilme
+    let botaoDelete;
+    let botaoEdit;
+    let botaoResenha;
+    if(localStorage.getItem("usuario")){
+        botaoResenha=<button className="btn-azul" onClick={() => setEscreverResenha(!escreverResenha)}>{escreverResenha ? "Cancelar" : "Adicionar resenha"}</button>;
+    }
+    if(localStorage.getItem("usuario")&&JSON.parse(localStorage.getItem("usuario")).administrador) {
+        botaoDelete = <button className="btn-azul" onClick={(e) => { e.preventDefault(); props.deletar(id)}}>Deletar filme</button>
+        botaoEdit=<button className="btn-azul" onClick={() => setEditarFilme(!editarFilme)}>{editarFilme ? "Cancelar edição" : "Editar filme"}</button>
+        if (editarFilme){
+            formEditFilme = <FormEditarFilme id={id} edit={props.editarFilme} filme={filme} diretores={props.diretores} alterarExibir={() => setEditarFilme(!editarFilme)}/>
+        }
+
+    }
+    let formResenha;
+    if (escreverResenha) {
+        formResenha = <FormResenha id={id} adicionarResenha={props.adicionarResenha} alterarExibir={()=>{setEscreverResenha(!escreverResenha)}}/>
+    }
+    return (
+        <>
+            <p className="categoria">Filme</p>
+            <Link className="link voltar categoria text-dark " to={"/filmes"}><BsArrowLeft /> Voltar</Link>
+            <div className="grid-filme">
+                <h1 className="titulo">{filme.titulo}</h1>
+                {botaoDelete}
+                
+                {botaoEdit}
+
+                {editarFilme ? formEditFilme : <></>}
+
+                <div className="combo">
+                    <img src={filme.cartaz!=null?`http://localhost:3000/arquivo/${filme.cartaz}`:"../Imagens/imagemFilme.jpg"} alt="Image" className="cartaz" />
+                    <h5>
+                        Sinopse: <br />
+                        <span className="sinopse">{filme.sinopse}</span>
+                    </h5>
+                </div>
+
+                <div>
+                    <hr></hr>
+                    <p><b>Duração:</b> {filme.duracao} minutos</p>
+                    <hr></hr>
+                    <p><b>Faixa etária:</b> {filme.faixa_etaria} anos</p>
+                    <hr></hr>
+                    <p><b>Quantidade de prêmios:</b> {filme.qtde_premios}</p>
+                    <hr></hr>
+                    <p>
+                        <b>Diretor:</b>{" "}
+                        {diretor && (<Link className="link" to={`/diretor/${diretor.id}`}> {diretor.nome} </Link>)}
+                    </p>
+                </div>
+            </div>
+
+            <div className="grid-atores">
+                <h2><span className="blue">|</span> Elenco Principal</h2>
+                {cardAtores}
+            </div>
+
+            <div className="lista-resenhas">
+                <h2><span className="blue">|</span> Resenhas</h2>
+
+                {botaoResenha} <br />
+                {formResenha}
+                {cardResenhas.length > 0 ? cardResenhas : <p className="sem-resenhas">Este filme ainda não possui resenhas.</p>}
+            </div>
+        </>
+    )
+}
+
+export default Filme;

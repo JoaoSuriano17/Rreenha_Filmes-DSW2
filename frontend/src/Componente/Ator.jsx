@@ -37,7 +37,7 @@ function Ator(props){
                 {editarAtor ? formEditAtor : <></>}
 
                 <div className="combo">
-                    <img src={ator.fotografia != null ? `http://localhost:3000/arquivo/${ator.fotografia}`: "../Imagens/imagemAtor.jpg"} onError={(e) => {e.currentTarget.style.display = 'none';}} alt="Image" className='imagem_catalogo_pessoa' />
+                    <img src={ator.fotografia != null ? `http://localhost:3000/arquivo/${ator.fotografia}`: "../Imagens/imagemAtor.jpg"} onError={(e) => {e.currentTarget.style.display = 'none';}} alt="Image" className='imagem_catalogo_pessoa2' />
                     <h5>Biografia: <br/> <span className="sinopse">{ator.biografia}</span></h5>
                 </div>
                 <div className="">

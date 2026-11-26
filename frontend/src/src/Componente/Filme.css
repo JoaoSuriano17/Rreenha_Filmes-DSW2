@@ -1,0 +1,232 @@
+
+.grid-filme {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+    gap: 24px 35px;
+    align-items: start;
+    margin: 25px 0 40px;
+}
+
+.grid-filme > .form-editar-filme {
+    grid-column: 1 / -1;
+    width: 100%;
+    max-width: 700px;
+    margin: 5px 0 20px;
+}
+
+
+.grid-filme > .titulo {
+    grid-column: 1 / -1;
+    color: #183b60;
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.grid-filme > button {
+    justify-self: start;
+}
+
+.grid-filme > .btn-azul {
+    margin-right: 8px;
+}
+
+.grid-filme .combo {
+    display: flex;
+    align-items: flex-start;
+    gap: 22px;
+}
+
+.grid-filme .cartaz {
+    width: 220px;
+    max-width: 42%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.grid-filme .combo h5 {
+    color: #183b60;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.grid-filme .sinopse {
+    display: inline-block;
+    color: #536273;
+    font-size: 0.95rem;
+    font-weight: 400;
+    line-height: 1.7;
+    margin-top: 8px;
+}
+
+.grid-filme > div:last-child {
+    color: #536273;
+    font-size: 0.95rem;
+}
+
+.grid-filme > div:last-child p {
+    margin: 13px 0;
+    line-height: 1.5;
+}
+
+.grid-filme > div:last-child hr {
+    border-color: #dce3eb;
+    opacity: 1;
+    margin: 10px 0;
+}
+
+.grid-filme > div:last-child b {
+    color: #183b60;
+    font-weight: 600;
+}
+
+.grid-filme .link {
+    color: #315f8e;
+    text-decoration: none;
+}
+
+.grid-filme .link:hover {
+    text-decoration: underline;
+}
+
+.grid-atores {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+    margin: 35px 0 45px;
+}
+
+.grid-atores h2 {
+    grid-column: 1 / -1;
+    color: #183b60;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.grid-atores .cardcatalogo {
+    height: 100%;
+    border: 1px solid #dce3eb;
+    border-radius: 5px;
+    overflow: hidden;
+    background: #fff;
+    transition: border-color 0.2s ease;
+}
+
+.grid-atores .cardcatalogo:hover {
+    border-color: #8da8c3;
+}
+
+.grid-atores .imagem_catalogo_pessoa {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+}
+
+.grid-atores .card-body {
+    padding: 12px;
+}
+
+.grid-atores .card-title {
+    color: #183b60;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.lista-resenhas {
+    margin: 35px 0;
+}
+
+.lista-resenhas h2 {
+    color: #183b60;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.lista-resenhas > button {
+    margin-bottom: 20px;
+}
+
+.sem-resenhas {
+    color: #788797;
+    font-size: 0.95rem;
+    margin-top: 15px;
+}
+
+.categoria {
+    color: #788797;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+}
+
+.voltar {
+    display: inline-block;
+    color: #536273;
+    text-decoration: none;
+    margin-bottom: 15px;
+}
+
+.voltar:hover {
+    color: #244d78;
+}
+
+.btn-azul {
+    background-color: #244d78;
+    color: #fff;
+    border: 1px solid #244d78;
+    border-radius: 5px;
+    padding: 9px 15px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-azul:hover {
+    background-color: #193b60;
+    border-color: #193b60;
+}
+
+@media (max-width: 768px) {
+    .grid-filme {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .grid-filme > .titulo {
+        font-size: 1.7rem;
+    }
+
+    .grid-filme .combo {
+        gap: 16px;
+    }
+
+    .grid-atores {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .grid-filme .combo {
+        flex-direction: column;
+    }
+
+    .grid-filme .cartaz {
+        width: 180px;
+        max-width: 100%;
+    }
+
+    .grid-atores {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .grid-atores .imagem_catalogo_pessoa {
+        height: 150px;
+    }
+}

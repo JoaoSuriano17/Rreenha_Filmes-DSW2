@@ -1,0 +1,120 @@
+
+.formEditarAtor {
+    width: 100%;
+    margin: 20px 0;
+    padding: 25px;
+    background-color: #fff;
+    border: 1px solid #e1e8f0;
+    border-radius: 10px;
+}
+
+.formEditarAtor h3 {
+    margin-bottom: 22px;
+    color: #193b68;
+    font-size: 21px;
+    font-weight: 600;
+}
+
+/* Campos */
+.formEditarAtor label {
+    display: block;
+    margin: 18px 0 7px;
+    color: #334b68;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.formEditarAtor label:first-of-type {
+    margin-top: 0;
+}
+
+.formEditarAtor input:not([type="file"]) {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    color: #263b55;
+    background-color: #f8faff;
+    border: 1px solid #cbd8e8;
+    border-radius: 7px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.formEditarAtor input:not([type="file"]):hover {
+    border-color: #7da5d8;
+}
+
+.formEditarAtor input:not([type="file"]):focus {
+    border-color: #3478c9;
+    box-shadow: 0 0 0 3px rgba(52, 120, 201, 0.12);
+}
+
+/* Fotografia */
+.formEditarAtor .file-input {
+    display: block;
+    width: 100%;
+    padding: 9px;
+    color: #526780;
+    background-color: #f8faff;
+    border: 1px solid #cbd8e8;
+    border-radius: 7px;
+    font-size: 13px;
+}
+
+.formEditarAtor .file-input::file-selector-button {
+    margin-right: 12px;
+    padding: 7px 12px;
+    color: #fff;
+    background-color: #2868b2;
+    border: none;
+    border-radius: 5px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.formEditarAtor .file-input::file-selector-button:hover {
+    background-color: #1d528f;
+}
+
+/* Botão */
+.formEditarAtor button {
+    margin-top: 22px;
+    padding: 10px 20px;
+    color: #fff;
+    background-color: #2868b2;
+    border: none;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.formEditarAtor button:hover {
+    background-color: #1d528f;
+}
+
+.formEditarAtor button:active {
+    background-color: #194779;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    .formEditarAtor {
+        padding: 18px;
+    }
+
+    .formEditarAtor h3 {
+        font-size: 19px;
+    }
+
+    .formEditarAtor label {
+        font-size: 13px;
+    }
+
+    .formEditarAtor button {
+        width: 100%;
+    }
+}

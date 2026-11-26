@@ -61,7 +61,7 @@ function Serie(props) {
         botaoResenha=<button className="btn-azul" onClick={() => setEscreverResenha(!escreverResenha)}>{escreverResenha ? "Cancelar" : "Adicionar resenha"}</button>;
     }
     if(localStorage.getItem("usuario")&&JSON.parse(localStorage.getItem("usuario")).administrador){
-        botaoDelete=<button onClick={(e)=>{e.preventDefault(); props.deletar(id)}}>Deletar série</button>
+        botaoDelete=<button className="btn-azul" onClick={(e)=>{e.preventDefault(); props.deletar(id)}}>Deletar série</button>
         botaoEdit=<button className="btn-azul" onClick={() => setEditarSerie(!editarSerie)}>{editarSerie ? "Cancelar" : "Alterar série"}</button>;
     }
     let formResenha;

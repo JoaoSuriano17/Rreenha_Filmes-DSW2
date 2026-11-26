@@ -1,12 +1,3 @@
-
-.grid-filme {
-    display: grid;
-    grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
-    gap: 24px 35px;
-    align-items: start;
-    margin: 25px 0 40px;
-}
-
 .grid-filme > .form-editar-filme {
     grid-column: 1 / -1;
     width: 100%;
@@ -229,4 +220,20 @@
     .grid-atores .imagem_catalogo_pessoa {
         height: 150px;
     }
+}
+
+/* Ajustes de espaçamento aproveitados do src1, sem remover o grid do src2 */
+.grid-atores {
+    margin-left: 15%;
+    margin-right: 15%;
+}
+
+.lista-resenhas {
+    width: 70%;
+    margin-left: 15%;
+    margin-right: 15%;
+}
+
+.resenhas {
+    margin-top: 3%;
 }

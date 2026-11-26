@@ -1,0 +1,66 @@
+import { useEffect, useState } from "react"
+import { BsArrowLeft } from "react-icons/bs"
+import { Link, useParams } from "react-router-dom"
+import Episodio from "../Componente/Episodio"
+
+function ListaEpisodios(props){
+    const {id}=useParams()
+    const serie = props.series.find(e => e.id == id);
+    if (!serie) {
+        return <h1>Carregando ...</h1>;
+    }
+
+    
+    let episodiosSerie = []
+    for (let a of props.episodios){
+        if (a.serie_id == id){
+            episodiosSerie.push(a)
+        }
+    }
+
+    let cardEpisodios = []
+    if (episodiosSerie.length > 0){
+        for (let a of episodiosSerie){
+            cardEpisodios.push(<Episodio episodio={a} key={a.id} deletar={props.deletar} edit={props.editarEpisodio}></Episodio>)
+        }
+    }
+
+    return(
+        <>
+            <div className="grid-episodios">
+                <div className="cabecalhoeps">
+                    <Link className="link voltar text-white" to={"/serie/"+ id}><BsArrowLeft /> Voltar</Link>
+                    <div className="d-flex">
+                        <img src={serie.cartaz != null ? `http://localhost:3000/arquivo/${serie.cartaz}`: "../Imagens/imagemSerie.webp"} onError={(e) => {e.currentTarget.style.display = 'none';}} alt="Image" className='imagem_catalogo_pessoa' />
+                        <div>
+                            <h4 className="tserie">{serie.titulo}</h4>
+                            <h2>Lista de episódios</h2>
+                        </div>
+                    </div>
+                </div>
+                <div className="episodios">
+                    {cardEpisodios}
+                </div>
+                {/*<div className="temporadas">
+                    {[...new Set(episodios?.map(ep => ep.temporada))].map(numero => (
+                        <button key={numero} className={temporada === numero ? "ativo" : ""} onClick={() => setTemporada(numero)}>{numero}</button>
+                    ))}
+                </div>
+                <div className="episodios">
+                    {episodios?.filter(episodio => episodio.temporada === temporada).map((episodio, index) => (
+                        <div className="ep" key={episodio.id ?? index}>
+                            <div className="card-body">
+                                <h5 className="card-title">T{episodio.temporada}.E{index+1} - {episodio.titulo}</h5>
+                                <p className="card-text">{episodio.duracao} minutos</p>
+                                <p className="card-text">{episodio.sinopse}</p>
+                            </div>
+                            <hr />
+                        </div>
+                    ))}
+                </div>*/}
+            </div>
+        </>
+    )
+}
+
+export default ListaEpisodios;

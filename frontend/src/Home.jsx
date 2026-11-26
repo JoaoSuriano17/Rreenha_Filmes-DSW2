@@ -16,6 +16,15 @@ function Home(props) {
                         <div className="carousel-item active">
                             <img src="Imagens\shawshank-redemption-20th-anniversary-01.webp" className="w-50" alt="Banner do Naruto" />
                         </div>
+                        <div className="carousel-item">
+                            <img src="Imagens\naruto-hero.jpg" className="w-50" alt="Banner do Naruto" />
+                        </div>
+                        <div className="carousel-item">
+                            <img src="Imagens\Minecraft-hero.webp" className="w-50" alt="Banner do Naruto" />
+                        </div>
+                        <div className="carousel-item">
+                            <img src="Imagens\homem_aranha-hero.jpeg" className="w-50" alt="Banner do Naruto" />
+                        </div>
                     </div>
 
                     <div className="hero-content">
@@ -28,12 +37,13 @@ function Home(props) {
                             <button type="button" data-bs-target="#carouselExampleInterval" data-bs-slide-to="0" className="active bg-gray" aria-current="true" aria-label="Slide 1"></button>
                             <button type="button" data-bs-target="#carouselExampleInterval" data-bs-slide-to="1" aria-label="Slide 2" className="bg-gray"></button>
                             <button type="button" data-bs-target="#carouselExampleInterval" data-bs-slide-to="2" aria-label="Slide 3" className="bg-gray"></button>
+                            <button type="button" data-bs-target="#carouselExampleInterval" data-bs-slide-to="3" aria-label="Slide 4" className="bg-gray"></button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className='grid-filme grid-filme-menor'>
+            <div className='grid-filme-menor'>
                 <h4 className='text-center'>Explore nossos catálogos</h4>
                 <div className='d-flex justify-content-center catalogos'>
                     <button className="btncatalogos" onClick={() => { navigate("/filmes") }}>Filmes</button>

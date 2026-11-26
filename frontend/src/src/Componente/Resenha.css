@@ -1,0 +1,107 @@
+.resenha {
+    width: 100%;
+    background-color: #ffffff;
+    border: 1px solid #dce3eb;
+    border-left: 4px solid #244d78;
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    transition: border-color 0.2s ease;
+}
+
+.resenha:hover {
+    border-color: #a9bfd5;
+    border-left-color: #244d78;
+}
+
+.resenha .resenha-cabecalho {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.resenha .resenha-usuario {
+    color: #183b60;
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.resenha .resenha-email {
+    color: #788797;
+    font-size: 0.85rem;
+    margin: 4px 0 0;
+}
+
+.resenha .resenha-avaliacao {
+    color: #244d78;
+    background-color: #edf3f9;
+    border-radius: 4px;
+    padding: 6px 11px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.resenha .resenha-texto {
+    color: #424f5d;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+/* Área das resenhas */
+
+.lista-resenhas {
+    width: 100%;
+    margin-top: 30px;
+}
+
+.lista-resenhas h2 {
+    color: #183b60;
+    font-size: 1.45rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.lista-resenhas .sem-resenhas {
+    color: #788797;
+    font-size: 0.95rem;
+    padding: 18px 0;
+}
+
+/* Responsividade */
+
+@media (max-width: 576px) {
+    .resenha {
+        padding: 16px;
+    }
+
+    .resenha .resenha-cabecalho {
+        align-items: flex-start;
+    }
+
+    .resenha .resenha-usuario {
+        font-size: 0.98rem;
+    }
+
+    .resenha .resenha-email {
+        font-size: 0.8rem;
+    }
+
+    .resenha .resenha-avaliacao {
+        font-size: 0.82rem;
+        padding: 5px 8px;
+    }
+
+    .resenha .resenha-texto {
+        font-size: 0.9rem;
+    }
+
+    .lista-resenhas h2 {
+        font-size: 1.25rem;
+    }
+}

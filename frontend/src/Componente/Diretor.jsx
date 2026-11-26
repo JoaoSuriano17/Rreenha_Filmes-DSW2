@@ -39,7 +39,7 @@ function Diretor(props){
                 {editarDiretor ? formEditarDiretor : <></>}
 
                 <div className="combo">
-                    <img src={diretor.fotografia != null ? `http://localhost:3000/arquivo/${diretor.fotografia}`: "../Imagens/imagemDiretor.webp"} onError={(e) => {e.currentTarget.style.display = 'none';}} alt="Image" className='imagem_catalogo_pessoa' />
+                    <img src={diretor.fotografia != null ? `http://localhost:3000/arquivo/${diretor.fotografia}`: "../Imagens/imagemDiretor.webp"} onError={(e) => {e.currentTarget.style.display = 'none';}} alt="Image" className='imagem_catalogo_pessoa2' />
                     <h5>Biografia: <br/> <span className="sinopse">{diretor.biografia}</span></h5>
                 </div>
                 <div className="">
