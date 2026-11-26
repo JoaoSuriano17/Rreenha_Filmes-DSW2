@@ -14,10 +14,16 @@ function Diretor(props){
 
 
     let formEditarDiretor
-    if (JSON.parse(localStorage.getItem("usuario")).administrador) {
+    let botaoEditar;
+    let botaoDeletar;
+    if (localStorage.getItem("usuario")&&JSON.parse(localStorage.getItem("usuario")).administrador) {
         //botaoDelete = <button className="btn-azul" onClick={(e) => { e.preventDefault(); props.deletar(id) }}>Deletar filme</button>
+        botaoEditar=<button className="btn-azul" onClick={() => setEditarDiretor(!editarDiretor)}>
+                    {editarDiretor ? "Cancelar edição" : "Editar diretor"}
+                </button>;
+        botaoDeletar=<button className="btn-azul" onClick={() => props.deletarDiretor(id)}>Deletar diretor</button>;
         if (editarDiretor){
-            formEditarDiretor = <FormEditarDiretor id={id} edit={props.editarDiretor} diretor={diretor}/>
+            formEditarDiretor = <FormEditarDiretor id={id} edit={props.editarDiretor} diretor={diretor} alterarExibir={()=>{setEditarDiretor(!editarDiretor)}}/>
         }
 
     }
@@ -27,14 +33,13 @@ function Diretor(props){
             <Link className="link voltar categoria text-dark " to={"/diretores"}><BsArrowLeft /> Voltar</Link>
             <div className="grid-filme">
                 <h1 className="titulo">{diretor.nome}</h1>
-                <button className="btn-azul" onClick={() => setEditarDiretor(!editarDiretor)}>
-                    {editarDiretor ? "Cancelar edição" : "Editar filme"}
-                </button>
+                {botaoDeletar}
+                {botaoEditar}
 
                 {editarDiretor ? formEditarDiretor : <></>}
 
                 <div className="combo">
-                    <img src={diretor.fotografia != null ? `http://localhost:3000/arquivo/${diretor.fotografia}`: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDlpiGLqA9GhqWx1nWZgjwmfm8IcuDv6gNcvdamF50Hg&s=10"} onError={(e) => {e.currentTarget.style.display = 'none';}} alt="Image" className='imagem_catalogo_pessoa' />
+                    <img src={diretor.fotografia != null ? `http://localhost:3000/arquivo/${diretor.fotografia}`: "../Imagens/imagemDiretor.webp"} onError={(e) => {e.currentTarget.style.display = 'none';}} alt="Image" className='imagem_catalogo_pessoa' />
                     <h5>Biografia: <br/> <span className="sinopse">{diretor.biografia}</span></h5>
                 </div>
                 <div className="">

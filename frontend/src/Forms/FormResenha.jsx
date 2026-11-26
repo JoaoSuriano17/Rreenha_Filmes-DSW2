@@ -16,6 +16,7 @@ function FormResenha(props) {
 
         setResenha("");
         setAvaliacao("");
+        props.alterarExibir();
     }
 
     return (
@@ -26,8 +27,8 @@ function FormResenha(props) {
             </div>
 
             <div className="campo-resenha">
-                <label>Avaliação (0 a 10)</label>
-                <input id="avaliacao-resenha" type="number" min="0" max="10" step="0.5" required value={avaliacao} onChange={(e) => setAvaliacao(e.target.value)} placeholder="Ex.: 9" />
+                <label>Avaliação (0 a 100)</label>
+                <input id="avaliacao-resenha" type="number" min="0" max="100" step="1" required value={avaliacao} onChange={(e) => setAvaliacao(e.target.value)} placeholder="Ex.: 9" />
             </div>
 
             <div className="acoes-formulario">

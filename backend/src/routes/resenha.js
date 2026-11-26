@@ -253,7 +253,7 @@ router.put("/filme/:id", tipo, tokenArmazenar, async (req, res) => {
             return res.status(404).json({ msg: "Resenha não encontrada ou você não é o autor." });
         }
 
-        const r = await db.query( `UPDATE resenha_filme SET resenha=$1, avaliacao=$2 WHERE filme_id=$3 RETURNING *`, [resenha, avaliacao, req.params.id] );
+        const r = await db.query( `UPDATE resenha_filme SET resenha=$1, avaliacao=$2 WHERE filme_id=$3 AND usuario_id=$4 RETURNING *`, [resenha, avaliacao, req.params.id, req.usuario_id] );
         return res.status(200).json({ msg: "Resenha atualizada com sucesso!", resenha: r.rows[0]});
 
     } catch (erro) {

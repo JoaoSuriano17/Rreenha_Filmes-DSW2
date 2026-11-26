@@ -52,7 +52,7 @@ function Home(props) {
                 {props.filmes?.filter(filme => filme.id < 5).map((filme, index) => (
                     <Link to={"/filme/" + filme.id} key={filme.id ?? index} className='link'>
                         <div className="card cardhome">
-                            <img src={`http://localhost:3000/arquivo/${filme.cartaz}`} alt="Image" className='imagem_classicos' />
+                            <img src={filme.cartaz!=null?`http://localhost:3000/arquivo/${filme.cartaz}`:"../Imagens/imagemFilme.jpg"} alt="Image" className='imagem_classicos' />
                             <div className="card-body">
                                 <h5 className="card-title">{filme.titulo}</h5>
                                 <p className="card-text">{filme.duracao} minutos</p>
@@ -71,7 +71,7 @@ function Home(props) {
                 {props.filmes_premiados?.slice(0, 4).map((filme, index) => (
                     <Link to={"/filme/" + filme.id} key={filme.id ?? index} className='link'>
                         <div className="card cardhome">
-                            <img src={`http://localhost:3000/arquivo/${filme.cartaz}`} alt="Image" className='imagem_classicos' />
+                            <img src={filme.cartaz!=null?`http://localhost:3000/arquivo/${filme.cartaz}`:"../Imagens/imagemFilme.jpg"} alt="Image" className='imagem_classicos' />
                             <div className="card-body">
                                 <h5 className="card-title">{filme.titulo}</h5>
                                 <p className="card-text">{filme.duracao} minutos</p>
@@ -90,7 +90,7 @@ function Home(props) {
                 {props.atores?.filter(ator => ator.id < 5).map((ator, index) => (
                     <Link to={"/ator/" + ator.id} key={ator.id ?? index} className='link'>
                         <div className="card cardhome">
-                            <img src={`http://localhost:3000/arquivo/${ator.fotografia}`} alt="Image" className='ator' />
+                            <img src={ator.fotografia!=null?`http://localhost:3000/arquivo/${ator.fotografia}`:"../Imagens/imagemAtor.jpg"} alt="Image" className='ator' />
                             <div className="card-body">
                                 <h5 className="card-title">{ator.nome}</h5>
                                 <p className="card-text">{ator.nacionalidade}</p>
@@ -109,7 +109,7 @@ function Home(props) {
                 {props.series?.filter(serie => serie.id < 5).map((serie, index) => (
                     <Link to={"/serie/" + serie.id} key={serie.id ?? index} className='link'>
                         <div className="card cardhome">
-                            <img src={`http://localhost:3000/arquivo/${serie.cartaz}`} alt="Image" className='imagem_classicos' />
+                            <img src={serie.cartaz!=null?`http://localhost:3000/arquivo/${serie.cartaz}`:"../Imagens/imagemSerie.webp"} alt="Image" className='imagem_classicos' />
                             <div className="card-body">
                                 <h5 className="card-title">{serie.titulo}</h5>
                                 <p className="card-text">{serie.qtde_premios} prêmios recebidos</p>

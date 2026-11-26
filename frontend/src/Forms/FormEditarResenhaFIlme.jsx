@@ -13,6 +13,7 @@ function FormEditarResenhaFilme(props) {
             resenha: resenha,
             avaliacao: Number(avaliacao)
         }, props.id);
+        props.alterarExibir();
     }
 
     return (
@@ -37,7 +38,7 @@ function FormEditarResenhaFilme(props) {
                     type="number"
                     min="0"
                     max="100"
-                    step="0.5"
+                    step="1"
                     value={avaliacao}
                     onChange={(e) => setAvaliacao(e.target.value)}
                     required

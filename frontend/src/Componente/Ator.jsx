@@ -19,7 +19,7 @@ function Ator(props){
         botaoDelete = <button className="btn-azul" onClick={(e) => { e.preventDefault(); props.deletar(id) }}>Deletar ator</button>
         botaoEdit=<button className="btn-azul" onClick={() => setEditarAtor(!editarAtor)}>{editarAtor ? "Cancelar edição" : "Editar ator"}</button>
         if (editarAtor){
-            formEditAtor = <FormEditarAtor id={id} edit={props.editarAtor} ator={ator}/>
+            formEditAtor = <FormEditarAtor id={id} edit={props.editarAtor} ator={ator} alterarExibir={()=>{setEditarAtor(!editarAtor)}}/>
         }
 
     }
@@ -37,7 +37,7 @@ function Ator(props){
                 {editarAtor ? formEditAtor : <></>}
 
                 <div className="combo">
-                    <img src={ator.fotografia != null ? `http://localhost:3000/arquivo/${ator.fotografia}`: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDlpiGLqA9GhqWx1nWZgjwmfm8IcuDv6gNcvdamF50Hg&s=10"} onError={(e) => {e.currentTarget.style.display = 'none';}} alt="Image" className='imagem_catalogo_pessoa' />
+                    <img src={ator.fotografia != null ? `http://localhost:3000/arquivo/${ator.fotografia}`: "../Imagens/imagemAtor.jpg"} onError={(e) => {e.currentTarget.style.display = 'none';}} alt="Image" className='imagem_catalogo_pessoa' />
                     <h5>Biografia: <br/> <span className="sinopse">{ator.biografia}</span></h5>
                 </div>
                 <div className="">

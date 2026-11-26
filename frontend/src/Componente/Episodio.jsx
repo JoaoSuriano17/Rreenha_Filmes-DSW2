@@ -11,7 +11,7 @@ function Episodio(props) {
         botaoDelete=<button className="btn-azul"onClick={(e)=>{e.preventDefault(); props.deletar(props.episodio.id)}}>Deletar episódio</button>
         botaoEdit=<button className="btn-azul" onClick={() => setEditarEp(!editarEp)}>{editarEp ? "Cancelar" : "Alterar episódio"}</button>
         if (editarEp){
-            form = <FormEditarEpisodio episodio={props.episodio} edit={props.edit}/>
+            form = <FormEditarEpisodio episodio={props.episodio} edit={props.edit} alterarExibir={()=>{setEditarEp(!editarEp)}}/>
         }
     }
 

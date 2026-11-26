@@ -17,14 +17,16 @@ function Login(props) {
                 <div id="carouselExampleInterval" className="carousel slide" data-bs-ride="carousel" data-bs-interval="3000" data-bs-pause="false">
                 <div className="carousel-inner">
                     <div className="carousel-item active">
-                    <img src="Imagens/naruto-hero.jpg" alt="Banner do Naruto"/>
+                    <img src="Imagens/imagemLogin.jpg" alt="Banner de login"/>
                     </div>
+                    {/*
                     <div className="carousel-item">
                     <img src="Imagens/Minecraft-hero.webp" alt="Banner do filme do Minecraft"/>
                     </div>
                     <div className="carousel-item">
                     <img src="Imagens/homem_aranha-hero.jpeg" alt="Banner do Homem Aranha Um Novo Dia"/>
                     </div>
+                    */}
                 </div>
 
                 <div className="hero-content-especial">

@@ -26,6 +26,7 @@ function FormEditarDiretor(props){
 
 
         props.edit(formData, props.id)
+        props.alterarExibir();
     }
     
     

@@ -1,4 +1,4 @@
-
+import { useNavigate } from 'react-router-dom';
 import FormEditarResenhaFilme from '../Forms/FormEditarResenhaFIlme';
 import './Resenha.css';
 import { useState } from 'react';
@@ -39,7 +39,7 @@ function Resenha(props) {
                     </button>
 
                     {alterarResenha && (
-                        <FormEditarResenhaFilme id={props.id} edit={props.edit} resenha={props.resenha}/>
+                        <FormEditarResenhaFilme id={props.id} edit={props.edit} resenha={props.resenha} alterarExibir={()=>{setAlterarResenha(!alterarResenha)}}/>
                     )}
                 </>
             )}

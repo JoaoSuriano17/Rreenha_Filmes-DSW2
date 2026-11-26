@@ -31,7 +31,7 @@ function ListaEpisodios(props){
                 <div className="cabecalhoeps">
                     <Link className="link voltar text-white" to={"/serie/"+ id}><BsArrowLeft /> Voltar</Link>
                     <div className="d-flex">
-                        <img src={serie.cartaz != null ? `http://localhost:3000/arquivo/${serie.cartaz}`: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDlpiGLqA9GhqWx1nWZgjwmfm8IcuDv6gNcvdamF50Hg&s=10"} onError={(e) => {e.currentTarget.style.display = 'none';}} alt="Image" className='imagem_catalogo_pessoa' />
+                        <img src={serie.cartaz != null ? `http://localhost:3000/arquivo/${serie.cartaz}`: "../Imagens/imagemSerie.webp"} onError={(e) => {e.currentTarget.style.display = 'none';}} alt="Image" className='imagem_catalogo_pessoa' />
                         <div>
                             <h4 className="tserie">{serie.titulo}</h4>
                             <h2>Lista de episódios</h2>

@@ -28,7 +28,7 @@ function Filme(props) {
             cardAtores.push(
                 <Link to={"/ator/" + a.id} className="link" key={a.id}>
                     <div className="card cardcatalogo">
-                        <img src={a.fotografia != null ? `http://localhost:3000/arquivo/${a.fotografia}` : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDlpiGLqA9GhqWx1nWZgjwmfm8IcuDv6gNcvdamF50Hg&s=10"} onError={(e) => { e.currentTarget.style.display = 'none'; }} alt="Image" className='imagem_catalogo_pessoa' />
+                        <img src={a.fotografia != null ? `http://localhost:3000/arquivo/${a.fotografia}` : "../Imagens/imagemAtor.jpg"} onError={(e) => { e.currentTarget.style.display = 'none'; }} alt="Image" className='imagem_catalogo_pessoa' />
                         <div className="card-body">
                             <h5 className="card-title">{a.nome}</h5>
                         </div>
@@ -60,16 +60,16 @@ function Filme(props) {
         botaoResenha=<button className="btn-azul" onClick={() => setEscreverResenha(!escreverResenha)}>{escreverResenha ? "Cancelar" : "Adicionar resenha"}</button>;
     }
     if(localStorage.getItem("usuario")&&JSON.parse(localStorage.getItem("usuario")).administrador) {
-        botaoDelete = <button className="btn-azul" onClick={(e) => { e.preventDefault(); props.deletar(id) }}>Deletar filme</button>
+        botaoDelete = <button className="btn-azul" onClick={(e) => { e.preventDefault(); props.deletar(id)}}>Deletar filme</button>
         botaoEdit=<button className="btn-azul" onClick={() => setEditarFilme(!editarFilme)}>{editarFilme ? "Cancelar edição" : "Editar filme"}</button>
         if (editarFilme){
-            formEditFilme = <FormEditarFilme id={id} edit={props.editarFilme} filme={filme} diretores={props.diretores}/>
+            formEditFilme = <FormEditarFilme id={id} edit={props.editarFilme} filme={filme} diretores={props.diretores} alterarExibir={() => setEditarFilme(!editarFilme)}/>
         }
 
     }
     let formResenha;
     if (escreverResenha) {
-        formResenha = <FormResenha id={id} adicionarResenha={props.adicionarResenha} />
+        formResenha = <FormResenha id={id} adicionarResenha={props.adicionarResenha} alterarExibir={()=>{setEscreverResenha(!escreverResenha)}}/>
     }
     return (
         <>
@@ -84,7 +84,7 @@ function Filme(props) {
                 {editarFilme ? formEditFilme : <></>}
 
                 <div className="combo">
-                    <img src={`http://localhost:3000/arquivo/${filme.cartaz}`} alt="Image" className="cartaz" />
+                    <img src={filme.cartaz!=null?`http://localhost:3000/arquivo/${filme.cartaz}`:"../Imagens/imagemFilme.jpg"} alt="Image" className="cartaz" />
                     <h5>
                         Sinopse: <br />
                         <span className="sinopse">{filme.sinopse}</span>

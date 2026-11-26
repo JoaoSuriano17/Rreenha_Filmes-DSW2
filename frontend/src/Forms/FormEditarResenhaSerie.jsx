@@ -13,6 +13,7 @@ function FormEditarResenhaSerie(props) {
             resenha: resenha,
             avaliacao: Number(avaliacao)
         }, props.id);
+        props.alterarExibir();
     }
 
     return (

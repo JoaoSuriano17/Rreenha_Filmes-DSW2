@@ -12,6 +12,7 @@ function FormEditarEpisodio(props){
         e.preventDefault()
 
         props.edit({titulo: titulo, sinopse: sinopse, duracao: duracao, temporada: temporada}, props.episodio.id)
+        props.alterarExibir();
     }
     
     return(

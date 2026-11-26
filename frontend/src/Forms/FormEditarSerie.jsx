@@ -30,6 +30,7 @@ function FormEditarSerie(props){
         }
 
         props.edit(formData, props.id)
+        props.alterarExibir();
     }
      
     let optionsSelect = [<option value={0} key={-1}></option>]

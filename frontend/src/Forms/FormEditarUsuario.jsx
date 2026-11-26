@@ -22,6 +22,7 @@ function FormEditarUsuario(props){
     }
 
     props.edit(formData)
+    props.alterarExibir();
 }
 
   return(

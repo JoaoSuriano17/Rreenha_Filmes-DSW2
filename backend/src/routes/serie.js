@@ -70,7 +70,7 @@ router.post("/", verificarAdministrador, upload.single("arquivo"), async (req, r
         if (faixa_etaria <= 0 || faixa_etaria>18) {
             return res.status(400).json({ msg: "A faixa etária deve ser um número inteiro igual ou maior que 0." })
         }
-        if (qtde_premios <= 0) {
+        if (qtde_premios < 0) {
             return res.status(400).json({ msg: "A quantidade de prêmios deve ser um número inteiro igual ou maior que 0." })
         }
 
@@ -154,7 +154,7 @@ router.put("/:id", tipo, verificarAdministrador, upload.single("arquivo"), async
         if (faixa_etaria <= 0 || faixa_etaria>18) {
             return res.status(400).json({ msg: "A faixa etária deve ser um número inteiro igual ou maior que 0." })
         }
-        if (qtde_premios <= 0) {
+        if (qtde_premios < 0) {
             return res.status(400).json({ msg: "A quantidade de prêmios deve ser um número inteiro igual ou maior que 0." })
         }
 

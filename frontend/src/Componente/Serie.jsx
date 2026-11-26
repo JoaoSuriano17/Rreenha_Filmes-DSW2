@@ -28,7 +28,7 @@ function Serie(props) {
             cardAtores.push(
                 <Link to={"/ator/" + a.id} className="link" key={a.id}>
                     <div className="card cardcatalogo">
-                        <img src={a.fotografia != null ? `http://localhost:3000/arquivo/${a.fotografia}` : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDlpiGLqA9GhqWx1nWZgjwmfm8IcuDv6gNcvdamF50Hg&s=10"} onError={(e) => { e.currentTarget.style.display = 'none'; }} alt="Image" className='imagem_catalogo_pessoa' />
+                        <img src={a.fotografia != null ? `http://localhost:3000/arquivo/${a.fotografia}` : "../Imagens/imagemAtor.jpg"} onError={(e) => { e.currentTarget.style.display = 'none'; }} alt="Image" className='imagem_catalogo_pessoa' />
                         <div className="card-body">
                             <h5 className="card-title">{a.nome}</h5>
                         </div>
@@ -66,12 +66,12 @@ function Serie(props) {
     }
     let formResenha;
     if (escreverResenha) {
-        formResenha = <FormResenha id={id} adicionarResenha={props.adicionarResenha} />
+        formResenha = <FormResenha id={id} adicionarResenha={props.adicionarResenha} alterarExibir={()=>{setEscreverResenha(!escreverResenha)}}/>
     }
 
     let formEditarSerie;
     if (editarSerie) {
-        formEditarSerie = <FormEditarSerie id={id} edit={props.editarSerie} diretores={props.diretores} serie={serie}/>
+        formEditarSerie = <FormEditarSerie id={id} edit={props.editarSerie} diretores={props.diretores} serie={serie} alterarExibir={() => setEditarSerie(!editarSerie)}/>
     }
 
     return (
@@ -85,7 +85,7 @@ function Serie(props) {
                 {botaoEdit} <br />
                 {formEditarSerie}
                 <div className="combo">
-                    <img src={serie.fotografia != null ? `http://localhost:3000/arquivo/${serie.fotografia}` : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDlpiGLqA9GhqWx1nWZgjwmfm8IcuDv6gNcvdamF50Hg&s=10"} onError={(e) => { e.currentTarget.style.display = 'none'; }} alt="Image" className='imagem_catalogo_pessoa' />
+                    <img src={serie.cartaz != null ? `http://localhost:3000/arquivo/${serie.cartaz}` : "../Imagens/imagemSerie.webp"}/>
                     <h5>
                         Sinopse: <br />
                         <span className="sinopse">{serie.sinopse}</span>

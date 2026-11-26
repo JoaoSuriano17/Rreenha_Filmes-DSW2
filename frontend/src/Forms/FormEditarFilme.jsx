@@ -33,6 +33,7 @@ function FormEditarFilme(props) {
         }
 
         props.edit(formData, props.id);
+        props.alterarExibir();
     }
 
     let optionsSelect = [];
